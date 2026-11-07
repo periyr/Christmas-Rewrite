@@ -4,6 +4,7 @@ import Domain exposing (..)
 import Expect
 import Fixtures
 import Rules.Repair
+import Rules.Room
 import Test exposing (Test, describe, test)
 import Update
 
@@ -43,6 +44,7 @@ endingAfterAll =
     , phase = Ending
     , inspecting = Nothing
     , notice = Nothing
+    , room = Rules.Room.initialRoom
     }
 
 

@@ -10,7 +10,7 @@ This is a plan, not an instruction to start three competing implementations. Bui
 
 **Tagline:** Every decade has its mistakes. Every diary remembers them.
 
-**Format:** A single-player, browser-based, 2D point-and-click puzzle adventure written in Elm. No walking character. The same bookshop appears in different eras, with document overlays and object puzzles.
+**Format:** A single-player, browser-based, 2D puzzle adventure written in Elm, with a controllable character walking through a fixed-camera, side-view bookshop. The same room appears in different eras. Approaching objects opens the existing document and puzzle panels. Character movement and visible room changes are required features.
 
 **Target playtime:** Approximately 10–15 minutes on a first playthrough. Main puzzles take roughly 2–3 minutes each; warm-ups are much shorter. This is a target, not a gameplay timer.
 
@@ -46,7 +46,7 @@ Tone: cosy, magical, and bittersweet, with understandable family mistakes. These
 
 ## 3. Shared play and failure rules
 
-The player inspects clues, selects and places objects, then explicitly submits a main puzzle. Selecting and placing is click-to-select, then click-to-place. Dragging is optional polish and must not be required.
+In the room, the player walks left/right using A/D or the arrow keys and presses E near an object to interact. Clicking an interactive object also walks the character to it and then opens it. The player inspects clues, selects and places objects within panels, then explicitly submits a main puzzle. Selecting and placing is click-to-select, then click-to-place. Dragging is optional polish and must not be required. Walking pauses while a clue, puzzle, feedback panel, or transition is active; closing an ordinary panel preserves its puzzle state.
 
 Each main puzzle gets **two attempts**:
 
@@ -225,6 +225,7 @@ The shared domain must cover:
 - Main outcome: succeeded or failed.
 - Chapter record: era, outcome, attempts used, final submission, and final violations if any.
 - Current puzzle state: placements/selection, inspected clues, attempts used, and feedback state.
+- Room presentation state: player position, facing, walking target, held keys, nearby interaction target, and panel visibility. Walking does not spend attempts or create chapter-history records.
 - Derived world: repaired premises, community tradition, online service, and the resulting clue/script variants.
 - Typed actions for inspection, selection, placement, submission, retry, advancing, and reopening.
 - Structured violations with stable identifiers and friendly text.
@@ -243,11 +244,11 @@ Person A defines the exact records/actions and freezes the first contract within
 
 **Person A — core logic and integration lead**
 
-Own Main.elm, Domain.elm, Update.elm, Timeline.elm, Rules/*, tests/*, Elm/package configuration, build scripts, and the integration branch. Implement the model, rules, attempts, progress, variants, endings, rewind, and validation tests. Merge the three work streams. Do not redesign the story or visual interface independently.
+Own Main.elm, Domain.elm, Update.elm, Timeline.elm, Rules/*, tests/*, Elm/package configuration, build scripts, and the integration branch. Implement the model, rules, attempts, progress, variants, endings, rewind, movement/interaction state and subscriptions, and validation tests. Publish the small additive movement contract before B connects the walking room. Merge the three work streams. Do not redesign the story or visual interface independently.
 
 **Person B — presentation and interaction**
 
-Own View.elm, Views/*, Components/*, public/index.html, public/styles.css, and optional startup/audio JavaScript. Implement the shop scene, document overlay, reusable placement interface, visible resource counts, attempt display, post-submit feedback, page/room transitions, slideshow, and ending screens. Dispatch typed actions to A’s update logic; do not duplicate validation or maintain a second history.
+Own View.elm, Views/*, Components/*, public/index.html, public/styles.css, and optional startup/audio JavaScript. Implement the illustrated shop scene, visible player and walk cycle, object hotspots, proximity prompts, document overlay, reusable placement interface, visible resource counts, attempt display, post-submit feedback, page/room transitions, slideshow, and ending screens. Render from A's movement contract; do not maintain a second player position. Dispatch typed actions to A’s update logic; do not duplicate validation or maintain a second history.
 
 **Person C — content, assets, and player clarity**
 
@@ -261,13 +262,26 @@ Use one repository and one branch per person. Each person’s assistant edits th
 
 ## 10. Visual and asset plan
 
-Use a paper-theatre style: flat shapes, textured-looking CSS, readable documents, and strong era colour changes. No animated character models or commissioned illustrations are needed.
+Use a paper-theatre style: flat illustrated shapes, textured-looking CSS, readable documents, a visible human character with a simple walk cycle, and strong era colour changes. Reuse one base character with era-specific clothing/age details. Commissioned illustrations are not required; code-authored SVG and CSS are suitable first assets.
 
-Required assets are one reusable shop composition with four era/present treatments; three diary covers; nine salvage book covers; four mystery-book variants; three character silhouettes; three prop silhouettes; simple task cards/icons; and a few photographs/posters represented as stylised cards with captions. Reuse cover shapes and room furniture.
+Required assets are one reusable shop composition with four era/present treatments; one base human character with two to four walking poses and era variants; three diary covers; nine salvage book covers; four mystery-book variants; three shadow-story character silhouettes; three prop silhouettes; simple task cards/icons; and a few photographs/posters represented as stylised cards with captions. Reuse cover shapes and room furniture.
 
 Keep all important text as real interface text. Do not bake clues into generated images. Use CSS/SVG for the first version. Optional generated room artwork may be added only after the full game works. Keep filenames stable and maintain an asset/credit list.
 
 Show the selected object and legal placement targets clearly without revealing which target is the correct answer. Provide readable overlays, visible focus states, a Help button explaining controls, and a mute toggle if sound exists. Aim for a comfortable desktop layout on both teammates’ computers. Test the actual submission viewport.
+
+### Required movement and visual revision
+
+This revision supersedes the earlier no-walking scope. The puzzles and failure rules remain unchanged.
+
+- Use a fixed-camera side view with one clear horizontal floor strip. A/D or left/right arrows move; E interacts with a nearby object. Clicking an object walks there and interacts on arrival. No jumping, maze navigation, or pathfinding system is needed.
+- Keep shared logical coordinates for actor positions, bounds, and hotspot anchors; scale those coordinates to the visible room. Furniture sits behind the walking strip so the initial version only needs left/right room bounds.
+- Use Elm keyboard subscriptions and animation-frame deltas. Clear held keys and walking targets on entering panels, changing chapter, and hiding the page. Clamp unusually large frame deltas. Movement must pause during overlays and transitions.
+- At the appropriate stations, open the current existing puzzle instead of replacing its rules. After salvage, the player approaches the repair board. During the shelving-day pause, the player approaches the shelf. Closing a puzzle panel does not reset its answer or attempts.
+- Present: dusty shelves, packing boxes, closure notice, cold light. 1950: damaged window/roof, rubble, timber, book crates; repairs visibly appear during the week. 1973: dark room, battery torch, sheet, and actual projected story silhouettes. 1998: CRT glow, book stacks, and parcel props. Later present-day props derive from history.
+- Make the character visibly walk, face the direction of movement, and idle when stopped. Keep it recognisably human using a simple paper-cutout design. The shop and character are not just text descriptions.
+- A owns the movement/interaction state and publishes the contract. B owns rendering, animation, hotspots, and panels. C owns compatible character/prop assets and era details. Coordinate any Main.elm integration; only one person edits it at a time.
+- First implement and playtest the walking 1950 chapter, then reuse the room system for the other eras. Preserve the current working build as a checkpoint. The original 22-hour budget does not restart; cut optional audio and decorative effects to make room for these required changes.
 
 ## 11. 22-hour production budget
 
@@ -302,6 +316,8 @@ Person A owns the checks, with examples supplied by C and UI verification by B:
 - The same history always derives the same world and clue variant.
 - Rewinding 1973 preserves 1950, resets 1973/1998 completely, and recomputes their world. Rewinding 1950 clears all chapters.
 - Later chapters remain solvable after earlier failures.
+- Walking is frame-rate independent and bounded by the room edges; approaching/clicking hotspots opens the correct existing panel.
+- Walking pauses during panels and transitions. Closing a panel preserves answers and attempts. Hiding the page clears held keys. Movement never changes puzzle attempts or history.
 - A fresh player can find every required clue and finish without spoken guidance.
 - Test the final packaged build on Mac and Windows and in the submission’s browser frame. Verify relative asset paths, both endings, and replay.
 
@@ -313,9 +329,9 @@ Build one static browser release with an index page, compiled Elm, local styles,
 
 Submission materials: game title/description, controls, screenshots, credits/asset licences, source link if required, and a short explanation of the functional design: immutable state, pure validators, history-derived world, deterministic replay, and rewind by clearing later records.
 
-Cut in this order when behind: optional audio; elaborate page turns; decorative room details; extra hover effects; fancy dragging; extended ending animation. Use basic click placement, plain silhouettes, and text slides as needed.
+Cut in this order when behind: optional audio; elaborate page turns; decorative room details beyond the required era changes; extra hover effects; fancy dragging; extended ending animation. Keep the walking character, illustrated room, visible consequences, and existing puzzles. Use basic click placement, simple SVG artwork, and text slides as needed.
 
-Do not add extra eras, another full shelf chapter, a walking character, inventory-combination systems, real-time shop simulation, extra currencies, procedural narrative, online accounts, or a 3D environment. Preserve the agreed puzzle rules and finish the complete small game.
+Do not add extra eras, another full shelf chapter, inventory-combination systems, real-time shop simulation, extra currencies, procedural narrative, online accounts, or a 3D environment. Preserve the agreed puzzle rules and finish the complete small game.
 
 ## 14. Official Elm references
 
