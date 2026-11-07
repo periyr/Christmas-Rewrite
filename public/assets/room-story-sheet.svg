@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 124" width="170" height="124">
+  <!-- room-story-sheet: the bedsheet hung on a line for the 1973 shadow story. Player scale (about 1.8 m wide). Blank: puppets and captions go on top as interface. -->
+  <path d="M2 6 Q85 12 168 6" fill="none" stroke="#291e1a" stroke-width="1.5"/>
+  <path d="M12 9 Q85 14 158 9 L160 118 Q122 122 85 118 Q48 122 10 118 Z" fill="#ece6d8" stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M40 14 Q38 60 42 116 M85 15 Q88 64 85 116 M128 14 Q126 66 130 116" stroke="#cfc6b2" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <g fill="#a6652b" stroke="#291e1a" stroke-width="1.2">
+    <rect x="20" y="5" width="4" height="10" rx="1"/>
+    <rect x="83" y="7" width="4" height="10" rx="1"/>
+    <rect x="146" y="5" width="4" height="10" rx="1"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 18" width="44" height="18">
+  <!-- room-torch: 1973 battery torch, lens facing right. Player scale. room-torch-beam.svg starts at the lens (x = 42, y = 9 here). -->
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round">
+    <rect x="3" y="5" width="26" height="8" rx="2" fill="#496669"/>
+    <path d="M29 4 L36 1.5 L41 1.5 L41 16.5 L36 16.5 L29 14 Z" fill="#d4d3d1"/>
+    <rect x="12" y="2.5" width="6" height="3" rx="1" fill="#c95937"/>
+  </g>
+  <path d="M41 3.5 L42.5 3.5 L42.5 14.5 L41 14.5 Z" fill="#d9a443"/>
+  <path d="M6 7 L26 7" stroke="#6f8a8c" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

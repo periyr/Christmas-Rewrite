@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 160" width="96" height="160">
+  <!-- player-edwin-present-idle: facing right, soles on y = 152, feet centred near x = 48. Body drawn with Google Gemini, built by docs/asset-sources/chibi-family.mjs -->
+  <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
+  <g fill="#f2e4c9" stroke="#f2e4c9" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M 40,76 C 34,86 32,96 24,94 C 28,84 36,74 40,76 Z" fill="#f2e4c9" />
+    <path d="M 32,96 C 30,106 28,112 22,110 C 24,100 24,94 32,96 Z" fill="#f2e4c9" />
+    <circle cx="25" cy="111" r="4" fill="#f2e4c9" />
+    <path d="M 38,115 L 36,142 L 46,142 L 48,115 Z" fill="#f2e4c9" />
+    <path d="M 36,142 L 46,142 L 46,152 L 30,152 C 30,144 33,142 36,142 Z" fill="#f2e4c9" />
+    <path d="M 48,115 L 50,144 L 62,144 L 60,115 Z" fill="#f2e4c9" />
+    <path d="M 50,144 L 62,144 C 65,144 66,147 66,152 L 50,152 Z" fill="#f2e4c9" />
+    <path d="M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z" fill="#f2e4c9" />
+    <circle cx="42.2" cy="93" r="1.1" fill="#f2e4c9" />
+    <circle cx="50.6" cy="93" r="1.1" fill="#f2e4c9" />
+    <circle cx="61" cy="93" r="1.1" fill="#f2e4c9" />
+    <path d="M 52,78 L 59.5,78 L 60.5,104 L 52.5,104 Z" fill="#f2e4c9" />
+    <path d="M 35,73 C 43,79.5 54,79.5 62,72 L 62.5,79.5 C 54,86.5 43,86.5 34.5,80.5 Z" fill="#f2e4c9" />
+    <path d="M 54,76 C 64,84 62,98 52,96 C 50,86 46,78 54,76 Z" fill="#f2e4c9" />
+    <path d="M 62,98 C 60,110 56,116 48,114 C 50,104 52,96 62,98 Z" fill="#f2e4c9" />
+    <circle cx="52" cy="115" r="4" fill="#f2e4c9" />
+    <path d="M 16,30 C 12,40 16,54 26,56 L 30,46 Z" fill="#f2e4c9" />
+    <path d="M 48,18 C 66,18 78,30 78,46 C 78,64 66,76 48,76 C 30,76 18,64 18,46 C 18,30 30,18 48,18 Z" fill="#f2e4c9" />
+    <path d="M 18,40 C 16,22 30,13 48,13 C 66,13 80,22 79,36 C 76,33 73,31.5 69,31.5 L 71,27 L 64,29.5 L 63.5,25 L 57,28.5 C 46,27.5 36,30.5 30,37.5 C 26,41.5 22,42 18,40 Z" fill="#f2e4c9" />
+  </g>
+  <g stroke="#291e1a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Far arm -->
+    <path d="M 40,76 C 34,86 32,96 24,94 C 28,84 36,74 40,76 Z" fill="#893f43" />
+    <path d="M 32,96 C 30,106 28,112 22,110 C 24,100 24,94 32,96 Z" fill="#893f43" />
+    <circle cx="25" cy="111" r="4" fill="#e8b98f" />
+    <!-- Far leg -->
+    <path d="M 38,115 L 36,142 L 46,142 L 48,115 Z" fill="#496669" />
+    <path d="M 36,142 L 46,142 L 46,152 L 30,152 C 30,144 33,142 36,142 Z" fill="#5a3428" />
+    <!-- Near leg -->
+    <path d="M 48,115 L 50,144 L 62,144 L 60,115 Z" fill="#496669" />
+    <path d="M 50,144 L 62,144 C 65,144 66,147 66,152 L 50,152 Z" fill="#5a3428" />
+    <!-- Torso (Christmas jumper and scarf) -->
+    <path d="M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z" fill="#893f43" />
+    <path d="M 34.5,87.5 L 61.5,87.5" fill="none" stroke="#f2e4c9" stroke-width="1.4" />
+    <path d="M 34.5,98.5 L 62,98.5" fill="none" stroke="#f2e4c9" stroke-width="1.4" />
+    <path d="M 38,90.4 L 38,95.6 M 35.4,93 L 40.6,93 M 36.3,91.3 L 39.7,94.7 M 36.3,94.7 L 39.7,91.3" fill="none" stroke="#f2e4c9" stroke-width="1.1" />
+    <path d="M 46.5,90.4 L 46.5,95.6 M 43.9,93 L 49.1,93 M 44.8,91.3 L 48.2,94.7 M 44.8,94.7 L 48.2,91.3" fill="none" stroke="#f2e4c9" stroke-width="1.1" />
+    <circle cx="42.2" cy="93" r="1.1" fill="#d9a443" stroke="none" />
+    <circle cx="50.6" cy="93" r="1.1" fill="#d9a443" stroke="none" />
+    <circle cx="61" cy="93" r="1.1" fill="#d9a443" stroke="none" />
+    <path d="M 36,108 L 36,112" fill="none" stroke-width="1.3" />
+    <path d="M 40,108 L 40,112" fill="none" stroke-width="1.3" />
+    <path d="M 44,108 L 44,112" fill="none" stroke-width="1.3" />
+    <path d="M 48,108 L 48,112" fill="none" stroke-width="1.3" />
+    <path d="M 52,108 L 52,112" fill="none" stroke-width="1.3" />
+    <path d="M 56,108 L 56,112" fill="none" stroke-width="1.3" />
+    <path d="M 60,108 L 60,111.4" fill="none" stroke-width="1.3" />
+    <path d="M 52,78 L 59.5,78 L 60.5,104 L 52.5,104 Z" fill="#31542f" />
+    <path d="M 53,86 L 59.6,86 M 53.2,93 L 59.9,93" fill="none" stroke="#d9a443" stroke-width="1.8" />
+    <path d="M 54,105.5 L 54,108.6 M 56.5,105.5 L 56.5,108.6 M 59,105.5 L 59,108.6" fill="none" stroke="#31542f" stroke-width="1.6" />
+    <path d="M 35,73 C 43,79.5 54,79.5 62,72 L 62.5,79.5 C 54,86.5 43,86.5 34.5,80.5 Z" fill="#31542f" />
+    <!-- Near arm -->
+    <path d="M 54,76 C 64,84 62,98 52,96 C 50,86 46,78 54,76 Z" fill="#893f43" />
+    <path d="M 62,98 C 60,110 56,116 48,114 C 50,104 52,96 62,98 Z" fill="#893f43" />
+    <circle cx="52" cy="115" r="4" fill="#e8b98f" />
+    <!-- Hair and head -->
+    <path d="M 16,30 C 12,40 16,54 26,56 L 30,46 Z" fill="#d4d3d1" />
+    <path d="M 48,18 C 66,18 78,30 78,46 C 78,64 66,76 48,76 C 30,76 18,64 18,46 C 18,30 30,18 48,18 Z" fill="#e8b98f" />
+    <!-- Face -->
+    <circle cx="41" cy="57" r="3.6" fill="#d9806a" stroke="none" />
+    <circle cx="71" cy="57" r="3.6" fill="#d9806a" stroke="none" />
+    <ellipse cx="46" cy="46" rx="5.6" ry="7.2" fill="#f2e4c9" stroke-width="2.4" />
+    <ellipse cx="47.4" cy="46.6" rx="4" ry="5.4" fill="#31542f" stroke="none" />
+    <ellipse cx="65" cy="46" rx="5.6" ry="7.2" fill="#f2e4c9" stroke-width="2.4" />
+    <ellipse cx="66.4" cy="46.6" rx="4" ry="5.4" fill="#31542f" stroke="none" />
+    <circle cx="57" cy="53.4" r="1.5" fill="#291e1a" stroke="none" />
+    <path d="M 29.5,63.5 C 37,63 44,64.5 50,65 C 57,64.5 65,62.5 74,61.5 C 72,70.5 63,78.6 50,78.8 C 38,78.6 31,71.5 29.5,63.5 Z" fill="#d4d3d1" stroke-width="2.4" />
+    <path d="M 54,67.2 Q 57.5,70.2 61,67.2" fill="none" stroke-width="2" />
+    <circle cx="46" cy="46" r="8.2" fill="none" stroke-width="1.5" />
+    <circle cx="65" cy="46" r="8.2" fill="none" stroke-width="1.5" />
+    <path d="M 54.2,45 L 56.8,45" fill="none" stroke-width="1.5" />
+    <path d="M 37.8,45 L 27,43" fill="none" stroke-width="1.5" />
+    <!-- Short grey hair -->
+    <path d="M 18,40 C 16,22 30,13 48,13 C 66,13 80,22 79,36 C 76,33 73,31.5 69,31.5 L 71,27 L 64,29.5 L 63.5,25 L 57,28.5 C 46,27.5 36,30.5 30,37.5 C 26,41.5 22,42 18,40 Z" fill="#d4d3d1" />
+  </g>
+</svg>

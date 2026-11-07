@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140" preserveAspectRatio="none">
+  <!-- room-window-boarded: one window pane covered with planks. Same box as room-window-broken.svg. -->
+  <rect x="0" y="0" width="100" height="140" fill="#2c3a3c" opacity="0.6"/>
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M0 18 L100 8 L100 30 L0 40 Z" fill="#a6652b"/>
+    <path d="M0 62 L100 58 L100 80 L0 84 Z" fill="#8a5424"/>
+    <path d="M0 108 L100 98 L100 120 L0 130 Z" fill="#a6652b"/>
+  </g>
+  <g fill="#291e1a">
+    <circle cx="6" cy="27" r="1.6"/><circle cx="94" cy="18" r="1.6"/>
+    <circle cx="6" cy="72" r="1.6"/><circle cx="94" cy="69" r="1.6"/>
+    <circle cx="6" cy="118" r="1.6"/><circle cx="94" cy="109" r="1.6"/>
+  </g>
+</svg>

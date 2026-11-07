@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 54" width="68" height="54">
+  <!-- room-parcels: a stack of brown-paper parcels tied with string. Labels are blank: addresses are interface text. Player scale. Rests on y = 52. -->
+  <ellipse cx="34" cy="52" rx="31" ry="1.8" fill="#291e1a" opacity="0.18"/>
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round">
+    <rect x="4" y="30" width="38" height="22" rx="1.5" fill="#a6652b"/>
+    <rect x="40" y="34" width="24" height="18" rx="1.5" fill="#8a5424"/>
+    <rect x="12" y="12" width="30" height="18" rx="1.5" fill="#b9793c"/>
+  </g>
+  <g stroke="#d4d3d1" stroke-width="1.2" fill="none">
+    <path d="M23 30 L23 52 M4 41 L42 41"/>
+    <path d="M52 34 L52 52 M40 43 L64 43"/>
+    <path d="M27 12 L27 30 M12 21 L42 21"/>
+  </g>
+  <g fill="#d4d3d1" stroke="#291e1a" stroke-width="1">
+    <rect x="28" y="44" width="11" height="6" rx="0.8"/>
+    <rect x="30" y="23" width="9" height="5" rx="0.8"/>
+  </g>
+</svg>

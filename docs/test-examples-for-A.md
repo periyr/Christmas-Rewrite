@@ -30,7 +30,7 @@ A useful property: because each cut-out is used exactly once, a wrong staging al
 
 ### Whole-space checks (like the 2,520 enumeration for 1950)
 
-- There are 3! × 3! × 3! = 216 complete stagings. For each variant, exactly **one** is valid.
+- There are 3! × 3! = **36** unique complete stagings: 6 ways to order the three characters across the scenes, times 6 ways to order the three props. For each variant, exactly **one** is valid. (An earlier version of this file said 216, which was wrong.)
 - The two valid stagings are different, so the same staging never passes under both variants.
 
 ### Through history (variant chosen from 1950)

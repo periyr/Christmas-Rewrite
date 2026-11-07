@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 38" width="36" height="38">
+  <!-- room-bucket: catches the drips under room-roof-damaged.svg. Player scale. Rests on y = 36. -->
+  <ellipse cx="18" cy="36" rx="15" ry="1.8" fill="#291e1a" opacity="0.18"/>
+  <path d="M6 8 Q18 -2 30 8" fill="none" stroke="#291e1a" stroke-width="1.5"/>
+  <path d="M4 10 L32 10 L28 36 L8 36 Z" fill="#496669" stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round"/>
+  <ellipse cx="18" cy="10" rx="14" ry="3" fill="#2c3a3c" stroke="#291e1a" stroke-width="1.5"/>
+  <ellipse cx="18" cy="10.6" rx="10" ry="1.6" fill="#7687ab"/>
+  <path d="M7 18 L29 18 M8 28 L28 28" stroke="#3a5254" stroke-width="1.2"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" width="120" height="60">
+  <!-- room-roof-patched: the same spot after the repair, new boards nailed over the hole. Same box as room-roof-damaged.svg. -->
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M26 4 L96 2 L97 12 L25 13 Z" fill="#c08a4e"/>
+    <path d="M24 13 L98 12 L98 22 L24 23 Z" fill="#a6652b"/>
+    <path d="M26 23 L96 22 L95 32 L27 33 Z" fill="#c08a4e"/>
+  </g>
+  <g fill="#291e1a">
+    <circle cx="30" cy="8" r="1"/><circle cx="92" cy="7" r="1"/>
+    <circle cx="29" cy="17.5" r="1"/><circle cx="94" cy="17" r="1"/>
+    <circle cx="31" cy="28" r="1"/><circle cx="91" cy="27" r="1"/>
+  </g>
+  <path d="M40 8 Q60 7 80 8 M45 18 Q62 17 85 18 M38 28 Q58 27 78 28" stroke="#5a3428" stroke-width="0.8" fill="none" opacity="0.6" stroke-linecap="round"/>
+</svg>

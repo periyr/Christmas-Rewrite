@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" width="120" height="60">
+  <!-- room-roof-damaged: a hole in the ceiling, night showing through, water dripping. Swap with room-roof-patched.svg (same box). -->
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M30 6 L48 3 L58 9 L74 4 L90 8 L86 18 L94 26 L76 30 L66 26 L50 31 L36 26 L40 17 Z" fill="#5a3428"/>
+    <path d="M36 9 L48 7 L58 12 L72 8 L84 11 L81 18 L87 24 L75 26 L66 22 L51 27 L41 23 L44 16 Z" fill="#2c3a3c"/>
+  </g>
+  <circle cx="54" cy="14" r="0.9" fill="#d4d3d1"/>
+  <circle cx="70" cy="19" r="0.7" fill="#d4d3d1"/>
+  <path d="M36 26 L30 30 M90 9 L98 6 M66 27 L67 33" stroke="#5a3428" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+  <g fill="#7687ab" stroke="#291e1a" stroke-width="1">
+    <path d="M52 30 Q55 36 52 38 Q49 36 52 30 Z"/>
+    <path d="M67 36 Q70 42 67 44 Q64 42 67 36 Z"/>
+    <path d="M58 47 Q61 53 58 55 Q55 53 58 47 Z"/>
+  </g>
+</svg>

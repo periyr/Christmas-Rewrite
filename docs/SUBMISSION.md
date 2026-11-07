@@ -26,7 +26,8 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10â
 
 ## Controls
 
-- **Mouse only.** Click objects and documents to inspect them.
+- **Walking (planned, not yet in the game):** move Walter, Henry or Edwin around the shop to reach things. [Fill in the real controls once B builds this, e.g. click a spot on the floor or use the arrow keys.]
+- **Click objects and documents** to inspect them.
 - **To move something:** click to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click the same object again to put it down.
 - **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses one of two attempts.
 - **Help:** the Help button explains the controls. [Check that every puzzle screen has one before submitting.]
@@ -56,12 +57,28 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 | Content, assets and player clarity (Person C) | Peri Yarci [confirm] |
 
 - **Writing:** the team. Text drafted with help from Claude (Anthropic), then edited by the team.
-- **Art:** all art is flat SVG drawn for this project. It was generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand. Free to use in this game. See `public/assets/ASSETS.md` for the full asset list.
+- **Art:** all made for this project and free to use in this game. See `public/assets/ASSETS.md` for the full list.
+  - The room pictures, book and diary covers, damage marks, shadow puppets and mystery books were generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand.
+  - The four walking characters share one body drawn with Google Gemini from the team's prompt. Each person's look follows Gemini's designs, rebuilt with help from Claude so all four match (`docs/asset-sources/chibi-family.mjs`).
+  - The room props are flat SVG made for the team with help from Claude.
 - **Fonts:** none bundled. The game uses fonts already installed on the player's system (Palatino or Georgia, and Courier).
 - **Sound:** none.
 - **Software:** Elm 0.19.1 and the packages elm/core, elm/browser, elm/html (BSD-3-Clause); elm-test for testing; Node.js for the build scripts.
 
 **Source:** [repository link, if required]
+
+## What is verified so far (update before submitting)
+
+Remove this section from the public copy. It keeps the claims above honest.
+
+| Feature | Status (7 November) |
+|---|---|
+| 1950 rules: repair board, salvage, shelf | Built and tested (`npm test`, including all 2,520 weeks) |
+| All game text (`src/Content`) | Built; compiles; word counts checked |
+| 1973 and 1998 validators | **Not built yet** (`Debug.todo`); expected results are in `docs/test-examples-for-A.md` |
+| Walking characters | Sprites drawn and checked for alignment; **walking is not in the game yet** |
+| Room props (roof, window, timber, torch, sheet, computer, parcels) | Drawn; **not placed in the rooms yet** |
+| Help button on every screen | Only the 1950 screens so far |
 
 ## Screenshots to take
 
