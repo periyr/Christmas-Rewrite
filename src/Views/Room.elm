@@ -7,6 +7,7 @@ stores a position or moves anyone: clicks only send A's messages.
 
 import Components.Actor as Actor
 import Components.Art as Art
+import Components.Props as Props
 import Content.Room
 import Domain exposing (..)
 import Html exposing (Html, button, div, p, span, text)
@@ -34,7 +35,8 @@ emptyScene =
 view : World -> Model -> Scene -> List (Html Msg)
 view world model scene =
     Art.room
-        :: scene.behind
+        :: Props.forPhase world model.phase
+        ++ scene.behind
         ++ [ Actor.view (person model.phase) model.room.player
            , hotspots world model
            , bottomBar model scene.line

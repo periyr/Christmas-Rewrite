@@ -175,18 +175,6 @@ button:disabled { cursor: not-allowed; }
   white-space: nowrap;
 }
 
-/* Marks the 1973 and 1998 screens until they are built. */
-.sample-tag {
-  display: inline-block;
-  padding: 0 0.4rem;
-  border: 0.08rem dashed currentColor;
-  border-radius: 0.2rem;
-  font: 700 0.75rem/1.5 var(--font-form);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
 /* ---------- Stage ---------- */
 
 .stage {
@@ -1544,3 +1532,173 @@ svg-art { display: contents; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* ---------- Main puzzles: clues beside the panel ---------- */
+
+.side-clues {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.4rem;
+}
+
+.side-clues .clue {
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.75rem 0.5rem 1.4rem;
+  text-align: left;
+  transform: none;
+}
+
+.side-clues .clue::before { left: 0.5rem; top: 50%; transform: translateY(-50%); }
+
+/* ---------- 1973 shadow stage ---------- */
+
+.story-stage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  padding: 0.8rem;
+  border: 0.6rem solid var(--wood);
+  border-radius: 0.2rem;
+  background: #2b211b;
+  box-shadow: 0.2rem 0.3rem 0 var(--cast);
+}
+
+.story-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.2rem;
+  background: #efe3c8;
+  box-shadow: inset 0 0 1.6rem rgba(120, 90, 50, 0.35);
+}
+
+.story-panel__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem 0.4rem;
+  border-bottom: 0.08rem dashed rgba(41, 30, 26, 0.35);
+}
+
+.story-panel__number { font-size: 1.25rem; font-weight: 700; }
+.story-panel__setting { font-size: 1.125rem; color: var(--ink-soft); }
+.story-panel.is-flagged { box-shadow: inset 0 0 0 0.2rem var(--warn), inset 0 0 1.6rem rgba(120, 90, 50, 0.35); }
+
+.story-panel__sheet {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.story-panel__space { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+.story-panel__kind { font-size: 0.9375rem; font-weight: 700; color: var(--ink-soft); }
+
+.stage-scene .slot { width: 7.75rem; height: 9.25rem; }
+.stage-scene .story-panel .slot__empty { background: rgba(255, 255, 255, 0.35); border-color: rgba(41, 30, 26, 0.35); }
+.stage-scene .tray__slots { grid-template-columns: repeat(6, 7.75rem); gap: 1.4rem; }
+
+.book.cutout {
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.4rem;
+  background: #f3e9d2;
+  color: var(--ink);
+}
+
+.book.cutout::after { content: none; }
+.cutout__art { width: 5.75rem; height: 5.75rem; object-fit: contain; }
+.cutout__name { font-size: 1.0625rem; font-weight: 700; }
+
+/* ---------- 1998 book table ---------- */
+
+.table-scene { grid-template-rows: 3.75rem 28.75rem 11rem; }
+
+.book-table {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 0.6rem solid var(--wood);
+  border-radius: 0.2rem;
+  background: #6b4a33;
+  box-shadow: 0.2rem 0.3rem 0 var(--cast);
+}
+
+.table-scene.is-reviewing .book-table { grid-row: 2; padding-block: 0.6rem; }
+
+.candidate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 0.7rem;
+  border-radius: 0.3rem;
+  background: var(--paper);
+  box-shadow: 0.15rem 0.2rem 0 var(--cast);
+}
+
+.candidate__cover { width: 8.5rem; height: 12.05rem; }
+.table-scene.is-reviewing .candidate__cover { width: 6rem; height: 8.5rem; }
+.candidate__title { min-height: 2.6rem; margin: 0; font-size: 1.0625rem; line-height: 1.25; text-align: center; }
+
+.candidate__tabs { display: grid; gap: 0.3rem; width: 100%; }
+
+.candidate__tab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  border: 0.08rem solid var(--paper-edge);
+  border-radius: 0.2rem;
+  background: var(--paper-deep);
+  font-size: 1rem;
+  text-align: left;
+}
+
+.candidate__tab:hover { background: var(--interact-tint); }
+.candidate__choose { width: 100%; }
+
+.candidate.is-chosen { box-shadow: 0 0 0 0.3rem var(--interact), 0.15rem 0.2rem 0 var(--cast); }
+.candidate.is-chosen .candidate__choose { background: var(--interact); border-color: #0f2f4b; color: #fff; }
+.candidate.is-chosen .candidate__choose:disabled { color: #fff; opacity: 0.85; }
+.candidate > .mark { top: -0.6rem; right: -0.6rem; }
+
+/* A picture page in a clue sheet: the illustration above its description. */
+.sheet__picture {
+  display: block;
+  width: 100%;
+  max-height: 17rem;
+  margin-bottom: 0.9rem;
+  object-fit: contain;
+  border: 0.1rem solid var(--paper-edge);
+  background: #fff;
+}
+
+/* ---------- Chapter props in the room ---------- */
+
+/* Placed by Components.Props in logical px / 16, from A's hotspot anchors. */
+.prop { position: absolute; pointer-events: none; }
+.prop > img { display: block; width: 100%; height: 100%; }
+
+.prop--computer { filter: drop-shadow(0 0 0.9rem rgba(170, 235, 210, 0.55)); }
+
+.prop--puppet { filter: drop-shadow(0.2rem 0.2rem 0.15rem rgba(0, 0, 0, 0.35)); }
+
+/* Switched on, the torch is propped up on its tail and the beam leaves its lens,
+   tilted up at the sheet (positions in Components.Props). */
+.prop--torch.is-on { transform-origin: 5% 80%; transform: rotate(-25deg); }
+.prop--beam { transform-origin: 0 50%; transform: rotate(-27deg); mix-blend-mode: screen; }
+
+/* House lights down for the performance; the lit sheet and puppets stay bright. */
+.stage[data-lights="down"] .room-art { filter: brightness(0.4) saturate(0.75); }
+.stage[data-lights="down"] .prop:not(.prop--sheet, .prop--puppet, .prop--beam, .prop--torch) { filter: brightness(0.45); }

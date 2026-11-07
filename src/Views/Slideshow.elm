@@ -1,10 +1,11 @@
-module Views.Slideshow exposing (atShelvingPause, stageAttributes, view)
+module Views.Slideshow exposing (atShelvingPause, lights, stageAttributes, view)
 
 {-| The week's playback. The model owns the position: this only draws the slide
 it points at and sends Advance.
 -}
 
 import Components.Art as Art
+import Components.Props as Props
 import Content.Slides
 import Domain exposing (..)
 import Html exposing (Attribute, Html, button, text)
@@ -46,9 +47,23 @@ view world history era index =
                 |> Maybe.map (Content.Slides.slide world)
                 |> Maybe.withDefault { title = "", paragraphs = [] }
     in
-    [ Art.room
-    , Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
-    ]
+    Art.room
+        :: (current |> Maybe.map Props.forSlide |> Maybe.withDefault [])
+        ++ [ Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
+           ]
+
+
+{-| The house lights go down for the shadow performance, so the torch-lit sheet
+shows. Taken from the slide being shown.
+-}
+lights : History -> Era -> Int -> List (Attribute msg)
+lights history era index =
+    case List.head (List.drop index (Timeline.slides era history)) of
+        Just (PerformanceSlide _ _) ->
+            [ attribute "data-lights" "down" ]
+
+        _ ->
+            []
 
 
 {-| The room at the shelving pause: everything done up to that day stays done,

@@ -1,4 +1,4 @@
-module Components.Art exposing (arrows, bookCover, diaryCover, icon, room)
+module Components.Art exposing (arrows, bookCover, candidateCover, candidateIllustration, cutout, diaryCover, icon, room)
 
 {-| The game's pictures. Room photos and C's covers are plain files in
 public/assets. Inline SVG goes through the <svg-art> element defined in
@@ -6,7 +6,7 @@ public/index.html, and every markup string is built here from fixed text and
 numbers.
 -}
 
-import Domain exposing (BookId(..), Damage(..), Era(..), RecoverableBook(..), RuinedBook(..))
+import Domain exposing (BookId(..), CandidateId(..), Character(..), Cutout(..), Damage(..), Era(..), Prop(..), RecoverableBook(..), RuinedBook(..))
 import Html exposing (Html, div, img, node, span)
 import Html.Attributes exposing (alt, attribute, class, src)
 
@@ -103,6 +103,71 @@ diaryCover era =
         , alt ""
         ]
         []
+
+
+{-| A 1973 shadow puppet or prop, from C's silhouettes. -}
+cutout : Cutout -> Html msg
+cutout piece =
+    img
+        [ class "cutout__art"
+        , src
+            (case piece of
+                CharacterCutout Fox ->
+                    "assets/shadow-fox.svg"
+
+                CharacterCutout Owl ->
+                    "assets/shadow-owl.svg"
+
+                CharacterCutout Child ->
+                    "assets/shadow-child.svg"
+
+                PropCutout Lantern ->
+                    "assets/prop-lantern.svg"
+
+                PropCutout Key ->
+                    "assets/prop-key.svg"
+
+                PropCutout Book ->
+                    "assets/prop-book.svg"
+            )
+        , alt ""
+        ]
+        []
+
+
+{-| A 1998 candidate's cover. All four share one size, so none stands out. -}
+candidateCover : CandidateId -> Html msg
+candidateCover candidate =
+    img [ class "candidate__cover", src ("assets/candidate-" ++ candidateLetter candidate ++ ".svg"), alt "" ] []
+
+
+{-| The picture inside a candidate. A, B and C share one file on purpose
+(ASSETS.md), so the picture alone never tells them apart.
+-}
+candidateIllustration : CandidateId -> String
+candidateIllustration candidate =
+    case candidate of
+        CandidateD ->
+            "assets/illustration-fox-wood.svg"
+
+        _ ->
+            "assets/illustration-fox-bridge.svg"
+
+
+candidateLetter : CandidateId -> String
+candidateLetter candidate =
+    case candidate of
+        CandidateA ->
+            "a"
+
+        CandidateB ->
+            "b"
+
+        CandidateC ->
+            "c"
+
+        CandidateD ->
+            "d"
 
 
 icon : String -> Html msg

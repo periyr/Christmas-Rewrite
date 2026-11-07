@@ -1,7 +1,7 @@
-module Views.Shop exposing (ending, introduction, openingDiary, presentHub, returning, unbuiltChapter)
+module Views.Shop exposing (ending, introduction, openingDiary, presentHub, returning)
 
 {-| What the room-based screens add to the room: introduction, present hub,
-diary openings, endings, and the screen for chapters that aren't built yet.
+diary openings and endings.
 -}
 
 import Components.Art as Art
@@ -108,6 +108,7 @@ openingDiary world era =
     , Common.documentSheet
         { variant = "sheet--diary"
         , document = Content.Diaries.passage world era
+        , picture = Nothing
         , buttonLabel = "Step into " ++ eraYear era
         , onPress = Advance
         }
@@ -127,26 +128,10 @@ returning =
     ]
 
 
-{-| Development only, until the next milestone builds these two screens. It offers
-no Submit, because there is no arrangement to submit yet.
+{-| The fate of the shop once all three chapters are resolved. A closed shop
+lists what each failed chapter left missing, under that chapter's heading; the
+saved ending is one document, already titled by the sheet.
 -}
-unbuiltChapter : Era -> List (Html Msg)
-unbuiltChapter era =
-    [ div [ class "sheet" ]
-        [ div [ class "sheet__head" ]
-            [ h2 [ class "sheet__title" ] [ text (eraYear era ++ " isn’t built yet") ]
-            , span [ class "sample-tag" ] [ text "Development placeholder" ]
-            ]
-        , div [ class "sheet__body" ]
-            [ p [] [ text "This chapter’s screen comes in a later milestone." ]
-            , p [] [ text "Reload the page to start a new game." ]
-            ]
-        , footer [ class "sheet__foot" ] [ Common.closePanel True ]
-        ]
-    ]
-
-
-{-| Not reachable until the 1973 and 1998 chapters can be resolved. -}
 ending : World -> List (Html Msg)
 ending world =
     let
@@ -159,8 +144,13 @@ ending world =
                     [ Content.Endings.saved ]
 
         section_ document =
-            h3 [] [ text document.title ]
-                :: List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
+            (if document.title == title then
+                []
+
+             else
+                [ h3 [] [ text document.title ] ]
+            )
+                ++ List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
 
         title =
             case world.fate of

@@ -4,16 +4,19 @@ module View exposing (view)
 document over it. All game state stays in the model.
 -}
 
+import Components.Art as Art
 import Content.Clues
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (attribute, class)
 import Timeline
 import Views.Common as Common
+import Views.BookTable
 import Views.Labels exposing (eraYear)
 import Views.RepairBoard
 import Views.Room
 import Views.Salvage
+import Views.ShadowStage
 import Views.Shelf
 import Views.Shop
 import Views.Slideshow
@@ -59,11 +62,11 @@ screen world model =
         ReopeningShelf placement ->
             station (Views.Shelf.view world placement model.notice)
 
-        ShadowPuzzle _ ->
-            station (Views.Shop.unbuiltChapter Shadows1973)
+        ShadowPuzzle puzzle ->
+            station (Views.ShadowStage.view world puzzle model.notice)
 
-        BookMystery _ ->
-            station (Views.Shop.unbuiltChapter Search1998)
+        BookMystery puzzle ->
+            station (Views.BookTable.view world puzzle model.notice)
 
         Transition (OpeningDiary era) ->
             Views.Shop.openingDiary world era
@@ -106,7 +109,7 @@ stageAttributes world model =
             [ eraAttribute (eraYear era) ]
 
         Transition (Slideshow era index) ->
-            eraAttribute (eraYear era) :: Views.Slideshow.stageAttributes model.history era index
+            eraAttribute (eraYear era) :: Views.Slideshow.stageAttributes model.history era index ++ Views.Slideshow.lights model.history era index
 
         Transition ReturningToPresent ->
             eraAttribute "present" :: premisesAttribute world
@@ -151,6 +154,7 @@ inspection world model =
             [ Common.documentSheet
                 { variant = sheetVariant clue
                 , document = Content.Clues.clue world clue
+                , picture = cluePicture clue
                 , buttonLabel = "Put it back"
                 , onPress = CloseInspection
                 }
@@ -158,6 +162,17 @@ inspection world model =
 
         Nothing ->
             []
+
+
+{-| A 1998 book's picture page shows the picture itself above its description. -}
+cluePicture : ClueId -> Maybe String
+cluePicture clue =
+    case clue of
+        CandidatePage candidate CoverTab ->
+            Just (Art.candidateIllustration candidate)
+
+        _ ->
+            Nothing
 
 
 sheetVariant : ClueId -> String
