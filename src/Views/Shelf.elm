@@ -40,6 +40,7 @@ view world placement notice =
                 [ "Click a book to pick it up, then click a space on the shelf. Click a filled space to swap."
                 , "Fill the shelf in any order the plaque suggests. You can rearrange as often as you like, and it never costs an attempt."
                 ]
+                ++ [ Common.closePanel True ]
             )
         , section [ class "shelf", attribute "aria-label" "Reopening shelf" ]
             [ div [ class "shelf__slots" ] (List.indexedMap position Rules.Shelf.slots) ]

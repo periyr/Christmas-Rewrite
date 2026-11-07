@@ -1,11 +1,11 @@
-module Views.Common exposing (attemptsDisplay, documentSheet, helpButton, narration, popoverSheet, popoverToggle, primaryButton, statusLine, topbar)
+module Views.Common exposing (attemptsDisplay, closePanel, documentSheet, helpButton, narration, popoverSheet, popoverToggle, primaryButton, roomNote, statusLine, topbar)
 
 {-| Pieces shared by several screens. -}
 
 import Content.Feedback
 import Domain exposing (Attempts, Document, Msg(..), Notice)
 import Html exposing (Attribute, Html, button, div, footer, h2, header, p, section, span, text)
-import Html.Attributes exposing (attribute, class, classList, id, type_)
+import Html.Attributes exposing (attribute, class, classList, disabled, id, type_)
 import Html.Events exposing (onClick)
 import Rules.Attempts
 
@@ -84,6 +84,25 @@ narration document action =
             )
         , action
         ]
+
+
+{-| Scene text at the top of the room, for a phase the player walks around in. -}
+roomNote : Document -> Html msg
+roomNote document =
+    div [ class "narration narration--top" ]
+        [ div [ class "narration__text" ]
+            (h2 [ class "narration__title" ] [ text document.title ]
+                :: List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
+            )
+        ]
+
+
+{-| Back to the room from a panel. The answer and attempts stay as they are. Off
+while first-attempt feedback is showing, when the player presses Retry first.
+-}
+closePanel : Bool -> Html Msg
+closePanel canClose =
+    button [ type_ "button", class "btn", disabled (not canClose), onClick ClosePanel ] [ text "Back to the room" ]
 
 
 {-| Help and reference sheets need no game state, so they use the browser's

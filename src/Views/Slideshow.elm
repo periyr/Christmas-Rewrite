@@ -1,4 +1,4 @@
-module Views.Slideshow exposing (stageAttributes, view)
+module Views.Slideshow exposing (atShelvingPause, stageAttributes, view)
 
 {-| The week's playback. The model owns the position: this only draws the slide
 it points at and sends Advance.
@@ -49,6 +49,31 @@ view world history era index =
     [ Art.room
     , Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
     ]
+
+
+{-| The room at the shelving pause: everything done up to that day stays done,
+and the books aren't up yet.
+-}
+atShelvingPause : History -> List (Attribute msg)
+atShelvingPause history =
+    let
+        isShelving ( _, slide ) =
+            case slide of
+                WeekdaySlide _ ShelveBooks ->
+                    True
+
+                _ ->
+                    False
+
+        index =
+            Timeline.slides Repairs1950 history
+                |> List.indexedMap Tuple.pair
+                |> List.filter isShelving
+                |> List.head
+                |> Maybe.map Tuple.first
+                |> Maybe.withDefault 0
+    in
+    stageAttributes history Repairs1950 index
 
 
 {-| The room changes as the week's work gets done. The tasks come from the
