@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 56" width="64" height="56">
+
+  <!-- Foreground colored shapes -->
+  <ellipse cx="32" cy="50.5" rx="22" ry="1.8" fill="#291e1a" opacity="0.18"/>
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Box Inside -->
+    <path d="M 14,32 L 20,24 C 30,23.5 40,24.5 44,24 L 50,32 Z" fill="#5a3428" />
+
+    <!-- Sticks -->
+    <path d="M 21.5,21 L 22,35" fill="none" />
+    <path d="M 32.5,21 L 32,35" fill="none" />
+    <path d="M 41,21 L 42,35" fill="none" />
+
+    <!-- Fox Silhouette -->
+    <path d="M 17,18 C 16,16 16.5,14 18,14 L 19,8 L 21,11 L 23.5,8 L 24.5,13 C 26,15 26,17 25,18 C 24,20 18,20 17,18 Z" fill="#291e1a" />
+    
+    <!-- Owl Silhouette -->
+    <circle cx="32" cy="17" r="5" fill="#291e1a" />
+    <path d="M 28,15 L 27,11 L 30,13 M 36,15 L 37,11 L 34,13" fill="#291e1a" />
+    
+    <!-- Lantern Silhouette -->
+    <path d="M 37,13 L 41,9 L 45,13 Z" fill="#291e1a" />
+    <rect x="38" y="13" width="6" height="8" fill="#291e1a" />
+    <circle cx="41" cy="7" r="2" fill="#291e1a" />
+
+    <!-- Cream cut-out holes (no stroke so they read purely as negative space) -->
+    <circle cx="19" cy="15.5" r="1" fill="#f2e4c9" stroke="none" />
+    <circle cx="22.5" cy="15.5" r="1" fill="#f2e4c9" stroke="none" />
+    <circle cx="30" cy="16.5" r="1.2" fill="#f2e4c9" stroke="none" />
+    <circle cx="34" cy="16.5" r="1.2" fill="#f2e4c9" stroke="none" />
+    <path d="M 31.5,18 L 32.5,18 L 32,19.5 Z" fill="#f2e4c9" stroke="none" />
+    <rect x="39.5" y="14.5" width="3" height="4" rx="1.5" fill="#f2e4c9" stroke="none" />
+
+    <!-- Box Left Flap -->
+    <path d="M 14,32 L 5,38 L 11,28 L 20,24 Z" fill="#a6652b" />
+    <!-- Box Right Flap -->
+    <path d="M 50,32 L 59,38 L 53,28 L 44,24 Z" fill="#a6652b" />
+    <!-- Box Front -->
+    <path d="M 14,32 C 26,33 38,33 50,32 C 49,39 50,44 49,50.5 C 37,50.5 25,50.5 15,50.5 C 14,44 14.5,39 14,32 Z" fill="#a6652b" />
+  </g>
+</svg>
