@@ -26,8 +26,9 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10�
 
 ## Controls
 
-- **Walking (planned, not yet in the game):** move Walter, Henry or Edwin around the shop to reach things. [Fill in the real controls once B builds this, e.g. click a spot on the floor or use the arrow keys.]
-- **Click objects and documents** to inspect them.
+- **Walk** around the shop as Walter, Henry or Edwin: hold **A**/**D** or the **← →** arrow keys. [Not on screen yet: confirm once B wires walking in.]
+- **Use** what's nearby with **E** when its prompt appears. Or **click** an object: your character walks there and uses it.
+- **Inspect** documents and objects to read them; this never costs anything.
 - **To move something:** click to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click the same object again to put it down.
 - **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses one of two attempts.
 - **Help:** the Help button explains the controls. [Check that every puzzle screen has one before submitting.]
@@ -71,13 +72,15 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 
 Remove this section from the public copy. It keeps the claims above honest.
 
-| Feature | Status (7 November) |
+| Feature | Status (7 November, `main` at contract v1.3) |
 |---|---|
-| 1950 rules: repair board, salvage, shelf | Built and tested (`npm test`, including all 2,520 weeks) |
-| All game text (`src/Content`) | Built; compiles; word counts checked |
-| 1973 and 1998 validators | **Not built yet** (`Debug.todo`); expected results are in `docs/test-examples-for-A.md` |
-| Walking characters | Sprites drawn and checked for alignment; **walking is not in the game yet** |
-| Room props (roof, window, timber, torch, sheet, computer, parcels) | Drawn; **not placed in the rooms yet** |
+| Rules for all three chapters (repair board, salvage, shelf, shadow story, forgotten book) | Built and tested: `npm test` passes 270 tests, including all 2,520 repair weeks and all 36 shadow stagings. The release build (`npm run build -- --optimize`) works. |
+| 1950 screens (salvage, repair board, shelf, slideshow) | Playable in the browser |
+| 1973 and 1998 puzzle screens | **Not built yet:** the game shows a placeholder for both chapters, though the rules behind them are done |
+| Walking (keys, click to walk, hotspots, room labels) | Logic built and tested in `Update`; room labels in `Content.Room`. **Not on screen yet**: B still has to draw the player and hotspots. |
+| Walking characters (4 people × 3 poses) | Drawn and checked: palette, bounds, anchor, no jumping between frames. **Not wired in yet.** |
+| Room props (14 files) | Drawn; **not placed in the rooms yet** |
+| All game text (`src/Content`) | Built; compiles; word counts checked; covers every 1973 and 1998 result |
 | Help button on every screen | Only the 1950 screens so far |
 
 ## Screenshots to take
