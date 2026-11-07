@@ -56,7 +56,7 @@ All nine book covers are clean. In the **salvage scene only**, lay the matching 
 | `damage-smoke-stains.svg` | `SmokeStains` |
 | `damage-missing-pages.svg` | `MissingPages` |
 
-Proposed damage per book (content to confirm in `src/Content`): the rule the player learns is that smoke or water can be repaired, but burning or missing pages cannot.
+Damage per book (agreed; `src/Content` should use the same lists): the rule the player learns is that smoke or water can be repaired, but burning or missing pages cannot.
 
 | Book | Condition | Damage |
 |---|---|---|
