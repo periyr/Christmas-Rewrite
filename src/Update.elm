@@ -5,6 +5,10 @@ module Update exposing (init, startChapter, update)
 Actions that do not make sense in the current phase are ignored, which is
 what makes double clicks and clicks during feedback/transitions harmless.
 
+The room (contract v1.3) wraps the game: walking only changes `model.room`,
+and using a hotspot sends the same game action the old button did. Walking
+never touches history, attempts or arrangements.
+
 -}
 
 import Domain exposing (..)
@@ -50,13 +54,96 @@ startChapter era =
             BookMystery (freshPuzzle Nothing)
 
 
+{-| Every phase change closes the panel and stops the player (held keys and
+any walking target are cleared). The player stays where they are, so after
+salvage they walk on to the board, and at the shelving pause to the shelf.
+-}
 goTo : Phase -> Model -> Model
 goTo phase model =
-    { model | phase = phase, inspecting = Nothing, notice = Nothing }
+    { model
+        | phase = phase
+        , inspecting = Nothing
+        , notice = Nothing
+        , room = { panelOpen = False, player = Rules.Room.stop model.room.player }
+    }
+
+
+{-| Entering a diary or coming back to the present: a new room, so the player
+starts again at the door end, facing right.
+-}
+enterRoom : Model -> Model
+enterRoom model =
+    { model | room = Rules.Room.initialRoom }
 
 
 update : Msg -> Model -> Model
 update msg model =
+    case msg of
+        WalkKeyDown key ->
+            if Rules.Room.canWalk model then
+                withPlayer (Rules.Room.press key) model
+
+            else
+                model
+
+        WalkKeyUp key ->
+            withPlayer (Rules.Room.release key) model
+
+        InteractNearby ->
+            case Rules.Room.nearby model of
+                Just hotspot ->
+                    useHotspot hotspot model
+
+                Nothing ->
+                    model
+
+        ApproachHotspot hotspot ->
+            approach hotspot model
+
+        AnimationFrame delta ->
+            if Rules.Room.isMoving model then
+                let
+                    ( player, arrived ) =
+                        Rules.Room.step delta model.room.player
+
+                    moved =
+                        withPlayer (\_ -> player) model
+                in
+                case arrived of
+                    Just hotspot ->
+                        useHotspot hotspot moved
+
+                    Nothing ->
+                        moved
+
+            else
+                model
+
+        ClosePanel ->
+            if model.room.panelOpen && not (phaseIsReviewing model.phase) then
+                let
+                    room =
+                        model.room
+                in
+                { model | room = { room | panelOpen = False }, notice = Nothing }
+
+            else
+                model
+
+        PageVisibilityChanged visible ->
+            if visible then
+                model
+
+            else
+                withPlayer Rules.Room.stop model
+
+        _ ->
+            settle (play msg model)
+
+
+{-| The game itself: everything except the room messages. -}
+play : Msg -> Model -> Model
+play msg model =
     case msg of
         Inspect clue ->
             { model | inspecting = Just clue, phase = noteInspected clue model.phase }
@@ -160,7 +247,7 @@ update msg model =
                 _ ->
                     model
 
-        -- Room messages (contract v1.3): accepted now, implemented in the next checkpoint.
+        -- The room messages are handled in `update`.
         WalkKeyDown _ ->
             model
 
@@ -181,6 +268,108 @@ update msg model =
 
         PageVisibilityChanged _ ->
             model
+
+
+
+-- ROOM
+
+
+withPlayer : (Player -> Player) -> Model -> Model
+withPlayer change model =
+    let
+        room =
+            model.room
+    in
+    { model | room = { room | player = change room.player } }
+
+
+{-| Whenever the player cannot walk (a clue, notice, feedback or panel is
+open, or the phase has no room), nothing is held and nothing is targeted.
+-}
+settle : Model -> Model
+settle model =
+    if Rules.Room.canWalk model then
+        model
+
+    else
+        withPlayer Rules.Room.stop model
+
+
+{-| Clicking a hotspot: use it now if it is in reach, otherwise walk to it. -}
+approach : Hotspot -> Model -> Model
+approach hotspot model =
+    let
+        goal =
+            (Rules.Room.position hotspot).x
+
+        player =
+            model.room.player
+    in
+    if not (Rules.Room.canWalk model && List.member hotspot (Rules.Room.hotspots model.phase)) then
+        model
+
+    else if abs (goal - player.x) <= Rules.Room.interactionDistance then
+        useHotspot hotspot model
+
+    else
+        withPlayer
+            (\p -> { p | held = [], target = Just hotspot, facing = Rules.Room.facingTowards goal p, walking = True })
+            model
+
+
+{-| Use a hotspot of the current phase: exactly the old action, or open the
+phase's panel. The player stops and turns to face it first.
+-}
+useHotspot : Hotspot -> Model -> Model
+useHotspot hotspot model =
+    if Rules.Room.canWalk model && List.member hotspot (Rules.Room.hotspots model.phase) then
+        let
+            stopped =
+                withPlayer
+                    (\player ->
+                        Rules.Room.stop { player | facing = Rules.Room.facingTowards (Rules.Room.position hotspot).x player }
+                    )
+                    model
+        in
+        case hotspot of
+            ClueSpot clue ->
+                settle (play (Inspect clue) stopped)
+
+            BoxSpot ->
+                settle (play Advance stopped)
+
+            DiarySpot ->
+                settle (play OpenNextDiary stopped)
+
+            _ ->
+                if Rules.Room.hasPanel model.phase then
+                    let
+                        room =
+                            stopped.room
+                    in
+                    { stopped | room = { room | panelOpen = True } }
+
+                else
+                    model
+
+    else
+        model
+
+
+phaseIsReviewing : Phase -> Bool
+phaseIsReviewing phase =
+    case phase of
+        RepairBoard puzzle ->
+            isReviewing puzzle
+
+        ShadowPuzzle puzzle ->
+            isReviewing puzzle
+
+        BookMystery puzzle ->
+            isReviewing puzzle
+
+        _ ->
+            False
 
 
 
@@ -330,7 +519,7 @@ advance model =
             goTo PresentHub model
 
         Transition (OpeningDiary era) ->
-            goTo (startChapter era) model
+            enterRoom (goTo (startChapter era) model)
 
         Salvage placement ->
             if Rules.Salvage.isSolved placement then
@@ -367,7 +556,7 @@ advance model =
 
         Transition ReturningToPresent ->
             if Timeline.fate model.history == Nothing then
-                goTo PresentHub model
+                enterRoom (goTo PresentHub model)
 
             else
                 goTo Ending model

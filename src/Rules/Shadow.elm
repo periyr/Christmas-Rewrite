@@ -1,9 +1,14 @@
-module Rules.Shadow exposing (accepts, allCutouts, complete, scenes, slots, validate)
+module Rules.Shadow exposing (accepts, allCutouts, complete, scenes, script, slots, validate)
 
-{-| 1973 shadow story: three panels, each one character and one prop.
+{-| 1973 shadow story: three numbered panels, each one character and one prop.
+
+The scenes are fixed slots, so a complete staging is one way of giving the
+three characters and the three props to Scene 1, 2 and 3: 3! × 3! = 36
+stagings. Each script variant accepts exactly one of them.
+
 -}
 
-import Domain exposing (Character(..), Cutout(..), Placement, Prop(..), Scene(..), ScriptVariant, ShadowSlot(..), Staging, Violation)
+import Domain exposing (Character(..), Cutout(..), Placement, Prop(..), Scene(..), ScriptVariant(..), ShadowSlot(..), Staging, Violation(..))
 import Rules.Placement as Placement
 
 
@@ -36,10 +41,25 @@ accepts cutout slot =
             False
 
 
-{-| A Staging once all six slots are filled. -}
+{-| A Staging once the stage is structurally complete: all six slots filled,
+each with the right kind of cut-out, and every cut-out used exactly once.
+Anything less is an incomplete submission, which spends no attempt.
+This is never a correctness signal.
+-}
 complete : Placement Cutout ShadowSlot -> Maybe Staging
 complete placement =
     let
+        placed =
+            placement.placed
+
+        occurrences match =
+            List.length (List.filter match placed)
+
+        wellFormed =
+            (List.length placed == List.length slots)
+                && List.all (\slot -> occurrences (\( _, s ) -> s == slot) == 1) slots
+                && List.all (\cutout -> occurrences (\( c, _ ) -> c == cutout) == 1) allCutouts
+
         cast scene =
             case ( Placement.itemIn (CharacterSlot scene) placement, Placement.itemIn (PropSlot scene) placement ) of
                 ( Just (CharacterCutout character), Just (PropCutout prop) ) ->
@@ -48,12 +68,51 @@ complete placement =
                 _ ->
                     Nothing
     in
-    Maybe.map3 Staging (cast Scene1) (cast Scene2) (cast Scene3)
+    if wellFormed then
+        Maybe.map3 Staging (cast Scene1) (cast Scene2) (cast Scene3)
+
+    else
+        Nothing
 
 
-{-| NOT IMPLEMENTED YET — Person A, hours 3.5–7.
-Compare each scene to the script variant derived from history (brief section 5).
+{-| The staging each script describes (brief section 5). The original script
+is used when 1950 succeeded, the neighbours' retelling when it failed.
+-}
+script : ScriptVariant -> Staging
+script variant =
+    case variant of
+        OriginalScript ->
+            { scene1 = { character = Fox, prop = Lantern }
+            , scene2 = { character = Owl, prop = Key }
+            , scene3 = { character = Child, prop = Book }
+            }
+
+        NeighboursRetelling ->
+            { scene1 = { character = Child, prop = Key }
+            , scene2 = { character = Owl, prop = Book }
+            , scene3 = { character = Fox, prop = Lantern }
+            }
+
+
+{-| One SceneConflictsWithScript per scene whose character or prop differs
+from the script, in scene order. Because every cut-out is used exactly once,
+a wrong staging always conflicts in at least two scenes.
 -}
 validate : ScriptVariant -> Staging -> List Violation
-validate _ _ =
-    Debug.todo "Rules.Shadow.validate is not implemented yet"
+validate variant staging =
+    let
+        expected =
+            script variant
+
+        check scene castOf =
+            if castOf staging == castOf expected then
+                []
+
+            else
+                [ SceneConflictsWithScript scene ]
+    in
+    List.concat
+        [ check Scene1 .scene1
+        , check Scene2 .scene2
+        , check Scene3 .scene3
+        ]
