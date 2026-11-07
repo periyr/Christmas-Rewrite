@@ -1705,77 +1705,62 @@ svg-art { display: contents; }
 
 /* ---------- Wall clock (Components.Clock) ---------- */
 
-/* Hangs on the clear right-hand wall above the family photograph, in % of the
-   room so it scales with it. The 1950 picture (also used for 1998) and the
-   saved ending have a painted clock, so this one shows only where the picture
-   has none: the present-day and 1973 rooms, where the painted clock's hands
-   overlay (.r-hands) is switched off. */
+/* Hangs on the right-hand side wall above the family photograph, in % of the
+   room so it scales with it (centre at 1210, 185 of 1280 x 720). That wall is
+   angled, so the clock is narrowed and sheared to lie flat on it, measured from
+   the photograph frame below: its top edge rises about 8 degrees to the right
+   and its right side is about 13% taller. The swing turns .clock__body inside
+   this, so the clock swings flat against the wall.
+
+   The 1950 picture (also used for 1998) and the saved ending have a painted
+   clock, so this one shows only where the picture has none: the present-day
+   and 1973 rooms, where the painted clock's hands overlay is switched off. */
 .clock {
   position: absolute;
   z-index: 1;
-  left: 90.8%;
-  top: 19%;
-  width: 7.5%;
+  left: 91.1%;
+  top: 19.6%;
+  width: 6.9%;
   aspect-ratio: 1;
-  transform-origin: 50% 0; /* swings from its nail */
-  filter: drop-shadow(0.15rem 0.25rem 0.15rem rgba(41, 30, 26, 0.4));
+  transform: scaleX(0.87) skewY(-9deg);
+  /* Shadows in the room fall down and to the right. */
+  filter: drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33));
   pointer-events: none;
 }
 
 .stage:is([data-era="1950"], [data-era="1998"], [data-era="saved"]) .clock { display: none; }
+
 /* The hands overlay sits inside an SVG <use>, so it is switched by a variable. */
 .r-hands { opacity: var(--show-hands, 1); }
 .stage:is([data-era="present"], [data-era="closed"], [data-era="1973"]) { --show-hands: 0; }
-.stage[data-lights="down"] .clock { filter: brightness(0.45); }
 
-.clock__face {
+/* Recoloured exactly like the room picture behind it. */
+.stage[data-era="closed"] .clock { filter: brightness(0.5) saturate(0.6) drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33)); }
+.stage[data-lights="down"] .clock { filter: brightness(0.4) saturate(0.75); }
+
+.clock__body {
   position: absolute;
   inset: 0;
-  border: 0.45rem solid #a6652b;
-  border-radius: 50%;
-  background: #f2e4c9;
-  box-shadow: 0 0 0 0.12rem #5a3428, inset 0 0 0 0.1rem #5a3428;
+  transform-origin: 50% 0; /* swings from its nail */
 }
 
-/* Ticks and hands each fill the face and are turned about its centre; the
-   visible mark is drawn from the centre (hands) or the rim (ticks). */
-.clock__tick,
+/* Every layer fills the clock; the hands turn about its centre. */
 .clock__hand { position: absolute; inset: 0; }
 
-.clock__tick::before,
-.clock__hand::before {
-  content: "";
+.clock__layer {
   position: absolute;
-  left: 50%;
-  border-radius: 0.1rem;
-  background: #291e1a;
-  transform: translateX(-50%);
-}
-
-.clock__tick::before { top: 5%; width: 0.15rem; height: 9%; }
-.clock__hand::before { bottom: 50%; }
-.clock__hand--hour::before { width: 0.35rem; height: 26%; }
-.clock__hand--minute::before { width: 0.25rem; height: 38%; }
-.clock__hand--second::before { width: 0.1rem; height: 40%; background: #893f43; }
-
-.clock__pin {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 12%;
-  height: 12%;
-  border: 0.08rem solid #291e1a;
-  border-radius: 50%;
-  background: #d9a443;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 /* The second hand ticks once a second and the clock sways a little; both stop
    when the clock has stopped, and both are off for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
-  .clock { animation: clock-swing 3s ease-in-out infinite alternate; }
+  .clock__body { animation: clock-swing 3s ease-in-out infinite alternate; }
   .clock__hand--second { animation: clock-second 60s steps(60) infinite; }
-  .clock.is-stopped,
+  .clock.is-stopped .clock__body,
   .clock.is-stopped .clock__hand--second { animation-play-state: paused; }
 }
 
