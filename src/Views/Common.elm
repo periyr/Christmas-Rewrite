@@ -1,11 +1,12 @@
-module Views.Common exposing (attemptsDisplay, closePanel, documentSheet, helpButton, narration, popoverSheet, popoverToggle, primaryButton, roomNote, statusLine, topbar)
+module Views.Common exposing (attemptsDisplay, closePanel, clueNote, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar)
 
 {-| Pieces shared by several screens. -}
 
+import Content.Clues
 import Content.Feedback
-import Domain exposing (Attempts, Document, Msg(..), Notice)
-import Html exposing (Attribute, Html, button, div, footer, h2, header, p, section, span, text)
-import Html.Attributes exposing (attribute, class, classList, disabled, id, type_)
+import Domain exposing (Attempts(..), ClueId(..), Document, Msg(..), Notice, Violation, World)
+import Html exposing (Attribute, Html, button, div, footer, h2, h3, header, img, li, p, section, span, text, ul)
+import Html.Attributes exposing (alt, attribute, class, classList, disabled, id, src, type_)
 import Html.Events exposing (onClick)
 import Rules.Attempts
 
@@ -60,14 +61,25 @@ primaryButton attributes label =
     button (type_ "button" :: class "btn btn--primary" :: attributes) [ text label ]
 
 
-{-| A document on paper over the current screen. -}
-documentSheet : { variant : String, document : Document, buttonLabel : String, onPress : msg } -> Html msg
-documentSheet { variant, document, buttonLabel, onPress } =
+{-| A document on paper over the current screen, with an optional picture above
+the words (a 1998 book's illustration). The words stay real text.
+-}
+documentSheet : { variant : String, document : Document, picture : Maybe String, buttonLabel : String, onPress : msg } -> Html msg
+documentSheet { variant, document, picture, buttonLabel, onPress } =
     div [ class "overlay" ]
         [ section [ class ("sheet " ++ variant), attribute "role" "dialog", attribute "aria-modal" "true", attribute "aria-labelledby" "sheet-title" ]
             [ header [ class "sheet__head" ]
                 [ h2 [ class "sheet__title", id "sheet-title" ] [ text document.title ] ]
-            , div [ class "sheet__body" ] (List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs)
+            , div [ class "sheet__body" ]
+                ((case picture of
+                    Just file ->
+                        [ img [ class "sheet__picture", src file, alt "" ] [] ]
+
+                    Nothing ->
+                        []
+                 )
+                    ++ List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
+                )
             , footer [ class "sheet__foot" ]
                 [ button [ type_ "button", class "btn", onClick onPress ] [ text buttonLabel ] ]
             ]
@@ -139,3 +151,88 @@ helpButton closeLabel paragraphs =
     [ popoverToggle "help" "Help"
     , popoverSheet "help" "How to play" closeLabel (List.map (\paragraph -> p [] [ text paragraph ]) paragraphs)
     ]
+
+
+
+-- MAIN PUZZLES: shared by the 1950 board, the 1973 stage and the 1998 books.
+
+
+{-| The violations to show while the first mistake is being reviewed. -}
+reviewedViolations : Attempts -> List Violation
+reviewedViolations attempts =
+    case attempts of
+        ReviewingFirstMistake violations ->
+            violations
+
+        _ ->
+            []
+
+
+{-| Violations numbered from 1, for the marks and the feedback list. -}
+numbered : List Violation -> List ( String, Violation )
+numbered =
+    List.indexedMap (\index violation -> ( String.fromInt (index + 1), violation ))
+
+
+{-| After Retry the arrangement can change, so the marks go and the earlier
+violations stay available as plain text.
+-}
+lastTryNotes : String -> Attempts -> List (Html msg)
+lastTryNotes closeLabel attempts =
+    case attempts of
+        RetryingAfterMistake violations ->
+            [ popoverToggle "last-try" "Last try’s notes"
+            , popoverSheet "last-try"
+                "What went wrong last time"
+                closeLabel
+                [ ul [] (List.map (\violation -> li [] [ text (Content.Feedback.violation violation) ]) violations) ]
+            ]
+
+        _ ->
+            []
+
+
+{-| The first-mistake strip: every violation, numbered to match its marks, and
+Retry. Only shown after a submission.
+-}
+feedback : { title : String, note : String } -> List ( String, Violation ) -> Html Msg
+feedback words numberedViolations =
+    section [ class "feedback", attribute "role" "alert", attribute "aria-label" "What went wrong" ]
+        [ div []
+            [ h3 [ class "feedback__title" ] [ text words.title ]
+            , ul [ class "feedback__list" ]
+                (List.map
+                    (\( mark, violation ) ->
+                        li [ class "feedback__item" ]
+                            [ span [ class "mark mark--inline" ] [ text mark ]
+                            , span [] [ text (Content.Feedback.violation violation) ]
+                            ]
+                    )
+                    numberedViolations
+                )
+            ]
+        , div [ class "feedback__aside" ]
+            [ p [ class "feedback__note" ] [ text words.note ]
+            , button [ type_ "button", class "btn", onClick Retry ] [ text "Try again" ]
+            ]
+        ]
+
+
+{-| A clue pinned beside a puzzle. Its title follows the history-derived world,
+and it shows "Read" once opened.
+-}
+clueNote : World -> List ClueId -> ClueId -> Html Msg
+clueNote world inspected clue =
+    button
+        [ type_ "button"
+        , classList [ ( "clue", True ), ( "clue--slip", clue == GlassDeliverySlip ) ]
+        , onClick (Inspect clue)
+        ]
+        (text (Content.Clues.clue world clue).title
+            :: (if List.member clue inspected then
+                    [ span [ class "clue__read" ] [ text "Read" ] ]
+
+                else
+                    []
+               )
+        )

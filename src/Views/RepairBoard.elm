@@ -6,12 +6,10 @@ about correctness comes from puzzle.attempts, never from calling the validator.
 
 import Components.Art as Art
 import Components.Placement as PlacementUI
-import Content.Clues
-import Content.Feedback
 import Content.Repair
 import Content.Words exposing (dayName)
 import Domain exposing (..)
-import Html exposing (Html, aside, button, div, h3, li, p, section, span, text, ul)
+import Html exposing (Html, aside, button, div, h3, li, section, span, text, ul)
 import Html.Attributes exposing (attribute, class, classList, disabled, type_)
 import Html.Events exposing (onClick)
 import Rules.Placement
@@ -30,10 +28,10 @@ view world puzzle notice =
             puzzle.arrangement
 
         reviewing =
-            reviewedViolations puzzle.attempts
+            Common.reviewedViolations puzzle.attempts
 
         numbered =
-            List.indexedMap (\index violation -> ( String.fromInt (index + 1), violation )) reviewing
+            Common.numbered reviewing
 
         config =
             placementConfig puzzle numbered
@@ -44,12 +42,12 @@ view world puzzle notice =
     [ div [ class "board-scene" ]
         [ Common.topbar "1950"
             "The Repair Week"
-            (Common.attemptsDisplay puzzle.attempts :: lastTryNotes puzzle.attempts ++ help ++ [ Common.closePanel (not isReviewing) ])
+            (Common.attemptsDisplay puzzle.attempts :: Common.lastTryNotes "Back to the board" puzzle.attempts ++ help ++ [ Common.closePanel (not isReviewing) ])
         , section [ class "cork", attribute "aria-label" "Planning board" ]
             [ div [ class "days" ] (List.map (dayColumn config) Rules.Repair.days)
             , div [ class "cork__lower" ]
                 [ notThisWeek config
-                , div [ class "clues" ] (List.map (clueNote world puzzle) clues)
+                , div [ class "clues" ] (List.map (Common.clueNote world puzzle.inspected) clues)
                 ]
             , if isReviewing then
                 Art.arrows (List.filterMap (arrowFor placement) reviewing)
@@ -64,22 +62,16 @@ view world puzzle notice =
             , Common.primaryButton [ disabled isReviewing, onClick Submit ] "Finish week"
             ]
         , if isReviewing then
-            feedback numbered
+            Common.feedback
+                { title = "The week didn’t hold. Here’s what went wrong:"
+                , note = "You have one more try. Your cards stay where they are."
+                }
+                numbered
 
           else
             PlacementUI.tray config
         ]
     ]
-
-
-reviewedViolations : Attempts -> List Violation
-reviewedViolations attempts =
-    case attempts of
-        ReviewingFirstMistake violations ->
-            violations
-
-        _ ->
-            []
 
 
 placementConfig : Puzzle -> List ( String, Violation ) -> PlacementUI.Config TaskId RepairSlot Msg
@@ -117,24 +109,6 @@ help =
         , "Read anything pinned to the board as often as you like. Looking and rearranging never costs an attempt."
         , "When every card has a place, press Finish week. You have two attempts."
         ]
-
-
-{-| After Retry the board can change, so the marks go and the earlier
-violations stay available as plain text.
--}
-lastTryNotes : Attempts -> List (Html Msg)
-lastTryNotes attempts =
-    case attempts of
-        RetryingAfterMistake violations ->
-            [ Common.popoverToggle "last-try" "Last try’s notes"
-            , Common.popoverSheet "last-try"
-                "What went wrong last time"
-                "Back to the board"
-                [ ul [] (List.map (\violation -> li [] [ text (Content.Feedback.violation violation) ]) violations) ]
-            ]
-
-        _ ->
-            []
 
 
 hint : Puzzle -> Bool -> String
@@ -191,23 +165,6 @@ notThisWeek config =
 clues : List ClueId
 clues =
     [ WalterDiaryPage, GlassDeliverySlip, RubbleAndShelvesNote, BudgetAllocation ]
-
-
-clueNote : World -> Puzzle -> ClueId -> Html Msg
-clueNote world puzzle clue =
-    button
-        [ type_ "button"
-        , classList [ ( "clue", True ), ( "clue--slip", clue == GlassDeliverySlip ) ]
-        , onClick (Inspect clue)
-        ]
-        (text (Content.Clues.clue world clue).title
-            :: (if List.member clue puzzle.inspected then
-                    [ span [ class "clue__read" ] [ text "Read" ] ]
-
-                else
-                    []
-               )
-        )
 
 
 cardBody : TaskId -> List (Html Msg)
@@ -418,29 +375,6 @@ goals numbered isReviewing =
     div [ class "paper-note" ]
         [ h3 [ class "paper-note__title" ] [ text "Reopening goals" ]
         , ul [ class "goals" ] (List.map goalRow allGoals)
-        ]
-
-
-feedback : List ( String, Violation ) -> Html Msg
-feedback numbered =
-    section [ class "feedback", attribute "role" "alert", attribute "aria-label" "What went wrong" ]
-        [ div []
-            [ h3 [ class "feedback__title" ] [ text "The week didn’t hold. Here’s what went wrong:" ]
-            , ul [ class "feedback__list" ]
-                (List.map
-                    (\( mark, violation ) ->
-                        li [ class "feedback__item" ]
-                            [ span [ class "mark mark--inline" ] [ text mark ]
-                            , span [] [ text (Content.Feedback.violation violation) ]
-                            ]
-                    )
-                    numbered
-                )
-            ]
-        , div [ class "feedback__aside" ]
-            [ p [ class "feedback__note" ] [ text "You have one more try. Your cards stay where they are." ]
-            , button [ type_ "button", class "btn", onClick Retry ] [ text "Try again" ]
-            ]
         ]
 
 
