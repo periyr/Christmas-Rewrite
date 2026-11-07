@@ -4,9 +4,9 @@
 
 ## The basics
 
-- **Walking** (built in the game's logic, not yet on screen; confirm once B wires it in):
+- **Walking:**
   - Hold **A**/**D** or **← →** to walk.
-  - Press **E** to use whatever is nearby when its prompt appears, or **click** an object to walk there and use it.
+  - Press **E** to use whatever is nearby when its prompt appears, or **click** an object's label to walk there and use it.
   - Walking never costs anything and never changes an answer. Every solution below stays the same.
 - **Where things are** (left to right in the room):
 

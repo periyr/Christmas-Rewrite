@@ -189,7 +189,7 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
   - Walter in the 1950 phases (salvage, repair board, reopening shelf)
   - Henry in 1973
   - young Edwin in 1998
-- **B's placeholder figure:** the `#actor-idle`, `#actor-walk-a` and `#actor-walk-b` symbols in `public/index.html` (viewBox 200 × 400) can be replaced by these files. `Components.Actor`'s `Idle`, `StepA` and `StepB` map to `idle`, `walk-1` and `walk-2`.
+- **In the game:** B's `Components.Actor` draws these files (her placeholder figure is gone), using the anchor and scale above. Checked in the browser: the sprite is 192 × 320 room px, the feet sit on y 650, and it flips and cycles both walk frames.
 
 ### Room props (overlays for B's room composition)
 
