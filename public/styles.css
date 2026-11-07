@@ -1333,15 +1333,27 @@ svg-art { display: contents; }
   top: 0.5rem;
   z-index: 2;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1rem;
-  padding: 0.3rem 1rem;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.3rem 1rem 0.3rem 0.4rem;
   border: 0.1rem solid var(--paper-edge);
   border-radius: 0.3rem;
   background: var(--paper);
   box-shadow: 0.14rem 0.18rem 0 var(--cast);
   white-space: nowrap;
+}
+
+/* The year the room is in, in the same badge the puzzle panels use. */
+.room-bar__year { flex: none; }
+
+/* On slides there's no walking hint, just the year. */
+.room-bar--year { padding: 0.3rem; }
+
+.room-bar__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
 }
 
 .room-bar p { margin: 0; }

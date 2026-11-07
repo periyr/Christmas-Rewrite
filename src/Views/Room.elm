@@ -14,6 +14,7 @@ import Html exposing (Html, button, div, p, span, text)
 import Html.Attributes exposing (attribute, class, classList, style, type_)
 import Html.Events exposing (onClick)
 import Rules.Room
+import Views.Labels exposing (eraYear)
 
 
 {-| What a phase adds to the room. `behind` is on the furniture, so the player
@@ -48,6 +49,29 @@ view world model scene =
             else
                 []
            )
+
+
+{-| The year the room is in, for the corner badge. -}
+yearLabel : Phase -> String
+yearLabel phase =
+    case phase of
+        Salvage _ ->
+            eraYear Repairs1950
+
+        RepairBoard _ ->
+            eraYear Repairs1950
+
+        ReopeningShelf _ ->
+            eraYear Repairs1950
+
+        ShadowPuzzle _ ->
+            eraYear Shadows1973
+
+        BookMystery _ ->
+            eraYear Search1998
+
+        _ ->
+            "Present day"
 
 
 person : Phase -> Actor.Person
@@ -144,7 +168,9 @@ hotspot isNear spot =
         )
 
 
-{-| Only in rooms the player can walk around, and not under a panel. -}
+{-| Only in rooms the player can walk around, and not under a panel (which shows
+its own year). Starts with the year the room is in.
+-}
 bottomBar : Model -> Maybe String -> Html Msg
 bottomBar model line =
     if List.isEmpty (Rules.Room.hotspots model.phase) || model.room.panelOpen then
@@ -152,12 +178,15 @@ bottomBar model line =
 
     else
         div [ class "room-bar" ]
-            ((case line of
-                Just words ->
-                    [ p [ class "room-bar__line" ] [ text words ] ]
+            [ span [ class "era-tag room-bar__year" ] [ text (yearLabel model.phase) ]
+            , div [ class "room-bar__text" ]
+                ((case line of
+                    Just words ->
+                        [ p [ class "room-bar__line" ] [ text words ] ]
 
-                Nothing ->
-                    []
-             )
-                ++ [ p [ class "room-bar__hint" ] [ text "A/D or ←/→ to walk · E to use · or click a label" ] ]
-            )
+                    Nothing ->
+                        []
+                 )
+                    ++ [ p [ class "room-bar__hint" ] [ text "A/D or ←/→ to walk · E to use · or click a label" ] ]
+                )
+            ]

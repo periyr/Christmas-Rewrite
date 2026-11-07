@@ -1,4 +1,4 @@
-module Views.Common exposing (attemptsDisplay, closePanel, clueNote, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar)
+module Views.Common exposing (attemptsDisplay, closePanel, clueNote, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar, yearBadge)
 
 {-| Pieces shared by several screens. -}
 
@@ -236,3 +236,11 @@ clueNote world inspected clue =
                     []
                )
         )
+
+
+{-| The year the scene is in, top left, in the same badge the panels use.
+Shown on slides, where there is no walking bar.
+-}
+yearBadge : String -> Html msg
+yearBadge year =
+    div [ class "room-bar room-bar--year" ] [ span [ class "era-tag room-bar__year" ] [ text year ] ]
