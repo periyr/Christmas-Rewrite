@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+
+  <!-- Holding Rod -->
+  <rect x="80" y="90" width="4" height="70" rx="1" fill="#291e1a" />
+  <circle cx="82" cy="96" r="3" fill="#291e1a" />
+
+  <!-- Lantern Silhouette Structure -->
+  <g fill="#291e1a">
+    <!-- Top Loop / Handle -->
+    <path d="M80 12 C70 12, 64 20, 64 28 C64 34, 70 38, 80 38 C90 38, 96 34, 96 28 C96 20, 90 12, 80 12 Z M80 18 C85 18, 88 22, 88 27 C88 31, 85 33, 80 33 C75 33, 72 31, 72 27 C72 22, 75 18, 80 18 Z" />
+
+    <!-- Cap / Roof -->
+    <path d="M80 34 L46 50 H114 Z" />
+
+    <!-- Main Glass Housing Frame -->
+    <rect x="50" y="50" width="60" height="42" rx="2" />
+
+    <!-- Base / Tray -->
+    <path d="M44 92 H116 V98 H44 Z" />
+    <path d="M52 98 L56 104 H104 L108 98 Z" />
+  </g>
+
+  <!-- Cut-out Light Openings (Glass Panes & Candle) -->
+  <!-- Glass Pane Windows (Negative Space) -->
+  <rect x="55" y="54" width="14" height="34" fill="#d4d3d1" />
+  <rect x="73" y="54" width="14" height="34" fill="#d4d3d1" />
+  <rect x="91" y="54" width="14" height="34" fill="#d4d3d1" />
+
+  <!-- Candle & Flame Inside Center Pane -->
+  <rect x="77" y="68" width="6" height="20" fill="#291e1a" />
+  <!-- Candle Flame Cut-out Glow -->
+  <path d="M80 58 C77 62, 77 66, 80 68 C83 66, 83 62, 80 58 Z" fill="#291e1a" />
+</svg>

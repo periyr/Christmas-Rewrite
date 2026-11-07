@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 340">
+  <!-- Drop Shadow -->
+  <rect x="26" y="24" width="188" height="288" rx="6" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cloth Cover (Ochre) -->
+  <rect x="20" y="18" width="188" height="288" rx="6" fill="#a6652b" />
+
+  <!-- Spine Layer -->
+  <path d="M20 18 h20 v288 h-20 a6 6 0 0 1 -6 -6 v-276 a6 6 0 0 1 6 -6 z" fill="#291e1a" opacity="0.25" />
+  <rect x="40" y="18" width="2" height="288" fill="#291e1a" opacity="0.18" />
+
+  <!-- Simple Embossed Blind-Stamped Border Lines -->
+  <!-- Outer Line (Darker Shade / Inset Shadow Effect) -->
+  <rect x="54" y="34" width="140" height="256" rx="2" fill="none" stroke="#291e1a" stroke-width="2.5" opacity="0.3" />
+  <!-- Inner Line -->
+  <rect x="60" y="40" width="128" height="244" rx="1" fill="none" stroke="#5a3428" stroke-width="1.5" opacity="0.4" />
+
+  <!-- Corner Fleur-de-lis / Corner Emboss Ornaments -->
+  <path d="M54 44 H66 V34 M194 44 H182 V34 M54 280 H66 V290 M194 280 H182 V290" fill="none" stroke="#291e1a" stroke-width="2" opacity="0.3" />
+
+  <!-- Equal Wear Scuffs & Faded Spine Cloth -->
+  <path d="M20 18 L32 18 L20 30 Z" fill="#d4d3d1" opacity="0.4" />
+  <path d="M208 18 L196 18 L208 30 Z" fill="#d4d3d1" opacity="0.3" />
+  <path d="M208 306 L194 306 L208 292 Z" fill="#d4d3d1" opacity="0.35" />
+  <path d="M20 306 L34 306 L20 292 Z" fill="#d4d3d1" opacity="0.25" />
+  <path d="M48 60 Q120 70 180 58 Q110 64 48 60 Z" fill="#291e1a" opacity="0.1" />
+</svg>

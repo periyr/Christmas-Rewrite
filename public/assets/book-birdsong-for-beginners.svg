@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="126" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="126" rx="4" fill="#d9a443" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v126 h-14 a4 4 0 0 1 -4 -4 v-118 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v126 h-12 a4 4 0 0 1 -4 -4 v-118 a4 4 0 0 1 4 -4 z" fill="#a6652b" />
+  <rect x="24" y="8" width="2" height="126" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Small Bird (Paper Cut Style) -->
+  <!-- Motif Shadow -->
+  <g fill="#291e1a" opacity="0.2" transform="translate(2, 3)">
+    <path d="M64 63 c-12 0 -20 8 -22 18 c6 2 12 -1 16 -5 c-6 10 -2 17 8 17 c8 0 16 -6 16 -16 c0 -8 -8 -14 -18 -14 z" />
+    <circle cx="70" cy="61" r="2" />
+    <path d="M78 62 l6 -2 l-4 5 z" />
+  </g>
+  <!-- Main Motif Shape -->
+  <path d="M64 63 c-12 0 -20 8 -22 18 c6 2 12 -1 16 -5 c-6 10 -2 17 8 17 c8 0 16 -6 16 -16 c0 -8 -8 -14 -18 -14 z" fill="#291e1a" />
+  <circle cx="70" cy="61" r="2" fill="#d4d3d1" />
+  <path d="M78 62 l6 -2 l-4 5 z" fill="#291e1a" />
+  <path d="M52 74 c6 -2 12 1 16 7 c-5 -2 -11 -3 -16 -7 z" fill="#893f43" />
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <!-- Soft Inner Water Stain Wash -->
+  <path d="M12 8 C28 4, 48 18, 62 14 C78 10, 88 24, 84 42 C80 60, 92 74, 76 86 C60 98, 38 88, 22 92 C6 96, -2 80 2 62 C6 44, -4 12, 12 8 Z" fill="#5a3428" opacity="0.12" />
+
+  <!-- Primary Tide-Mark Outer Ring (Dark Edge Deposit) -->
+  <path d="M10 6 C28 2, 50 16, 64 12 C80 8, 90 22, 86 42 C82 62, 94 76, 78 88 C62 100, 36 90, 20 94 C4 98, -4 80 0 60 C4 40, -6 10, 10 6 Z" fill="none" stroke="#5a3428" stroke-width="2.5" stroke-dasharray="80 2 40 1" stroke-linecap="round" stroke-linejoin="round" opacity="0.35" />
+
+  <!-- Secondary Overlapping Cup / Spills Tide-Mark -->
+  <path d="M45 30 C58 24, 75 32, 78 48 C81 64, 70 76, 54 78 C38 80, 26 68, 28 52 C30 36, 32 36, 45 30 Z" fill="#5a3428" opacity="0.08" />
+  <path d="M45 30 C58 24, 75 32, 78 48 C81 64, 70 76, 54 78 C38 80, 26 68, 28 52 C30 36, 32 36, 45 30 Z" fill="none" stroke="#5a3428" stroke-width="2" stroke-linecap="round" opacity="0.35" />
+
+  <!-- Third Small Drip Tide-Mark Ring -->
+  <path d="M72 70 C80 66, 92 72, 90 82 C88 92, 78 94, 70 88 C62 82, 64 74, 72 70 Z" fill="none" stroke="#5a3428" stroke-width="1.5" opacity="0.3" />
+
+  <!-- Wavy Paper Warp Deformation Lines -->
+  <path d="M-5 25 Q25 35 55 20 T105 30" fill="none" stroke="#291e1a" stroke-width="1.2" opacity="0.2" />
+  <path d="M-5 50 Q30 40 60 55 T105 45" fill="none" stroke="#291e1a" stroke-width="1.2" opacity="0.18" />
+  <path d="M-5 75 Q20 85 50 70 T105 80" fill="none" stroke="#291e1a" stroke-width="1.2" opacity="0.2" />
+</svg>

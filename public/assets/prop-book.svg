@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+
+  <!-- Holding Rod -->
+  <rect x="80" y="80" width="4" height="80" rx="1" fill="#291e1a" />
+  <circle cx="82" cy="88" r="3" fill="#291e1a" />
+
+  <!-- Open Book Silhouette -->
+  <g fill="#291e1a">
+    <!-- Hardcover Outer Shell Cut-Paper Backing -->
+    <path d="M18 52 Q50 40 80 54 Q110 40 142 52 L138 98 Q110 86 80 100 Q50 86 22 98 Z" />
+  </g>
+
+  <!-- Cut-out Open Pages (Negative Space Light Aperture) -->
+  <!-- Left Page Block -->
+  <path d="M24 56 Q50 46 77 58 V94 Q50 82 27 92 Z" fill="#d4d3d1" />
+  <!-- Right Page Block -->
+  <path d="M83 58 Q110 46 136 56 V92 Q110 82 83 94 Z" fill="#d4d3d1" />
+
+  <!-- Center Spine Shadow Gap -->
+  <path d="M77 58 Q80 60 83 58 V94 Q80 96 77 94 Z" fill="#291e1a" />
+
+  <!-- Page Text Lines Cut-out Slots (Shadow Lines) -->
+  <!-- Left Page Lines -->
+  <line x1="34" y1="64" x2="68" y2="68" stroke="#291e1a" stroke-width="2" stroke-linecap="round" />
+  <line x1="34" y1="72" x2="68" y2="76" stroke="#291e1a" stroke-width="2" stroke-linecap="round" />
+  <line x1="34" y1="80" x2="64" y2="84" stroke="#291e1a" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Right Page Lines -->
+  <line x1="92" y1="68" x2="126" y2="64" stroke="#291e1a" stroke-width="2" stroke-linecap="round" />
+  <line x1="92" y1="76" x2="126" y2="72" stroke="#291e1a" stroke-width="2" stroke-linecap="round" />
+  <line x1="96" y1="84" x2="126" y2="80" stroke="#291e1a" stroke-width="2" stroke-linecap="round" />
+</svg>

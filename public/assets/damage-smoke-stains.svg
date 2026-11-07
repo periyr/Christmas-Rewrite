@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <!-- Outer Soft Smoke Plume -->
+  <path d="M0 100 C15 90, 12 70, 28 55 C44 40, 35 25, 60 12 C75 4, 85 10, 100 0 V100 Z" fill="#393e26" opacity="0.12" />
+
+  <!-- Mid-Layer Drifting Soot Streaks -->
+  <path d="M0 100 C10 82, 22 75, 18 52 C14 29, 38 20, 48 0 H0 Z" fill="#393e26" opacity="0.18" />
+  <path d="M0 100 C25 95, 38 80, 42 62 C46 44, 68 35, 78 18 L100 10 V100 Z" fill="#291e1a" opacity="0.1" />
+
+  <!-- Dense Heavy Soot Accumulation at Bottom-Left Origin Corner -->
+  <path d="M0 100 C8 86, 16 84, 12 70 C8 56, 24 48, 30 32 L0 18 Z" fill="#393e26" opacity="0.25" />
+  <path d="M0 100 Q14 88 8 72 T22 45 L0 35 Z" fill="#291e1a" opacity="0.22" />
+
+  <!-- Faint Wisps at Upper Leading Edge -->
+  <path d="M42 28 C52 18, 65 22, 75 10 C82 2, 88 6, 95 0 C82 8, 70 12, 58 22 C48 30, 44 24, 42 28 Z" fill="#393e26" opacity="0.15" />
+</svg>

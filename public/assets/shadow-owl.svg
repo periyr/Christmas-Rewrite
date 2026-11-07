@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+
+  <!-- Holding Rod -->
+  <rect x="150" y="150" width="6" height="150" rx="1" fill="#291e1a" />
+  <circle cx="153" cy="160" r="4" fill="#291e1a" />
+
+  <!-- Perched Wooden Branch Silhouette Base -->
+  <path d="M60 205 C100 200, 200 200, 240 205 L242 215 C190 212, 110 212, 58 215 Z" fill="#291e1a" />
+
+  <!-- Main Owl Body Silhouette -->
+  <g fill="#291e1a">
+    <!-- Plump Oval Body & Head -->
+    <path d="M150 75 C180 75, 195 95, 195 130 C195 170, 180 205, 150 205 C120 205, 105 170, 105 130 C105 95, 120 75, 150 75 Z" />
+
+    <!-- Ear Tufts (Distinct Silhouette) -->
+    <path d="M118 84 L108 55 L132 76 Z" />
+    <path d="M182 84 L192 55 L168 76 Z" />
+
+    <!-- Beak Silhouette Contour -->
+    <path d="M150 108 L144 122 L150 120 L156 122 Z" />
+
+    <!-- Folded Wings Silhouette Overlay -->
+    <path d="M107 125 C103 150, 115 190, 140 202 C125 180, 112 155, 107 125 Z" />
+    <path d="M193 125 C197 150, 185 190, 160 202 C175 180, 188 155, 193 125 Z" />
+
+    <!-- Talons Gripping Branch -->
+    <path d="M132 202 L130 210 M138 202 L138 211 M144 202 L145 210" stroke="#291e1a" stroke-width="3" stroke-linecap="round" />
+    <path d="M156 202 L155 210 M162 202 L162 211 M168 202 L170 210" stroke="#291e1a" stroke-width="3" stroke-linecap="round" />
+  </g>
+
+  <!-- Cut-out Detail Holes (Paper Theatre Light Apertures) -->
+  <!-- Large Round Owl Eye Cut-outs -->
+  <circle cx="132" cy="104" r="11" fill="#d4d3d1" />
+  <circle cx="132" cy="104" r="5" fill="#291e1a" />
+
+  <circle cx="168" cy="104" r="11" fill="#d4d3d1" />
+  <circle cx="168" cy="104" r="5" fill="#291e1a" />
+
+  <!-- Breast Feather Pattern Cut-out Gaps -->
+  <path d="M140 140 Q150 146 160 140" fill="none" stroke="#d4d3d1" stroke-width="2" stroke-linecap="round" />
+  <path d="M134 154 Q150 162 166 154" fill="none" stroke="#d4d3d1" stroke-width="2" stroke-linecap="round" />
+  <path d="M142 168 Q150 174 158 168" fill="none" stroke="#d4d3d1" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Wing Feather Cut-out Slots -->
+  <path d="M118 140 L124 175 M125 145 L131 178" stroke="#d4d3d1" stroke-width="1.8" stroke-linecap="round" />
+  <path d="M182 140 L176 175 M175 145 L169 178" stroke="#d4d3d1" stroke-width="1.8" stroke-linecap="round" />
+</svg>

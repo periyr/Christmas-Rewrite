@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="176" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="176" rx="4" fill="#a6652b" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v176 h-14 a4 4 0 0 1 -4 -4 v-168 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v176 h-12 a4 4 0 0 1 -4 -4 v-168 a4 4 0 0 1 4 -4 z" fill="#5a3428" />
+  <rect x="24" y="8" width="2" height="176" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Mountains -->
+  <!-- Mountain Shadow -->
+  <g fill="#291e1a" opacity="0.2" transform="translate(2, 3)">
+    <path d="M36 125 L60 85 L76 107 L94 77 L102 125 Z" />
+  </g>
+
+  <!-- Back Mountain -->
+  <path d="M64 123 L92 75 L100 123 Z" fill="#496669" />
+  <path d="M92 75 L95 87 L90 92 L92 75 Z" fill="#d4d3d1" />
+
+  <!-- Front Mountain -->
+  <path d="M34 123 L58 83 L82 123 Z" fill="#393e26" />
+  <!-- Snowcap Front Mountain -->
+  <path d="M58 83 L65 95 L59 93 L53 97 Z" fill="#d4d3d1" />
+
+  <!-- Winding Path -->
+  <path d="M58 123 Q54 115 62 111 T58 103" fill="none" stroke="#d9a443" stroke-width="2" stroke-linecap="round" />
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <!-- Soft drop shadow -->
+  <rect x="56" y="44" width="200" height="320" rx="6" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Fabric Cover Base -->
+  <rect x="50" y="36" width="200" height="320" rx="6" fill="#a6652b" />
+
+  <!-- Fabric Texture Overlay Layers -->
+  <path d="M50 36 H250 V356 H50 Z" fill="#d9a443" opacity="0.06" />
+
+  <!-- Spine Overlay -->
+  <path d="M50 36 h18 v320 h-18 a6 6 0 0 1 -6 -6 v-308 a6 6 0 0 1 6 -6 z" fill="#291e1a" opacity="0.2" />
+
+  <!-- Bold 1970s Geometric Pattern Cut-Outs -->
+  <!-- Diagonal Stripe Group (Mustard & Vermilion) -->
+  <path d="M50 120 L160 36 H200 L50 155 Z" fill="#d9a443" />
+  <path d="M50 155 L200 36 H235 L50 190 Z" fill="#c95937" />
+  <path d="M50 190 L235 36 H250 V50 L65 205 Z" fill="#d9a443" />
+
+  <path d="M120 356 L250 245 V210 L100 356 Z" fill="#c95937" />
+  <path d="M160 356 L250 280 V245 L120 356 Z" fill="#d9a443" />
+
+  <!-- Supergraphic Concentric Circles (70s Retro Motif) -->
+  <!-- Shadow under large circle -->
+  <circle cx="175" cy="215" r="62" fill="#291e1a" opacity="0.2" />
+  <!-- Outer Circle - Mustard -->
+  <circle cx="170" cy="210" r="62" fill="#d9a443" />
+  <!-- Middle Circle - Vermilion -->
+  <circle cx="170" cy="210" r="44" fill="#c95937" />
+  <!-- Inner Circle - Ochre Base -->
+  <circle cx="170" cy="210" r="26" fill="#a6652b" />
+  <!-- Core Dot - Ink -->
+  <circle cx="170" cy="210" r="10" fill="#291e1a" />
+
+  <!-- Secondary Corner Circles Accent -->
+  <circle cx="85" cy="95" r="24" fill="#291e1a" opacity="0.2" />
+  <circle cx="82" cy="90" r="24" fill="#c95937" />
+  <circle cx="82" cy="90" r="14" fill="#d9a443" />
+
+  <!-- Cut-paper Depth Highlights on Cover -->
+  <path d="M44 36 h6 v320 h-6 z" fill="#d4d3d1" opacity="0.15" />
+</svg>

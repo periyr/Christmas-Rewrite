@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 210">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="186" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="186" rx="4" fill="#496669" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v186 h-14 a4 4 0 0 1 -4 -4 v-178 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v186 h-12 a4 4 0 0 1 -4 -4 v-178 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.35" />
+  <rect x="24" y="8" width="2" height="186" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Globe / Map Grid -->
+  <!-- Globe Base Shadow & Circle -->
+  <circle cx="68" cy="103" r="26" fill="#291e1a" opacity="0.2" />
+  <circle cx="66" cy="101" r="26" fill="#d9a443" opacity="0.9" />
+
+  <!-- Lines of Latitude & Longitude (Paper Cuts) -->
+  <path d="M40 101 H92 M66 75 V127" stroke="#496669" stroke-width="2" />
+  <ellipse cx="66" cy="101" rx="16" ry="26" fill="none" stroke="#496669" stroke-width="1.5" />
+  <ellipse cx="66" cy="101" rx="26" ry="12" fill="none" stroke="#496669" stroke-width="1.5" />
+
+  <!-- Outer Stand Arc -->
+  <path d="M66 69 A32 32 0 0 1 96 111 L90 115 A26 26 0 0 0 66 75 Z" fill="#291e1a" />
+  <rect x="63" y="129" width="6" height="12" fill="#291e1a" />
+  <path d="M54 141 H78 V145 H54 Z" fill="#291e1a" />
+</svg>

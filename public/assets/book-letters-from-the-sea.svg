@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 230">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="206" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="206" rx="4" fill="#c95937" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v206 h-14 a4 4 0 0 1 -4 -4 v-198 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v206 h-12 a4 4 0 0 1 -4 -4 v-198 a4 4 0 0 1 4 -4 z" fill="#893f43" />
+  <rect x="24" y="8" width="2" height="206" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Waves & Envelope -->
+  <!-- Envelope Shadow -->
+  <rect x="48" y="93" width="40" height="26" rx="2" fill="#291e1a" opacity="0.2" />
+
+  <!-- Envelope Body -->
+  <rect x="46" y="91" width="40" height="26" rx="2" fill="#d4d3d1" />
+  <path d="M46 91 L66 107 L86 91 Z" fill="#291e1a" opacity="0.15" />
+  <path d="M46 91 L66 105 L86 91 Z" fill="#d4d3d1" />
+  <path d="M46 117 L58 103 M86 117 L74 103" stroke="#291e1a" stroke-width="1" opacity="0.2" />
+
+  <!-- Stylized Ocean Waves Cut-Outs -->
+  <!-- Wave Shadow -->
+  <path d="M38 135 Q48 127 58 135 T78 135 T98 135" fill="none" stroke="#291e1a" stroke-width="4" opacity="0.2" />
+  <path d="M38 145 Q48 137 58 145 T78 145 T98 145" fill="none" stroke="#291e1a" stroke-width="4" opacity="0.2" />
+
+  <!-- Waves -->
+  <path d="M36 133 Q46 125 56 133 T76 133 T96 133" fill="none" stroke="#d9a443" stroke-width="3" stroke-linecap="round" />
+  <path d="M36 143 Q46 135 56 143 T76 143 T96 143" fill="none" stroke="#496669" stroke-width="3" stroke-linecap="round" />
+</svg>

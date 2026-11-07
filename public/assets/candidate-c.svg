@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 340">
+  <!-- Drop Shadow -->
+  <rect x="26" y="24" width="188" height="288" rx="6" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover (Teal Slate) -->
+  <rect x="20" y="18" width="188" height="288" rx="6" fill="#496669" />
+
+  <!-- Spine Layer -->
+  <path d="M20 18 h20 v288 h-20 a6 6 0 0 1 -6 -6 v-276 a6 6 0 0 1 6 -6 z" fill="#291e1a" opacity="0.25" />
+  <rect x="40" y="18" width="2" height="288" fill="#291e1a" opacity="0.18" />
+
+  <!-- Decorative Winding River Cut-Paper Motif -->
+  <!-- River Shadow -->
+  <path d="M208 70 C160 80, 140 130, 160 170 C180 210, 110 240, 60 306 H95 C140 250, 210 210, 190 170 C170 130, 180 95, 208 88 Z" fill="#291e1a" opacity="0.2" />
+
+  <!-- Main River Flow (Periwinkle & Mustard Accents) -->
+  <path d="M208 66 C160 76, 140 126, 160 166 C180 206, 110 236, 60 302 H90 C135 246, 205 206, 185 166 C165 126, 175 91, 208 82 Z" fill="#7687ab" />
+
+  <path d="M208 76 C172 84, 154 126, 170 166 C182 196, 135 230, 75 302 H84 C140 236, 192 198, 178 166 C164 134, 178 96, 208 84 Z" fill="#d9a443" opacity="0.7" />
+
+  <!-- Small Cut-Paper Hill / Bank Overlays -->
+  <path d="M120 185 C140 160, 170 180, 190 160 L208 190 V240 L150 220 Z" fill="#393e26" opacity="0.5" />
+
+  <!-- Corner Wear Marks & Edge Aging -->
+  <path d="M20 18 L32 18 L20 30 Z" fill="#d4d3d1" opacity="0.35" />
+  <path d="M208 18 L196 18 L208 30 Z" fill="#d4d3d1" opacity="0.3" />
+  <path d="M208 306 L194 306 L208 292 Z" fill="#d4d3d1" opacity="0.3" />
+  <path d="M20 306 L34 306 L20 292 Z" fill="#d4d3d1" opacity="0.35" />
+</svg>
