@@ -10,6 +10,8 @@ module Fixtures exposing
     , repairsSucceeded
     , repairsFailed
     , hubAfterRepairs
+    , salvageWalking
+    , repairBoardPanelOpen
     )
 
 {-| Development fixtures for building views and tests against the contract.
@@ -168,4 +170,33 @@ hubAfterRepairs =
     , inspecting = Nothing
     , notice = Nothing
     , room = Rules.Room.initialRoom
+    }
+
+
+{-| The start of 1950 in the room: salvage not opened yet, the player
+mid-walk to the crates after clicking them (contract v1.3).
+-}
+salvageWalking : Model
+salvageWalking =
+    { history = []
+    , phase = Salvage { placed = [], selected = Nothing }
+    , inspecting = Nothing
+    , notice = Nothing
+    , room =
+        { player = { x = 300, facing = FacingRight, walking = True, held = [], target = Just CratesSpot }
+        , panelOpen = False
+        }
+    }
+
+
+{-| repairBoardInProgress with the player standing at the board and its
+panel open (contract v1.3).
+-}
+repairBoardPanelOpen : Model
+repairBoardPanelOpen =
+    { repairBoardInProgress
+        | room =
+            { player = { x = 640, facing = FacingRight, walking = False, held = [], target = Nothing }
+            , panelOpen = True
+            }
     }

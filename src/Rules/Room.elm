@@ -3,6 +3,7 @@ module Rules.Room exposing
     , position, hotspots
     , canWalk, nearby, hasPanel
     , initialRoom, initialPlayer
+    , press, release, step, stop, isMoving, keyDown, keyUp, facingTowards
     )
 
 {-| The room: one shared coordinate system for the walking player and every
@@ -299,6 +300,176 @@ reviewingFeedback phase =
 
         _ ->
             False
+
+
+
+-- MOVEMENT
+
+
+{-| A walk key goes down: it becomes the most recent held key, the player
+faces that way, and any walk to a clicked hotspot is cancelled.
+-}
+press : WalkKey -> Player -> Player
+press key player =
+    { player
+        | held = key :: List.filter ((/=) key) player.held
+        , target = Nothing
+        , facing = facingFor key
+    }
+
+
+{-| A walk key comes up. With nothing left to walk for, the player stops at once. -}
+release : WalkKey -> Player -> Player
+release key player =
+    let
+        held =
+            List.filter ((/=) key) player.held
+    in
+    { player
+        | held = held
+        , walking = player.walking && (not (List.isEmpty held) || player.target /= Nothing)
+    }
+
+
+{-| Move the player for one animation frame of `delta` milliseconds.
+
+Held keys win over a walking target. The delta is clamped to
+0..maxFrameDelta, so the distance only depends on elapsed time, never on the
+frame rate, and a stalled tab cannot make the player jump. The player never
+passes minX/maxX and never overshoots a target: the last step lands exactly on
+it, and the hotspot reached is returned so Update can use it.
+
+-}
+step : Float -> Player -> ( Player, Maybe Hotspot )
+step delta player =
+    let
+        distance =
+            walkSpeed * clamp 0 maxFrameDelta delta / 1000
+    in
+    case ( player.held, player.target ) of
+        ( key :: _, _ ) ->
+            let
+                x =
+                    clamp minX maxX (player.x + direction key * distance)
+            in
+            ( { player | x = x, facing = facingFor key, walking = x /= player.x }, Nothing )
+
+        ( [], Just hotspot ) ->
+            let
+                goal =
+                    clamp minX maxX (position hotspot).x
+            in
+            if abs (goal - player.x) <= distance then
+                ( { player | x = goal, walking = False, target = Nothing }, Just hotspot )
+
+            else
+                let
+                    facing =
+                        facingTowards goal player
+                in
+                ( { player | x = player.x + facingSign facing * distance, facing = facing, walking = True }, Nothing )
+
+        ( [], Nothing ) ->
+            ( { player | walking = False }, Nothing )
+
+
+{-| Stand still: no held keys, no walking target. -}
+stop : Player -> Player
+stop player =
+    { player | held = [], target = Nothing, walking = False }
+
+
+{-| Whether animation frames are needed right now (Main subscribes only then). -}
+isMoving : Model -> Bool
+isMoving model =
+    canWalk model
+        && (not (List.isEmpty model.room.player.held) || model.room.player.target /= Nothing)
+
+
+{-| The game's keys, from a keydown event's `key`. A or the left arrow, D or the
+right arrow, E to use what is nearby. Anything else is not a game key.
+-}
+keyDown : String -> Maybe Msg
+keyDown key =
+    case walkKey key of
+        Just walk ->
+            Just (WalkKeyDown walk)
+
+        Nothing ->
+            if key == "e" || key == "E" then
+                Just InteractNearby
+
+            else
+                Nothing
+
+
+{-| The game's keys, from a keyup event's `key`. Only releasing a walk key matters. -}
+keyUp : String -> Maybe Msg
+keyUp key =
+    Maybe.map WalkKeyUp (walkKey key)
+
+
+walkKey : String -> Maybe WalkKey
+walkKey key =
+    case key of
+        "a" ->
+            Just WalkLeft
+
+        "A" ->
+            Just WalkLeft
+
+        "ArrowLeft" ->
+            Just WalkLeft
+
+        "d" ->
+            Just WalkRight
+
+        "D" ->
+            Just WalkRight
+
+        "ArrowRight" ->
+            Just WalkRight
+
+        _ ->
+            Nothing
+
+
+direction : WalkKey -> Float
+direction key =
+    facingSign (facingFor key)
+
+
+facingFor : WalkKey -> Facing
+facingFor key =
+    case key of
+        WalkLeft ->
+            FacingLeft
+
+        WalkRight ->
+            FacingRight
+
+
+facingSign : Facing -> Float
+facingSign facing =
+    case facing of
+        FacingLeft ->
+            -1
+
+        FacingRight ->
+            1
+
+
+{-| The way to face to look at `x` (unchanged when already there). -}
+facingTowards : Float -> Player -> Facing
+facingTowards x player =
+    if x < player.x then
+        FacingLeft
+
+    else if x > player.x then
+        FacingRight
+
+    else
+        player.facing
 
 
 

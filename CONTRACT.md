@@ -315,7 +315,7 @@ All other phases have no hotspots. Usable hotspots are always more than 128 px a
 
 ### Behaviour (implemented in `Update`, pure and tested)
 
-**Status:** this is the next A checkpoint. Until it lands, these messages compile and are accepted but do nothing, so B can build the room against the types and helpers now.
+`Main.elm` subscribes to keydown and keyup (A/D, the arrows and E; keydowns with Ctrl, Cmd or Alt are ignored), to animation frames only while the player is moving, and to the page being hidden. B never sends the key, frame or visibility messages.
 
 | Input | Effect |
 |---|---|
@@ -347,6 +347,8 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 | `validWeek` / `wrongWeek` | Example `WeekPlan`s. |
 | `repairsSucceeded` / `repairsFailed` | Resolved 1950 `ChapterRecord`s. |
 | `hubAfterRepairs` | The present after a successful 1950. |
+| `salvageWalking` | 1950 salvage in the room (v1.3): the player mid-walk to the crates, panel closed. |
+| `repairBoardPanelOpen` | `repairBoardInProgress` with the player at the board and its panel open (v1.3). |
 
 To preview a fixture, temporarily change `init` in `Main.elm` to `\_ -> ( Fixtures.repairBoardInProgress, Cmd.none )`. Don't commit that change.
 
