@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One More Christmas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Shared artwork. Elm draws it through <svg-art> below, so colours still come
+     from the CSS tokens under [data-era]. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="shop-room" viewBox="0 0 1280 720">
+    <rect class="r-wall" width="1280" height="720"/>
+    <rect class="r-trim" y="96" width="1280" height="10"/>
+    <rect class="r-wainscot" y="470" width="1280" height="130"/>
+    <rect class="r-trim" y="462" width="1280" height="10"/>
+    <rect class="r-floor" y="600" width="1280" height="120"/>
+    <path class="r-floor-line" d="M0 640H1280M0 685H1280M170 600L110 720M480 600L450 720M800 600L830 720M1110 600L1170 720"/>
+
+    <g class="r-stain">
+      <path d="M560 96c10 40 50 30 70 62 16 26 56 16 74-8 18-22 48-14 60-54Z" fill="#a4946b"/>
+      <path d="M600 96c8 22 34 20 46 38 12 16 34 8 44-8 10-14 28-12 36-30Z" fill="#8c7c56"/>
+    </g>
+
+    <rect class="r-case" x="90" y="118" width="330" height="482"/>
+    <rect class="r-case-back" x="108" y="136" width="294" height="446"/>
+    <g><rect class="r-book-a" x="108" y="158" width="16" height="92"/><rect class="r-book-b" x="126" y="167" width="10" height="83"/><rect class="r-book-c" x="138" y="176" width="20" height="74"/><rect class="r-book-a" x="160" y="158" width="13" height="92"/><rect class="r-book-c" x="175" y="167" width="8" height="83"/><rect class="r-book-b" x="185" y="176" width="18" height="74"/><rect class="r-book-b" x="205" y="158" width="12" height="92"/><rect class="r-book-a" x="219" y="167" width="22" height="83"/><rect class="r-book-c" x="243" y="176" width="9" height="74"/><rect class="r-book-b" x="254" y="158" width="15" height="92"/><rect class="r-book-a" x="271" y="167" width="19" height="83"/><rect class="r-book-a" x="292" y="176" width="11" height="74"/><rect class="r-book-b" x="305" y="158" width="14" height="92"/><rect class="r-book-c" x="321" y="167" width="17" height="83"/><rect class="r-book-a" x="340" y="176" width="16" height="74"/><rect class="r-book-c" x="358" y="158" width="10" height="92"/><rect class="r-book-b" x="370" y="167" width="20" height="83"/><rect class="r-book-b" x="392" y="176" width="4" height="74"/></g><rect class="r-case" x="108" y="250" width="294" height="14"/><g><rect class="r-book-a" x="108" y="270" width="13" height="92"/><rect class="r-book-c" x="123" y="279" width="8" height="83"/><rect class="r-book-b" x="133" y="288" width="18" height="74"/><rect class="r-book-b" x="153" y="270" width="12" height="92"/><rect class="r-book-a" x="167" y="279" width="22" height="83"/><rect class="r-book-c" x="191" y="288" width="9" height="74"/><rect class="r-book-b" x="202" y="270" width="15" height="92"/><rect class="r-book-a" x="219" y="279" width="19" height="83"/><rect class="r-book-a" x="240" y="288" width="11" height="74"/><rect class="r-book-b" x="253" y="270" width="14" height="92"/><rect class="r-book-c" x="269" y="279" width="17" height="83"/><rect class="r-book-a" x="288" y="288" width="16" height="74"/><rect class="r-book-c" x="306" y="270" width="10" height="92"/><rect class="r-book-b" x="318" y="279" width="20" height="83"/><rect class="r-book-b" x="340" y="288" width="13" height="74"/><rect class="r-book-a" x="355" y="270" width="8" height="92"/><rect class="r-book-c" x="365" y="279" width="18" height="83"/><rect class="r-book-b" x="385" y="288" width="11" height="74"/></g><rect class="r-case" x="108" y="362" width="294" height="14"/><g><rect class="r-book-b" x="108" y="382" width="12" height="92"/><rect class="r-book-a" x="122" y="391" width="22" height="83"/><rect class="r-book-c" x="146" y="400" width="9" height="74"/><rect class="r-book-b" x="157" y="382" width="15" height="92"/><rect class="r-book-a" x="174" y="391" width="19" height="83"/><rect class="r-book-a" x="195" y="400" width="11" height="74"/><rect class="r-book-b" x="208" y="382" width="14" height="92"/><rect class="r-book-c" x="224" y="391" width="17" height="83"/><rect class="r-book-a" x="243" y="400" width="16" height="74"/><rect class="r-book-c" x="261" y="382" width="10" height="92"/><rect class="r-book-b" x="273" y="391" width="20" height="83"/><rect class="r-book-b" x="295" y="400" width="13" height="74"/><rect class="r-book-a" x="310" y="382" width="8" height="92"/><rect class="r-book-c" x="320" y="391" width="18" height="83"/><rect class="r-book-b" x="340" y="400" width="12" height="74"/><rect class="r-book-a" x="354" y="382" width="22" height="92"/><rect class="r-book-a" x="378" y="391" width="9" height="83"/><rect class="r-book-b" x="389" y="400" width="7" height="74"/></g><rect class="r-case" x="108" y="474" width="294" height="14"/><g><rect class="r-book-b" x="108" y="490" width="15" height="92"/><rect class="r-book-a" x="125" y="499" width="19" height="83"/><rect class="r-book-a" x="146" y="508" width="11" height="74"/><rect class="r-book-b" x="159" y="490" width="14" height="92"/><rect class="r-book-c" x="175" y="499" width="17" height="83"/><rect class="r-book-a" x="194" y="508" width="16" height="74"/><rect class="r-book-c" x="212" y="490" width="10" height="92"/><rect class="r-book-b" x="224" y="499" width="20" height="83"/><rect class="r-book-b" x="246" y="508" width="13" height="74"/><rect class="r-book-a" x="261" y="490" width="8" height="92"/><rect class="r-book-c" x="271" y="499" width="18" height="83"/><rect class="r-book-b" x="291" y="508" width="12" height="74"/><rect class="r-book-a" x="305" y="490" width="22" height="92"/><rect class="r-book-a" x="329" y="499" width="9" height="83"/><rect class="r-book-b" x="340" y="508" width="15" height="74"/><rect class="r-book-c" x="357" y="490" width="19" height="92"/><rect class="r-book-a" x="378" y="499" width="11" height="83"/><rect class="r-book-c" x="391" y="508" width="5" height="74"/></g><rect class="r-case" x="108" y="582" width="294" height="18"/>
+
+    <rect x="150" y="186" width="72" height="62" fill="#f6eedb" transform="rotate(-3 186 217)"/>
+    <rect class="r-trim" x="468" y="200" width="150" height="150"/>
+    <rect x="478" y="210" width="130" height="130" fill="#bd9160"/>
+    <rect x="490" y="224" width="44" height="34" fill="#f6eedb"/>
+    <rect x="546" y="236" width="50" height="40" fill="#efe0b8"/>
+    <rect x="500" y="280" width="60" height="44" fill="#f6eedb"/>
+
+    <circle cx="718" cy="210" r="56" fill="#4a3120"/>
+    <circle cx="718" cy="210" r="46" fill="#f6eedb"/>
+    <path d="M718 210V172M718 210L701 198" stroke="#2b2119" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+    <g class="r-poster">
+      <rect x="810" y="176" width="86" height="118" fill="#f0d9a4"/>
+      <circle cx="853" cy="214" r="23" fill="#8a4a1f"/>
+      <rect x="822" y="248" width="62" height="8" fill="#5a361b"/>
+      <rect x="822" y="264" width="44" height="8" fill="#5a361b"/>
+    </g>
+    <g class="r-notice">
+      <rect x="810" y="176" width="86" height="118" fill="#f6eedb"/>
+      <rect x="822" y="190" width="62" height="14" fill="#2b2119"/>
+      <rect x="822" y="216" width="62" height="6" fill="#5c4c3d"/>
+      <rect x="822" y="230" width="62" height="6" fill="#5c4c3d"/>
+      <rect x="822" y="244" width="40" height="6" fill="#5c4c3d"/>
+    </g>
+
+    <rect class="r-case" x="920" y="126" width="290" height="290"/>
+    <rect class="r-sky" x="936" y="142" width="258" height="258"/>
+    <path d="M1065 142V400M936 271H1194" class="r-floor-line" style="stroke:var(--case);stroke-width:12"/>
+    <g fill="#f6eedb" opacity="0.85">
+      <circle cx="972" cy="180" r="4"/><circle cx="1020" cy="226" r="3"/><circle cx="1104" cy="176" r="4"/>
+      <circle cx="1160" cy="236" r="3"/><circle cx="986" cy="320" r="4"/><circle cx="1130" cy="330" r="4"/>
+      <circle cx="1034" cy="360" r="3"/><circle cx="1176" cy="370" r="3"/>
+    </g>
+    <path d="M936 400V374C990 350 1040 385 1090 370S1170 352 1194 372V400Z" fill="#f6eedb"/>
+    <rect class="r-counter-top" x="906" y="412" width="318" height="16"/>
+
+    <rect class="r-counter" x="470" y="442" width="410" height="158"/>
+    <rect class="r-counter-top" x="452" y="420" width="446" height="24"/>
+    <rect class="r-trim" x="490" y="466" width="176" height="110" opacity="0.3"/>
+    <rect class="r-trim" x="684" y="466" width="176" height="110" opacity="0.3"/>
+
+    <rect x="522" y="404" width="92" height="16" rx="2" fill="#4a5f55"/>
+    <rect x="522" y="414" width="92" height="6" fill="#f6eedb"/>
+
+    <rect x="700" y="398" width="66" height="22" fill="#efe0b8" transform="rotate(-3 733 409)"/>
+    <rect x="794" y="352" width="78" height="68" fill="#4a3120"/>
+    <rect x="804" y="362" width="58" height="22" fill="#d7c48e"/>
+    <circle cx="812" cy="400" r="4" fill="#f6eedb"/><circle cx="832" cy="400" r="4" fill="#f6eedb"/><circle cx="852" cy="400" r="4" fill="#f6eedb"/>
+
+    <g class="r-monitor">
+      <rect x="650" y="332" width="112" height="84" rx="4" fill="#d9d3c0"/>
+      <rect x="662" y="343" width="88" height="60" fill="#2f6463"/>
+      <rect x="640" y="406" width="132" height="14" fill="#c4bea9"/>
+    </g>
+
+    <g class="r-rubble" fill="#6f6252">
+      <path d="M930 610l30-52 34 22 26-36 42 38 34-24 44 52Z"/>
+      <path d="M1000 610l18-30 28 16 22-20 32 34Z" fill="#8a7c68"/>
+      <rect x="960" y="586" width="96" height="10" fill="#7a5233" transform="rotate(-10 1008 591)"/>
+    </g>
+    <g class="r-boxes">
+      <rect x="930" y="520" width="120" height="96" fill="#a58a5c"/>
+      <rect x="930" y="520" width="120" height="14" fill="#8a7147"/>
+      <rect x="1040" y="552" width="110" height="64" fill="#b49a6a"/>
+      <rect x="1040" y="552" width="110" height="12" fill="#967d50"/>
+    </g>
+
+    <path class="r-flat-edge" d="M0 0H96C70 200 88 520 72 720H0Z"/>
+    <path class="r-flat" d="M0 0H74C50 200 66 520 52 720H0Z"/>
+    <path class="r-flat-edge" d="M1280 0H1184C1210 200 1192 520 1208 720H1280Z"/>
+    <path class="r-flat" d="M1280 0H1206C1230 200 1214 520 1228 720H1280Z"/>
+    <path class="r-flat-edge" d="M0 0H1280V30a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0Z" transform="translate(0 10)"/>
+    <path class="r-flat" d="M0 0H1280V30a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0a40 34 0 0 1 -80 0Z"/>
+  </symbol>
+
+  <symbol id="i-roof" viewBox="0 0 24 24"><path d="M3 12 12 4l9 8M6 10v10h12V10M10 20v-5h4v5"/></symbol>
+  <symbol id="i-rubble" viewBox="0 0 24 24"><path d="M3 20l4-8 4 3 3-5 7 10ZM8 7l2-3M15 6l2 1"/></symbol>
+  <symbol id="i-shelves" viewBox="0 0 24 24"><path d="M5 3v18M19 3v18M5 8h14M5 14h14M5 20h14"/></symbol>
+  <symbol id="i-books" viewBox="0 0 24 24"><path d="M5 4h4v16H5ZM10 7h4v13h-4ZM15.5 6l3.5-1 3 14-3.5 1Z"/></symbol>
+  <symbol id="i-glass" viewBox="0 0 24 24"><path d="M5 3h14v18H5ZM12 3v18M5 12h14M8 9l2-2M15 17l2-2"/></symbol>
+  <symbol id="i-sign" viewBox="0 0 24 24"><path d="M3 6h18v9H3ZM7 15v6M17 15v6M7 10h10"/></symbol>
+  <symbol id="i-boards" viewBox="0 0 24 24"><path d="M5 3h14v18H5ZM3 8l18-2M3 13l18 1M3 19l18-3"/></symbol>
+</svg>
+<div id="app"></div>
+<script>
+  // Renders SVG for Elm, which can't create SVG elements without the elm/svg package.
+  // The markup attribute only ever holds strings written in src/Components/Art.elm.
+  customElements.define("svg-art", class extends HTMLElement {
+    static observedAttributes = ["markup"];
+    attributeChangedCallback(_name, _old, markup) { this.innerHTML = markup; }
+  });
+</script>
+<script src="elm.js"></script>
+<script>Elm.Main.init({ node: document.getElementById("app") });</script>
+</body>
+</html>
