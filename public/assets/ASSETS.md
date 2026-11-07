@@ -176,9 +176,28 @@ Every frame (Walter's style):
 | Edwin (young) | 1998 | `player-edwin-young-idle.svg`, `player-edwin-young-walk-1.svg`, `player-edwin-young-walk-2.svg` | Late-90s look: middle-parted "curtains" hair, open plaid flannel shirt `#31542f` with rolled sleeves over a mustard T-shirt, cuffed jeans `#7687ab`, black boots with a mustard sole line | **Final** |
 | Edwin (present) | present day | `player-edwin-present-idle.svg`, `player-edwin-present-walk-1.svg`, `player-edwin-present-walk-2.svg` | Cosy Christmas Eve look: short grey hair and soft beard, thin round glasses, wine Christmas jumper `#893f43` with a cream Fair Isle star band and ribbed hem, green scarf `#31542f` with mustard stripes, dark jeans `#496669`, brown Chelsea boots | **Final** |
 
+#### Placing them in the walking room (contract v1.3)
+
+Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet on `floorY` = 650).
+
+- **Scale:** draw every player-scale asset at **2 logical px per unit**. A sprite is then 192 × 320 px (12rem × 20rem). The person stands about 288 px tall, matching the contract's grown-up of about 290 px next to the 165 px counter.
+- **Anchor:** the feet point (48, 152) lands on (`player.x`, 650). So `left = player.x − 96` and `top = 650 − 304 = 346`, in px; divide by 16 for rem. The feet sit 8 units above the image's bottom edge, so line up this point, not the bottom of the image.
+- **Facing left:** `transform: scaleX(-1)` with the default centre origin. x = 48 is the centre, so the feet stay put.
+- **Walk cycle:** the contract suggests `pose = floor (player.x / 24) mod 4`. With two walk frames, map 0 → `walk-1`, 1 → `idle`, 2 → `walk-2`, 3 → `idle`; `idle` works as the passing pose between steps. Show `idle` whenever `player.walking` is False.
+- **Who:**
+  - present-day Edwin in the introduction and the present-day hub
+  - Walter in the 1950 phases (salvage, repair board, reopening shelf)
+  - Henry in 1973
+  - young Edwin in 1998
+- **B's placeholder figure:** the `#actor-idle`, `#actor-walk-a` and `#actor-walk-b` symbols in `public/index.html` (viewBox 200 × 400) can be replaced by these files. `Components.Actor`'s `Idle`, `StepA` and `StepB` map to `idle`, `walk-1` and `walk-2`.
+
 ### Room props (overlays for B's room composition)
 
-B owns where these go and when they show. The ceiling stain, the rubble and the clock hands are B's inline overlays in `public/index.html`, so there is no C file for them. "Player scale" means the same 1 unit ≈ 1.1 cm as the sprites; "rests on" is the floor line.
+B owns where these go and when they show. "Player scale" means the same 1 unit ≈ 1.1 cm as the sprites, so draw these at 2 logical px per unit too; "rests on" is the floor line.
+
+**Already drawn by B** (inline in `public/index.html`, so there is no C file): the ceiling stain, the rubble, the clock hands, the book crates and a timber pile (`r-crates`, `r-timber`). `room-timber.svg` below is an alternative to B's timber, so B keeps whichever fits the room better.
+
+**Not drawn yet:** the contract also lists a cut-out box (1973) and book stacks (1998) as room props. Neither exists as a file yet.
 
 | File | viewBox | Anchor / fitting | Use |
 |---|---|---|---|
