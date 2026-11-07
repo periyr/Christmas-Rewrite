@@ -1,5 +1,6 @@
 node_modules/
 elm-stuff/
 build/
+release/
 .DS_Store
 Thumbs.db
