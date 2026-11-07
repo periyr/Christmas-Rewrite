@@ -1,4 +1,4 @@
-# Shared contract v1: Person A handoff
+# Shared contract v1.1: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game. This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -125,13 +125,63 @@ The variants come from `World`. `scriptVariant` is `OriginalScript` or `Neighbou
 
 The content record types are `Document { title, paragraphs }`, `TaskCardContent { title, note }`, `BookContent { title, damage }`, `CandidateContent { label, cover, text, dedication }` and `ShadowSceneContent { setting, caption }`.
 
+## 1950 repair board: validator and submission (added in v1.1)
+
+The repair board is now fully playable through `Update`. `Domain.elm` did not change. The only additions are a few functions in `Rules.Repair` and `Fixtures`.
+
+### For B
+
+| B needs to… | Use |
+|---|---|
+| Show spent and remaining while arranging | `Rules.Repair.spent arrangement` and `Rules.Repair.remaining arrangement` (both `{ timber, pounds }`), with `Rules.Repair.budget` for the totals and `Rules.Repair.cost task` on each card. Only cards on days count; cards in the tray and in "Not this week" cost nothing. Remaining can go negative, so show it as plain numbers. |
+| Know whether the board is complete | `Rules.Repair.complete arrangement /= Nothing`. This is a structural check only: one card per day, two in "Not this week", each card exactly once. It is never a correctness signal. |
+| Submit the plan ("Finish week") | `Submit`. An incomplete board sets `model.notice = Just IncompleteSubmission` and spends nothing. |
+| Continue after first-error feedback | `Retry`. It keeps the arrangement and moves to the final attempt. While `ReviewingFirstMistake`, `Submit` and `BoardMove` are ignored, so disable them. |
+| Read attempts and violations | `puzzle.attempts`, which is `NoAttemptUsed`, `ReviewingFirstMistake violations` or `RetryingAfterMistake violations`. Attempts left = `Rules.Attempts.maxAttempts - Rules.Attempts.attemptsUsed puzzle.attempts`. |
+| Read the resolved outcome | Once resolved, the phase becomes `Transition (Slideshow Repairs1950 0)`. Then read `Timeline.recordFor Repairs1950 model.history`, which gives `{ outcome, attemptsUsed, finalSubmission, finalViolations }`, and the world via `Timeline.deriveWorld`. |
+
+Never call `Rules.Repair.validate` from a view. Correctness exists only after `Submit`, in `attempts` or the history record.
+
+After resolution, keep sending `Advance` for each slide in `Timeline.slides Repairs1950 model.history`:
+
+- **Success:** `WeekdaySlide day task` for Monday to Friday, in the submitted order. On the `ShelveBooks` day the phase becomes `ReopeningShelf`; after the shelf, the slides resume, then `ReopeningSaturday`, `ReturningToPresent` and `PresentHub`.
+- **Failure:** one `ConsequenceSlide Repairs1950 violation` built from the first recorded violation, then `ReturningToPresent` and `PresentHub`. The shelf is not played.
+
+### Violations the repair board can produce (for B's feedback and C's text)
+
+The list is ordered by consequence: roof, window, shelves, books, timber, money. Each problem is reported once, by its root cause.
+
+| Violation | When |
+|---|---|
+| `RoofAfterRain Wednesday \| Thursday \| Friday` | The roof is scheduled too late (rain on Wednesday). |
+| `GoalMissing WatertightRoof` | The roof is in "Not this week". |
+| `GlassNotYetDelivered Monday \| Tuesday` | Glazing is scheduled before the Wednesday delivery. |
+| `GoalMissing SealedWindow` | Neither glazing nor boarding is scheduled. |
+| `MustComeBefore ClearRubble BuildShelves` | Shelves are scheduled, but rubble is later or deferred. |
+| `GoalMissing UsableShelves` | Shelves are deferred. Books are then not blamed separately. |
+| `MustComeBefore BuildShelves ShelveBooks` | Both are scheduled, with the books first. |
+| `GoalMissing AllBooksShelved` | Books are deferred. |
+| `TimberOverspent n` / `MoneyOverspent n` | `n` is the total spent; the budget is 4 timber and £10. |
+
+### For C
+
+- **`Content.Feedback.violation : Violation -> String`** needs text for every row above. The day argument can be woven into the text, for example "Wednesday's rain came before the roof was patched." Explain the rule that was broken; never reveal the full correct week.
+- **`Content.Slides.slide`** needs text for:
+  - `WeekdaySlide day task` for every task that can appear on a valid week: `PatchRoof`, `ClearRubble`, `BuildShelves`, `ShelveBooks`, `ReglazeWindow`
+  - `ReopeningSaturday`
+  - `ConsequenceSlide Repairs1950 v` for any repair violation `v`, since any of them can come first
+- **`Content.Repair.taskCard`** (all seven `TaskId`s) and **`Content.Repair.goal`** (all four `ReopeningGoal`s) as before. Costs come from `Rules.Repair.cost`, so don't write them into the card text.
+
 ## Fixtures (`src/Fixtures.elm`)
 
 | Fixture | What it is |
 |---|---|
 | `initialModel` | A new game. |
 | `repairBoardInProgress` | Three cards placed and "Patch the roof" selected. Spent is 3 timber and £6. |
-| `repairFirstAttemptFailed` | A complete wrong week, with first-attempt feedback open. |
+| `repairBoardReady` | A complete valid week, not yet submitted. `Submit` succeeds. |
+| `repairFirstAttemptFailed` | A complete wrong week, with first-attempt feedback open. It is exactly what `Submit` produces from that board, and its violations come from the real validator. |
+| `repairBoard arrangement attempts` | The board in any state. |
+| `boardFor week` | Turns a `WeekPlan` into a board arrangement. |
 | `validWeek` / `wrongWeek` | Example `WeekPlan`s. |
 | `repairsSucceeded` / `repairsFailed` | Resolved 1950 `ChapterRecord`s. |
 | `hubAfterRepairs` | The present after a successful 1950. |
@@ -144,17 +194,22 @@ These functions are `Debug.todo`. Calling one stops the running app, rather than
 
 | Function | Planned for |
 |---|---|
-| `Rules.Repair.validate` | the next A task |
-| `Rules.Shadow.validate`, `Rules.Mystery.validate` | hours 3.5–7 |
-| `Rules.Salvage.misplaced`, `Rules.Salvage.isSolved`, `Rules.Shelf.matchedOrder` | hours 7–11 |
+| `Rules.Salvage.misplaced`, `Rules.Salvage.isSolved`, `Rules.Shelf.matchedOrder` | the next A task (they gate the 1950 flow) |
+| `Rules.Shadow.validate`, `Rules.Mystery.validate` | after that |
 
-Until those land, a complete Submit, or Advance out of salvage or the shelf, crashes the preview. Placement, resource numbers, the incomplete-submission notice, history, rewind and endings all work now.
+`Rules.Repair.validate` is done. Until the rest land, any of these stops the preview:
+
+- `Advance` out of salvage
+- `Advance` out of the reopening shelf
+- a complete Submit on the 1973 or 1998 puzzles
+
+The repair board itself, its submission flow, resource numbers, history, rewind and endings all work now.
 
 `npm run build -- --optimize` refuses to build while any `Debug` remains. This is intentional: a stub can't reach the release.
 
 ## Open coordination items
 
-1. **Fixture violations are hand-written.** The exact list for `wrongWeek` (for example, whether a late roof also reports `GoalMissing WatertightRoof`) is fixed by the repair validator task. A will update the fixture to match, so B should not hard-code that list.
+1. **The repair board can't yet be reached by playing.** A new game passes through salvage first, and `Advance` out of salvage still hits a stub. Until the next A task lands, test the board with `Fixtures.repairBoardInProgress`, `repairBoardReady` or `repairFirstAttemptFailed`. A successful week likewise stops at the reopening shelf.
 2. **Audio.** There are no ports yet. If B wants sound, agree a port name (suggested: `port playSound : String -> Cmd msg`), and A will add it to `Main.elm`.
 3. **Content module names** above are a proposal. C confirms or renames them once, before B calls them.
 4. **The brief file is named `one-more-christmas-shared-plan.md`.** There is no `GAME_PLAN.md`.
