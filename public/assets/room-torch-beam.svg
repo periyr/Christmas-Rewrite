@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120" width="240" height="120">
+  <!-- room-torch-beam: the torch's light, widening to the right. Its origin (the lens) is x = 0, y = 60. Semi-transparent; show it only while the torch is on. -->
+  <defs>
+    <linearGradient id="torch-beam-fade" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#d9a443" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#d9a443" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 54 L240 0 L240 120 L0 66 Z" fill="url(#torch-beam-fade)"/>
+</svg>

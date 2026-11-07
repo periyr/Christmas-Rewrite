@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140" preserveAspectRatio="none">
+  <!-- room-window-broken: the contents of one window pane, shattered. Stretch it inside the room's own window frame. Swap with room-window-glazed.svg or room-window-boarded.svg (same box). -->
+  <path d="M0 0 H100 V140 H0 Z M30 40 L45 30 L52 48 L68 38 L72 60 L88 70 L70 84 L76 104 L56 96 L46 116 L38 94 L18 100 L26 78 L10 64 L28 58 Z" fill="#c9d3d6" fill-rule="evenodd" opacity="0.75"/>
+  <path d="M30 40 L45 30 L52 48 L68 38 L72 60 L88 70 L70 84 L76 104 L56 96 L46 116 L38 94 L18 100 L26 78 L10 64 L28 58 Z" fill="#2c3a3c" stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M45 30 L40 0 M68 38 L92 0 M88 70 L100 66 M76 104 L96 140 M46 116 L44 140 M18 100 L0 112 M10 64 L0 58 M28 58 L6 20" stroke="#291e1a" stroke-width="1" fill="none" stroke-linecap="round"/>
+</svg>

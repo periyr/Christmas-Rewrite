@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 58" width="64" height="58">
+  <!-- room-crt-computer: 1998 beige CRT monitor and keyboard, facing the viewer. Player scale. Rests on y = 56. The screen is blank: any text on it is interface text. -->
+  <ellipse cx="32" cy="56" rx="28" ry="1.6" fill="#291e1a" opacity="0.18"/>
+  <g stroke="#291e1a" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M14 4 L50 4 Q54 4 54 8 L54 36 Q54 40 50 40 L14 40 Q10 40 10 36 L10 8 Q10 4 14 4 Z" fill="#d9cfb4"/>
+    <rect x="15" y="9" width="34" height="25" rx="3" fill="#2c3a3c"/>
+    <path d="M24 40 L40 40 L42 46 L22 46 Z" fill="#c4b997"/>
+    <path d="M6 48 L58 48 L62 56 L2 56 Z" fill="#d9cfb4"/>
+  </g>
+  <rect x="17" y="11" width="30" height="21" rx="2" fill="#496669" opacity="0.55"/>
+  <path d="M19 13 L27 13" stroke="#a9c0c2" stroke-width="1.4" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="48" cy="37" r="1.1" fill="#748b2c"/>
+  <path d="M9 51 L55 51 M7 53.5 L57 53.5" stroke="#a89d7c" stroke-width="1" stroke-linecap="round"/>
+</svg>

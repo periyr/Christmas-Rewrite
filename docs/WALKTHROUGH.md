@@ -4,6 +4,7 @@
 
 ## The basics
 
+- **Walking (planned, not yet in the game):** the player will walk Walter, Henry or Edwin around the shop. This guide will add the exact controls once B builds it. Nothing below depends on walking: every solution stays the same.
 - **Controls:** click an object to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click a placed object to move it again. Click the same object again to put it down.
 - **Clues:** click documents and objects in the scene to read them. Reading never costs anything.
 - **Main puzzles** (1950 planning board, 1973 shadow story, 1998 forgotten book) give **two attempts**.
