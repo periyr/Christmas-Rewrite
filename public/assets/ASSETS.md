@@ -36,7 +36,7 @@ All of these are already wired in `src/Components/Art.elm` and the views. Checke
 
 People have their own fixed colour list (see Player sprites below).
 
-Extra shades used only inside room props: darker and lighter timber (`#8a5424`, `#b9793c`, `#c08a4e`), night and dark screen (`#2c3a3c`), glass (`#c9d3d6`), bedsheet (`#ece6d8`, folds `#cfc6b2`), beige 1990s plastic (`#d9cfb4`, `#c4b997`, `#a89d7c`) and a few metal highlights.
+Extra shades used only inside room props: darker and lighter wood (`#8a5424`, `#b9793c`, `#c08a4e`), night and dark screen (`#2c3a3c`), glass (`#c9d3d6`), bedsheet (`#ece6d8`, folds `#cfc6b2`), beige 1990s plastic (`#d9cfb4`, `#c4b997`, `#a89d7c`) and a few metal highlights.
 
 ## Files
 
@@ -195,13 +195,13 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
 
 B owns where these go and when they show. "Player scale" means the same 1 unit ≈ 1.1 cm as the sprites, so draw these at 2 logical px per unit too; "rests on" is the floor line.
 
-**Already drawn by B** (inline in `public/index.html`, so there is no C file): the ceiling stain, the rubble, the clock hands, the book crates and a timber pile (`r-crates`, `r-timber`). `room-timber.svg` below is an alternative to B's timber, so B keeps whichever fits the room better.
+**Already drawn by B** (inline in `public/index.html`, so there is no C file): the ceiling stain, the rubble, the clock hands, the book crates and a pile of wood planks (`r-crates`, `r-timber`). `room-timber.svg` below is an alternative to B's wood planks, so B keeps whichever fits the room better.
 
 **One look for all room props:** a thin 1.5-unit `#291e1a` outline, no cream border, and a faint ground shadow (ink at 18% opacity) under props that stand on the floor. The characters keep their thicker outline and cream border, so they stand out from the room.
 
 | File | viewBox | Anchor / fitting | Use |
 |---|---|---|---|
-| `room-timber.svg` | 170 × 30 | Player scale, rests on y = 28 | 1950: the four planks before they are used |
+| `room-timber.svg` | 170 × 30 | Player scale, rests on y = 28 | 1950: the four wood planks before they are used. (The file keeps its name; in the game they are always called "wood planks".) |
 | `room-roof-damaged.svg` | 120 × 60 | Same box as the patched version | 1950: hole in the ceiling with dripping water, before the roof is patched (or after a failed week) |
 | `room-roof-patched.svg` | 120 × 60 | Same box as the damaged version | 1950 onward: new boards nailed over the hole |
 | `room-bucket.svg` | 36 × 38 | Player scale, rests on y = 36 | 1950: catches the drips under the damaged roof |

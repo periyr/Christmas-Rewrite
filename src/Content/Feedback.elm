@@ -33,7 +33,7 @@ violation broken =
             "“" ++ (Repair.taskCard first).title ++ "” must happen on an earlier day than “" ++ (Repair.taskCard second).title ++ "”."
 
         TimberOverspent total ->
-            "This week uses " ++ String.fromInt total ++ " planks of timber, but the licence allows only " ++ String.fromInt Rules.Repair.budget.timber ++ "."
+            "This week uses " ++ String.fromInt total ++ " wood planks, but the licence allows only " ++ String.fromInt Rules.Repair.budget.timber ++ "."
 
         MoneyOverspent total ->
             "This week costs £" ++ String.fromInt total ++ ", but there is only £" ++ String.fromInt Rules.Repair.budget.pounds ++ " to spend."

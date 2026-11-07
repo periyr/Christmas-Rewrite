@@ -64,11 +64,11 @@ clue world clueId =
             }
 
         BudgetAllocation ->
-            { title = "Timber licence and cash"
+            { title = "Wood planks and cash"
             , paragraphs =
                 [ "For the whole week: "
                     ++ String.fromInt Rules.Repair.budget.timber
-                    ++ " planks of timber and £"
+                    ++ " wood planks and £"
                     ++ String.fromInt Rules.Repair.budget.pounds
                     ++ "."
                 , "Every job done this week comes out of this. Anything left over can stay unspent."

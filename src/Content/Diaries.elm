@@ -39,7 +39,7 @@ walter : Foundation -> List String
 walter premises =
     case premises of
         NotRevisited ->
-            [ "Christmas Eve, 1950. Five years since the war ended, and the shop is still a mess. The timber licence finally came through. Four planks and £10 for the whole week. I spent it on a grand new sign for the reopening. It looked wonderful. Then Wednesday’s rain came through the roof onto every book we’d saved."
+            [ "Christmas Eve, 1950. Five years since the war ended, and the shop is still a mess. The licence for wood planks finally came through. Four planks and £10 for the whole week. I spent it on a grand new sign for the reopening. It looked wonderful. Then Wednesday’s rain came through the roof onto every book we’d saved."
             , "I thought we had more time."
             ]
 

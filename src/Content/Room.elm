@@ -69,7 +69,7 @@ clueLabel clue =
             "Read Walter's repair notes"
 
         BudgetAllocation ->
-            "Check the timber licence and cash"
+            "Check the wood planks and cash"
 
         ShelfPlaque ->
             "Read the shelf plaque"

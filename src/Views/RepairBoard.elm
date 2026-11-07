@@ -224,16 +224,25 @@ costText : Resources -> String
 costText cost =
     case ( cost.pounds > 0, cost.timber > 0 ) of
         ( True, True ) ->
-            "£" ++ String.fromInt cost.pounds ++ " + " ++ String.fromInt cost.timber ++ " timber"
+            "£" ++ String.fromInt cost.pounds ++ " + " ++ woodPlanks cost.timber
 
         ( True, False ) ->
             "£" ++ String.fromInt cost.pounds
 
         ( False, True ) ->
-            String.fromInt cost.timber ++ " timber"
+            woodPlanks cost.timber
 
         ( False, False ) ->
             "Free"
+
+
+woodPlanks : Int -> String
+woodPlanks n =
+    if n == 1 then
+        "1 wood plank"
+
+    else
+        String.fromInt n ++ " wood planks"
 
 
 iconName : TaskId -> String
@@ -321,7 +330,7 @@ ledger placement numbered =
     in
     div [ class "paper-note" ]
         [ h3 [ class "paper-note__title" ] [ text "This week’s allowance" ]
-        , resource "Timber" "" timberMark spent.timber left.timber Rules.Repair.budget.timber
+        , resource "Wood planks" "" timberMark spent.timber left.timber Rules.Repair.budget.timber
         , resource "Money" "£" moneyMark spent.pounds left.pounds Rules.Repair.budget.pounds
         ]
 

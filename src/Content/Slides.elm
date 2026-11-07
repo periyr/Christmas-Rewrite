@@ -175,7 +175,7 @@ repairConsequence broken =
             "The saved books never leave their crates, and the damp gets into them."
 
         TimberOverspent _ ->
-            "The timber runs out mid-week, with a job left half-built."
+            "The wood planks run out mid-week, with a job left half-built."
 
         MoneyOverspent _ ->
             "The money runs out mid-week, with a job left half-done."
