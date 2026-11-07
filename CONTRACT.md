@@ -352,17 +352,37 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 
 To preview a fixture, temporarily change `init` in `Main.elm` to `\_ -> ( Fixtures.repairBoardInProgress, Cmd.none )`. Don't commit that change.
 
-## Not implemented yet (deliberate stubs)
+## 1973 and 1998 validators (added in v1.3)
 
-These functions are `Debug.todo`. Calling one stops the running app, rather than pretending the feature works:
+Both main puzzles are now playable through `Update`, with the same two-attempt flow as 1950. `Domain.elm` did not change for this.
 
-| Function | Planned for |
-|---|---|
-| `Rules.Shadow.validate`, `Rules.Mystery.validate` | the next A task |
+### 1973 shadow story
 
-All 1950 rules are done: repair, salvage and shelf. Only a complete Submit on the 1973 or 1998 puzzle still stops the preview. Everything up to and including the return from 1950 works now, as do history, rewind and endings.
+- **Complete:** `Rules.Shadow.complete placement` gives `Just staging` only when all six slots hold the right kind of cut-out and each cut-out is used exactly once. Anything else is `IncompleteSubmission` and spends nothing.
+- **Validate:** `Rules.Shadow.validate scriptVariant staging` returns one `SceneConflictsWithScript scene` per scene whose character or prop differs from the script, in scene order. The variant comes from `(Timeline.deriveWorld history).scriptVariant`: the original script after a successful 1950, the neighbours' retelling after a failed one.
+- The scenes are numbered slots, so there are 3! × 3! = **36** complete stagings, not 216. Each variant accepts exactly one, and no staging passes under both. A wrong staging always conflicts in at least two scenes.
+- **Success** plays `PerformanceSlide Scene1..3` with the performed cast. **Failure** plays `ConsequenceSlide Shadows1973 (SceneConflictsWithScript firstScene)`. Then `ReturningToPresent` and `PresentHub`, with the 1998 journal next.
 
-`npm run build -- --optimize` refuses to build while any `Debug` remains. This is intentional: a stub can't reach the release.
+### 1998 forgotten book
+
+- **Complete:** a chosen candidate (`ChooseCandidate c`). Submitting with none chosen is `IncompleteSubmission`.
+- **Validate:** `Rules.Mystery.validate candidate` returns one `DetailDoesNotMatch detail` per remembered detail the book lacks: B lacks `LucyInscription`, C lacks `LanternSentence`, D lacks `FoxLanternIllustration`, and A has all three. The answer doesn't depend on history; only the inscription clue's source does (`FamilyArchive` or `FollowUpEmail`).
+- **Success** plays `ServiceFoundedSlide`. **Failure** plays `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)`. Then `ReturningToPresent` goes straight to `Ending`, because all three chapters are resolved.
+
+### For B
+
+- `Views.Shop.unbuiltChapter` can now be replaced by real 1973 and 1998 panels. Submit ("Perform the story", "Send this book") and Retry work like "Finish week".
+- Never call `Rules.Shadow.validate`, `Rules.Shadow.script`, `Rules.Mystery.validate` or `Rules.Mystery.matches` from a view: they are the answers. Correctness only exists after `Submit`, in `attempts` or the history record.
+- `Rules.Shadow.complete arrangement /= Nothing` may be used to enable the submit button, as on the repair board.
+
+### For C
+
+- Every 1973 and 1998 violation can now reach `Content.Feedback.violation` and `Content.Slides.slide` (`ConsequenceSlide Shadows1973 (SceneConflictsWithScript scene)` for any scene, and `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)` for any detail).
+- `docs/test-examples-for-A.md` says there are 216 complete stagings. Please change it to 36: the scenes are fixed slots, so only the characters' order (3!) and the props' order (3!) vary. All the other examples matched the implementation exactly and are now tests.
+
+## Release build
+
+There are no `Debug.todo` stubs left. `npm run build -- --optimize` builds the release, and the tests check every rule.
 
 ## Open coordination items
 
