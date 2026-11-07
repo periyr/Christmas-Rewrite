@@ -1,0 +1,14 @@
+{
+  "name": "one-more-christmas",
+  "private": true,
+  "description": "One More Christmas — Elm game jam project",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "elm-test"
+  },
+  "devDependencies": {
+    "elm": "0.19.1-6",
+    "elm-test": "0.19.1-revision17"
+  }
+}
