@@ -145,12 +145,12 @@ suite =
                     |> boardOf
                     |> Maybe.map .inspected
                     |> Expect.equal (Just [ WalterDiaryPage, BudgetAllocation, GlassDeliverySlip ])
-        , test "the introduction advances to the 1950 diary" <|
+        , test "the introduction ends in the present hub with the 1950 diary next" <|
             \_ ->
                 Update.init
                     |> Update.update Advance
                     |> Update.update Advance
                     |> Update.update Advance
-                    |> .phase
-                    |> Expect.equal (Transition (OpeningDiary Repairs1950))
+                    |> (\m -> ( m.phase, m.history ))
+                    |> Expect.equal ( PresentHub, [] )
         ]

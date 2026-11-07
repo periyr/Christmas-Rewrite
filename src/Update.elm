@@ -302,7 +302,8 @@ advance model =
             goTo (Introduction ClockStopped) model
 
         Introduction ClockStopped ->
-            goTo (Transition (OpeningDiary Repairs1950)) model
+            -- Back in the shop, where the oldest diary now glows (OpenNextDiary).
+            goTo PresentHub model
 
         Transition (OpeningDiary era) ->
             goTo (startChapter era) model
@@ -312,15 +313,16 @@ advance model =
                 goTo (RepairBoard (freshPuzzle Placement.empty)) model
 
             else
-                model
+                { model | notice = Just NotSolvedYet }
 
         ReopeningShelf placement ->
             case ( Rules.Shelf.matchedOrder placement, shelvingSlideIndex model.history ) of
                 ( Just _, Just index ) ->
+                    -- Resume the week on the day after shelving (never replay it).
                     goTo (Transition (Slideshow Repairs1950 (index + 1))) model
 
                 _ ->
-                    model
+                    { model | notice = Just NotSolvedYet }
 
         Transition (Slideshow era index) ->
             let

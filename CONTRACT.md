@@ -1,4 +1,4 @@
-# Shared contract v1.1: Person A handoff
+# Shared contract v1.2: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game. This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -43,19 +43,19 @@ To wire it up, change `view = temporaryView` to `view = View.view` in `src/Main.
 
 | `model.phase` | Render | Dispatch |
 |---|---|---|
-| `Introduction step` (`PackingUp`, `DiariesFound`, `ClockStopped`) | shop, notice, photo, box, diaries | `Inspect ClosureNotice`, `Inspect FamilyPhotograph`, `Advance` |
-| `PresentHub` | the shop, built from `deriveWorld` (`premises`, `tradition`, `onlineService` are each `NotRevisited`, `Established` or `Missing`) | `Inspect (HubProp p)`, `OpenNextDiary` |
+| `Introduction step` (`PackingUp`, `DiariesFound`, `ClockStopped`) | shop, notice, photo, box, diaries | `Inspect ClosureNotice`, `Inspect FamilyPhotograph`, `Advance`. After `ClockStopped`, `Advance` goes to `PresentHub`. |
+| `PresentHub` | the shop, built from `deriveWorld` (`premises`, `tradition`, `onlineService` are each `NotRevisited`, `Established` or `Missing`); the diary in `nextDiary` glows | `Inspect (HubProp p)`, `OpenNextDiary` |
 | `Transition (OpeningDiary era)` | page-turn into that diary | `Advance` |
-| `Salvage placement` | 9 books, 3 crates of 3 spaces | `SalvageMove …`, then `Advance` once solved |
+| `Salvage placement` | 9 books, 3 crates of 3 spaces, live misplaced marks | `SalvageMove …`, then `Advance` to continue (stays put with `NotSolvedYet` until solved) |
 | `RepairBoard puzzle` | tray, Mon–Fri, two "Not this week" spaces, spent/remaining | `BoardMove …`, `Inspect` the four clues, `Submit` ("Finish week"), `Retry` |
 | `Transition (Slideshow era i)` | slide `i` of `Timeline.slides era model.history` | `Advance` |
-| `ReopeningShelf placement` | 6 positions, plaque | `ShelfMove …`, `Inspect ShelfPlaque`, then `Advance` once ordered |
+| `ReopeningShelf placement` | 6 positions, plaque, matched order when complete | `ShelfMove …`, `Inspect ShelfPlaque`, then `Advance` to continue (stays put with `NotSolvedYet` until ordered) |
 | `ShadowPuzzle puzzle` | 3 panels, each with a character slot and a prop slot | `StageMove …`, `Inspect ShadowScript / StageSketch / CutoutBox`, `Submit` ("Perform the story"), `Retry` |
 | `BookMystery puzzle` | 4 candidates, tabs | `Inspect (CandidatePage c tab)`, `Inspect RuthsEmail / RememberedSentence / InscriptionClue`, `ChooseCandidate c`, `Submit` ("Send this book"), `Retry` |
 | `Transition ReturningToPresent` | room changing back | `Advance` |
 | `Ending` | fate from `(deriveWorld history).fate`: `ShopSaved` or `ShopClosed failedEras` | `ReopenDiary era`, `StartAgain` |
 
-In every phase, if `model.inspecting = Just clue`, show the overlay and dispatch `CloseInspection`. If `model.notice = Just n`, show neutral text and dispatch `DismissNotice` (it also clears on the next move).
+In every phase, if `model.inspecting = Just clue`, show the overlay and dispatch `CloseInspection`. If `model.notice = Just n`, show neutral text and dispatch `DismissNotice` (it also clears on the next move). The notices are `IncompleteSubmission`, `TargetFull`, `DoesNotFitThere` and `NotSolvedYet` (added in v1.2).
 
 ### Attempts and feedback (main puzzles only)
 
@@ -115,7 +115,7 @@ Content.Shadow.cutoutName  : Cutout -> String
 Content.Shadow.scene       : ScriptVariant -> Scene -> ShadowSceneContent
 Content.Mystery.candidate  : CandidateId -> CandidateContent        -- label, cover, text, dedication
 Content.Feedback.violation : Violation -> String                    -- brief explanation, never the full answer
-Content.Feedback.notice    : Notice -> String
+Content.Feedback.notice    : Notice -> String                       -- incl. NotSolvedYet (v1.2)
 Content.Slides.slide       : World -> Slide -> Document
 Content.Endings.saved      : Document
 Content.Endings.missing    : Era -> Document                        -- one per missing foundation
@@ -172,6 +172,49 @@ The list is ordered by consequence: roof, window, shelves, books, timber, money.
   - `ConsequenceSlide Repairs1950 v` for any repair violation `v`, since any of them can come first
 - **`Content.Repair.taskCard`** (all seven `TaskId`s) and **`Content.Repair.goal`** (all four `ReopeningGoal`s) as before. Costs come from `Rules.Repair.cost`, so don't write them into the card text.
 
+## 1950 warm-ups and the full chapter flow (added in v1.2)
+
+The whole 1950 chapter now runs through `Update`, from a new game to the present with 1973 unlocked. The tests drive it with real actions. B's screens are not wired yet, so this has been verified in the model, not in a playable browser build.
+
+**Contract change:** one new `Notice` constructor, `NotSolvedYet`. There are no renames and no other changes to `Domain.elm`.
+
+**Flow change:** after `Introduction ClockStopped`, `Advance` now goes to `PresentHub`, where the 1950 diary glows (`nextDiary = Just Repairs1950`). `OpenNextDiary` then opens it.
+
+### Flow
+
+```
+Introduction ×3 --Advance--> PresentHub --OpenNextDiary--> OpeningDiary Repairs1950 --Advance-->
+Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUsed) --Submit-->
+  success: Slideshow 0..  shelving-day slide --Advance--> ReopeningShelf --Advance (when ordered)-->
+           Slideshow (day after shelving) .. ReopeningSaturday --Advance--> ReturningToPresent --Advance--> PresentHub
+  failure: ConsequenceSlide --Advance--> ReturningToPresent --Advance--> PresentHub   (no shelf)
+```
+
+- The week follows the submitted order. It pauses once, on the `WeekdaySlide day ShelveBooks` slide. After the shelf it resumes on the next day: Friday if shelving was Thursday, straight to Saturday if shelving was Friday. The shelving day is never replayed.
+- The shelf and salvage never touch `history` or attempts. The 1950 record is written once, at the resolving `Submit`.
+
+### Warm-up helpers (all safe to call while the player is arranging)
+
+| Function | Meaning |
+|---|---|
+| `Rules.Salvage.misplaced placement : List BookId` | Books sitting in the wrong crate, in `Rules.Books.allBooks` order. Books in the tray are not listed. Use this for the immediate per-book feedback. |
+| `Rules.Salvage.isSolved placement : Bool` | All nine books placed, each exactly once, all in the right crates. Move order and the space used within a crate don't matter. |
+| `Rules.Placement.inTray Rules.Books.allBooks placement` | Books still to sort. |
+| `Rules.Salvage.crateSlots crate` | A crate's three spaces. Send `SalvageMove (PlaceSelectedInGroup (crateSlots crate))` when a crate is clicked. |
+| `Rules.Shelf.matchedOrder placement : Maybe ShelfOrder` | `Just ByHeight`, `Just ByColour` or `Just Alphabetical` when the shelf is full and in one of the three orders. Otherwise `Nothing`. Use it to show the celebration as soon as an order matches. |
+
+### Leaving the warm-ups
+
+Send `Advance` for both. If the warm-up isn't solved yet, the phase and arrangement stay as they are, `model.notice = Just NotSolvedYet` is set, and nothing is spent. The next move clears the notice. Corrections are unlimited.
+
+### For C
+
+- **`Content.Feedback.notice NotSolvedYet`**: one gentle line that works for both salvage and the shelf, such as "Not quite yet – keep arranging."
+- **`Content.Shelf.matched : ShelfOrder -> String`**: celebration text for each order.
+- **`Content.Books.book`**: titles and damage marks for all nine `BookId`s. Condition must be visible without relying on cover colour.
+- **`Content.Clues.clue ShelfPlaque`**: the plaque text ("Small to tall / rainbow / A–Z").
+- **Hub props** (`HubProp`) and **diary passages**: with `NotRevisited` foundations, i.e. the present before 1950 is played.
+
 ## Fixtures (`src/Fixtures.elm`)
 
 | Fixture | What it is |
@@ -194,22 +237,15 @@ These functions are `Debug.todo`. Calling one stops the running app, rather than
 
 | Function | Planned for |
 |---|---|
-| `Rules.Salvage.misplaced`, `Rules.Salvage.isSolved`, `Rules.Shelf.matchedOrder` | the next A task (they gate the 1950 flow) |
-| `Rules.Shadow.validate`, `Rules.Mystery.validate` | after that |
+| `Rules.Shadow.validate`, `Rules.Mystery.validate` | the next A task |
 
-`Rules.Repair.validate` is done. Until the rest land, any of these stops the preview:
-
-- `Advance` out of salvage
-- `Advance` out of the reopening shelf
-- a complete Submit on the 1973 or 1998 puzzles
-
-The repair board itself, its submission flow, resource numbers, history, rewind and endings all work now.
+All 1950 rules are done: repair, salvage and shelf. Only a complete Submit on the 1973 or 1998 puzzle still stops the preview. Everything up to and including the return from 1950 works now, as do history, rewind and endings.
 
 `npm run build -- --optimize` refuses to build while any `Debug` remains. This is intentional: a stub can't reach the release.
 
 ## Open coordination items
 
-1. **The repair board can't yet be reached by playing.** A new game passes through salvage first, and `Advance` out of salvage still hits a stub. Until the next A task lands, test the board with `Fixtures.repairBoardInProgress`, `repairBoardReady` or `repairFirstAttemptFailed`. A successful week likewise stops at the reopening shelf.
+1. **No playable browser build yet.** The 1950 flow is verified through `Update` in tests. A browser playthrough needs B's `View.view` wired into `Main.elm` (salvage, board, slides, shelf) and C's content. The temporary screen in `Main.elm` only has Advance and Open-next-diary buttons.
 2. **Audio.** There are no ports yet. If B wants sound, agree a port name (suggested: `port playSound : String -> Cmd msg`), and A will add it to `Main.elm`.
 3. **Content module names** above are a proposal. C confirms or renames them once, before B calls them.
 4. **The brief file is named `one-more-christmas-shared-plan.md`.** There is no `GAME_PLAN.md`.

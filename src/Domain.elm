@@ -357,11 +357,21 @@ type PlacementAction item slot
     | ClearSelection
 
 
-{-| Neutral messages. They never reveal correctness and never spend attempts. -}
+{-| Neutral messages. They never spend attempts, and the main-puzzle ones
+never reveal correctness.
+
+  - IncompleteSubmission: Submit on a main puzzle with cards/cut-outs/choice missing.
+  - TargetFull: the clicked group (crate, "Not this week") has no free space.
+  - DoesNotFitThere: that kind of item cannot go in that slot.
+  - NotSolvedYet: Advance in a warm-up (salvage or reopening shelf) before it
+    is solved. The player stays and keeps correcting. (Added in contract v1.2.)
+
+-}
 type Notice
     = IncompleteSubmission
     | TargetFull
     | DoesNotFitThere
+    | NotSolvedYet
 
 
 
