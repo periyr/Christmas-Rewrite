@@ -104,7 +104,7 @@ The plaque only says "Organize these books. Hint: There are four different ways 
 
 ## 1973: the shadow story (Henry)
 
-Clues: the script, the stage sketch and the box of cut-outs. Each scene takes one character and one prop, and every cut-out is used once. The script lists who does what. The sketch gives the scene order.
+Clues: the script, the stage sketch and the box of cut-outs. Each scene takes one character and one prop, and every cut-out is used once. The script lists who does what. The sketch gives the scene order, and the stage panels show each scene's setting too.
 
 The puzzle depends on how 1950 went.
 
