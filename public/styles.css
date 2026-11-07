@@ -1122,14 +1122,6 @@ button:disabled { cursor: not-allowed; }
 .r-timber { opacity: var(--show-timber, 0); }
 .r-bucket { opacity: var(--show-bucket, 0); }
 
-/* The walking strip's boards, sampled from each room picture's floor. */
-.r-apron-board { fill: var(--apron, #45372d); }
-.r-apron-lip { stroke: var(--apron-lip, #6b5544); }
-.stage[data-era="1950"],
-.stage[data-era="1998"] { --apron: #4b3a2f; --apron-lip: #705847; }
-.stage[data-era="1973"] { --apron: #443326; --apron-lip: #6c5039; }
-.stage[data-era="saved"] { --apron: #3a2518; --apron-lip: #5e3f2b; }
-
 .stage[data-era="1950"] {
   --show-bare: 1;
   --show-broken: 1;
@@ -1229,7 +1221,8 @@ svg-art { display: contents; }
 /* ---------- The player ---------- */
 
 /* C's sprites at 2 logical px per unit. Left and top come from the player's model
-   through Components.Actor, with the feet point on the walking line at y 650. */
+   through Components.Actor, with the feet point on the walking line (Rules.Room.floorY,
+   the front edge of the painted floor, so the player stands in front of the furniture). */
 .actor {
   position: absolute;
   z-index: 2;
@@ -1266,28 +1259,30 @@ svg-art { display: contents; }
 
 .room-hotspots { display: contents; }
 
-/* Stops short of the clock, and keeps the floor clear for the player's feet. */
+/* Stops short of the clock, keeps the floor clear for the player's feet, and
+   starts below the room bar in the top-left corner. */
 .narration--top {
-  top: 1rem;
+  top: 3rem;
   right: 14rem;
   bottom: auto;
 }
 
+/* On the ceiling, top left: the player walks along the bottom edge, and the
+   1950 roof damage is at the top centre. */
 .room-bar {
   position: absolute;
-  left: 50%;
-  bottom: 0.5rem;
+  left: 1rem;
+  top: 0.5rem;
   z-index: 2;
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  max-width: 72rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
   padding: 0.3rem 1rem;
   border: 0.1rem solid var(--paper-edge);
   border-radius: 0.3rem;
   background: var(--paper);
   box-shadow: 0.14rem 0.18rem 0 var(--cast);
-  transform: translateX(-50%);
   white-space: nowrap;
 }
 
