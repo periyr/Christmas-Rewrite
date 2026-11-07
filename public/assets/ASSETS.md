@@ -21,7 +21,7 @@ All of these are already wired in `src/Components/Art.elm` and the views. Checke
 | Damage overlays (salvage only) | `damage-<damage-in-kebab-case>.svg`, stretched over the cover | `(Content.Books.book id).damage` |
 | Clean reopening-shelf books | the same six `book-*.svg` files, **no overlays** | `RecoverableBook` |
 | Natural book heights | viewBox heights 150–250 in steps of 20; render at one shared width and align bottoms | agrees with `Rules.Books.height` |
-| Rainbow-guide swatches | `#893f43`, `#c95937`, `#d9a443`, `#748b2c`, `#496669`, `#7687ab` (red → violet) | agrees with `Rules.Books.colour`; already in `Views/Shelf.elm` |
+| Rainbow order | `#893f43`, `#c95937`, `#d9a443`, `#748b2c`, `#496669`, `#7687ab` (red → violet) | agrees with `Rules.Books.colour`. The plaque no longer shows these swatches: it only says there are four ways to order the books. |
 
 ## Palette
 
@@ -77,7 +77,7 @@ Draw each book at its natural size and **align the bottoms** (for example `align
 | `book-mountain-paths.svg` | Mountain Paths (ruined) | `#a6652b` | – | 200 |
 | `book-winter-almanac.svg` | Winter Almanac (ruined) | `#7687ab` | – | 200 |
 
-The palette has no true purple, so violet is periwinkle and blue is teal slate. The shelf plaque's colour guide should show these exact six swatches in order: `#893f43`, `#c95937`, `#d9a443`, `#748b2c`, `#496669`, `#7687ab`.
+The palette has no true purple, so violet is periwinkle and blue is teal slate. In rainbow order the six covers run `#893f43`, `#c95937`, `#d9a443`, `#748b2c`, `#496669`, `#7687ab`. The plaque no longer shows a colour guide.
 
 The ruined books deliberately share colour families with the recoverable ones, so colour never gives away a book's condition. Damage does that.
 

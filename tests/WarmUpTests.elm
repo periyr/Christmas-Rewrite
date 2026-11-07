@@ -265,20 +265,23 @@ shelfTests =
         , test "rainbow is accepted" <|
             \_ ->
                 Shelf.matchedOrder (shelfOf byRainbow) |> Expect.equal (Just ByColour)
+        , test "tall to small is accepted" <|
+            \_ ->
+                Shelf.matchedOrder (shelfOf (List.reverse byHeight)) |> Expect.equal (Just TallToSmall)
         , test "A–Z is accepted" <|
             \_ ->
                 Shelf.matchedOrder (shelfOf byAlphabet) |> Expect.equal (Just Alphabetical)
-        , test "of all 720 arrangements, exactly the three orders are accepted" <|
+        , test "of all 720 arrangements, exactly the four orders are accepted" <|
             \_ ->
                 permutations byAlphabet
                     |> List.filter (\books -> Shelf.matchedOrder (shelfOf books) /= Nothing)
-                    |> Expect.equal (List.filter (\p -> List.member p [ byHeight, byRainbow, byAlphabet ]) (permutations byAlphabet))
-        , test "there are 720 arrangements and 3 accepted" <|
+                    |> Expect.equal (List.filter (\p -> List.member p [ byHeight, List.reverse byHeight, byRainbow, byAlphabet ]) (permutations byAlphabet))
+        , test "there are 720 arrangements and 4 accepted" <|
             \_ ->
                 ( List.length (permutations byAlphabet)
                 , List.length (List.filter (\books -> Shelf.matchedOrder (shelfOf books) /= Nothing) (permutations byAlphabet))
                 )
-                    |> Expect.equal ( 720, 3 )
+                    |> Expect.equal ( 720, 4 )
         , test "two neighbours swapped is not accepted" <|
             \_ ->
                 Shelf.matchedOrder (shelfOf [ GardensInWinter, BirdsongForBeginners, PocketOfWonders, AtlasOfSmallPlaces, LettersFromTheSea, WinterTales ])
@@ -313,7 +316,8 @@ shelfTests =
         , test "the height and colour orders agree with the book facts" <|
             \_ ->
                 ( Shelf.order ByHeight == List.sortBy Books.height Books.recoverableBooks
+                , Shelf.order TallToSmall == List.sortBy (negate << Books.height) Books.recoverableBooks
                 , List.map Books.colour (Shelf.order ByColour)
                 )
-                    |> Expect.equal ( True, [ Red, Orange, Yellow, Green, Blue, Violet ] )
+                    |> Expect.equal ( True, True, [ Red, Orange, Yellow, Green, Blue, Violet ] )
         ]

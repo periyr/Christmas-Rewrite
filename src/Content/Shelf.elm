@@ -11,6 +11,9 @@ matched order =
         ByHeight ->
             "Small to tall, like steps up a hill. The shelf is ready for the reopening."
 
+        TallToSmall ->
+            "Tall to small, like steps down a hill. The shelf is ready for the reopening."
+
         ByColour ->
             "A rainbow, red to violet, right across the shelf. The shelf is ready for the reopening."
 
