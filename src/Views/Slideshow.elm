@@ -57,10 +57,13 @@ slides already shown, so a failed week keeps its damage.
 stageAttributes : History -> Era -> Int -> List (Attribute msg)
 stageAttributes history era index =
     let
-        shown =
-            List.take (index + 1) (Timeline.slides era history)
+        slides =
+            Timeline.slides era history
 
-        done task =
+        shown =
+            List.take (index + 1) slides
+
+        doneIn soFar task =
             List.any
                 (\slide ->
                     case slide of
@@ -70,7 +73,10 @@ stageAttributes history era index =
                         _ ->
                             False
                 )
-                shown
+                soFar
+
+        done =
+            doneIn shown
 
         isRaining =
             case List.head (List.reverse shown) of
@@ -89,4 +95,8 @@ stageAttributes history era index =
     in
     flag (done PatchRoof) "data-roof" "patched"
         ++ flag (done ClearRubble) "data-rubble" "cleared"
+        ++ flag (done BuildShelves) "data-shelves" "built"
+        ++ flag (done ReglazeWindow) "data-window" "glazed"
+        -- The shelving slide only leads to the shelf scene: the books are up after it.
+        ++ flag (doneIn (List.take index slides) ShelveBooks) "data-books" "shelved"
         ++ flag isRaining "data-weather" "rain"
