@@ -59,7 +59,7 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 - **Writing:** the team. Text drafted with help from Claude (Anthropic), then edited by the team.
 - **Art:** all made for this project and free to use in this game. See `public/assets/ASSETS.md` for the full list.
   - The room pictures, book and diary covers, damage marks, shadow puppets and mystery books were generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand.
-  - The walking characters are drawn with Google Gemini from the team's prompt, then adjusted with help from Claude (scripts in `docs/asset-sources/`). [Update when Henry and Edwin are final.]
+  - The four walking characters share one body drawn with Google Gemini from the team's prompt. Each person's look follows Gemini's designs, rebuilt with help from Claude so all four match (`docs/asset-sources/chibi-family.mjs`).
   - The room props are flat SVG made for the team with help from Claude.
 - **Fonts:** none bundled. The game uses fonts already installed on the player's system (Palatino or Georgia, and Courier).
 - **Sound:** none.

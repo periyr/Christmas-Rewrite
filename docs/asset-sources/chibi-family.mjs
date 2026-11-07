@@ -159,6 +159,47 @@ PEOPLE["edwin-young"] = {
   ],
 };
 
+// Present-day Edwin, Christmas Eve: cosy look from Gemini's design (wine
+// Christmas jumper with a Fair Isle band and ribbed hem, green scarf with
+// mustard stripes, dark jeans, Chelsea boots) plus the grey hair, short beard
+// and round glasses from the brief, redrawn on the shared body.
+const star = (x, y) => p(`M ${x},${y - 2.6} L ${x},${y + 2.6} M ${x - 2.6},${y} L ${x + 2.6},${y} M ${x - 1.7},${y - 1.7} L ${x + 1.7},${y + 1.7} M ${x - 1.7},${y + 1.7} L ${x + 1.7},${y - 1.7}`, "none", { stroke: CREAM, "stroke-width": 1.1 });
+PEOPLE["edwin-present"] = {
+  sleeve: CLOTH.wine, forearm: CLOTH.wine,
+  trousers: CLOTH.teal, shoes: HAIR.brown,
+  torso: [
+    p(TORSO_PATH, CLOTH.wine),
+    // Fair Isle band: two cream lines with little stars and mustard dots between.
+    p("M 34.5,87.5 L 61.5,87.5", "none", { stroke: CREAM, "stroke-width": 1.4 }),
+    p("M 34.5,98.5 L 62,98.5", "none", { stroke: CREAM, "stroke-width": 1.4 }),
+    star(38, 93), star(46.5, 93),
+    c(42.2, 93, 1.1, CLOTH.mustard, { stroke: "none" }), c(50.6, 93, 1.1, CLOTH.mustard, { stroke: "none" }), c(61, 93, 1.1, CLOTH.mustard, { stroke: "none" }),
+    // Ribbed hem.
+    ...[36, 40, 44, 48, 52, 56, 60].map((x) => p(`M ${x},108 L ${x},${x > 57 ? 111.4 : 112}`, "none", { "stroke-width": 1.3 })),
+    // Scarf: wrapped round the neck, one end hanging down the front with stripes and a fringe.
+    p("M 52,78 L 59.5,78 L 60.5,104 L 52.5,104 Z", CLOTH.green),
+    p("M 53,86 L 59.6,86 M 53.2,93 L 59.9,93", "none", { stroke: CLOTH.mustard, "stroke-width": 1.8 }),
+    p("M 54,105.5 L 54,108.6 M 56.5,105.5 L 56.5,108.6 M 59,105.5 L 59,108.6", "none", { stroke: CLOTH.green, "stroke-width": 1.6 }),
+    p("M 35,73 C 43,79.5 54,79.5 62,72 L 62.5,79.5 C 54,86.5 43,86.5 34.5,80.5 Z", CLOTH.green),
+  ],
+  torsoLabel: "Torso (Christmas jumper and scarf)",
+  behindHead: [p("M 16,30 C 12,40 16,54 26,56 L 30,46 Z", HAIR.grey)],
+  face: [
+    ...eyes(CLOTH.green),
+    // Short soft beard along the jaw and chin, below both blushes; one smooth outer edge.
+    p("M 29.5,63.5 C 37,63 44,64.5 50,65 C 57,64.5 65,62.5 74,61.5 C 72,70.5 63,78.6 50,78.8 C 38,78.6 31,71.5 29.5,63.5 Z", HAIR.grey, { "stroke-width": 2.4 }),
+    // Warm smile on the beard.
+    p("M 54,67.2 Q 57.5,70.2 61,67.2", "none", { "stroke-width": 2 }),
+    // Thin round glasses.
+    c(46, 46, 8.2, "none", { "stroke-width": 1.5 }),
+    c(65, 46, 8.2, "none", { "stroke-width": 1.5 }),
+    p("M 54.2,45 L 56.8,45", "none", { "stroke-width": 1.5 }),
+    p("M 37.8,45 L 27,43", "none", { "stroke-width": 1.5 }),
+  ],
+  topLabel: "Short grey hair",
+  top: [p("M 18,40 C 16,22 30,13 48,13 C 66,13 80,22 79,36 C 76,33 73,31.5 69,31.5 L 71,27 L 64,29.5 L 63.5,25 L 57,28.5 C 46,27.5 36,30.5 30,37.5 C 26,41.5 22,42 18,40 Z", HAIR.grey)],
+};
+
 // ── rendering ──────────────────────────────────────────────────────────────
 const attrs = (o, overrides = {}) =>
   Object.entries({ ...o, ...overrides })
