@@ -15,7 +15,7 @@
   | Introduction | closure notice (door), box beneath the counter, family photographs (right wall) |
   | Present-day shop | order desk (till), glowing diary (counter), community wall (cork board), roof and shelves (right bookcase) |
   | 1950 sorting | book crates |
-  | 1950 planning | glass slip (door), timber licence (till), Walter's diary page (counter), planning board (cork board), repair notes (by the rubble) |
+  | 1950 planning | glass slip (door), wood planks and cash (till), Walter's diary page (counter), planning board (cork board), repair notes (by the rubble) |
   | 1950 shelving day | reopening shelf (right bookcase) |
   | 1973 | box of cut-outs, script (counter), shadow stage (sheet across the window), stage sketch (by the bookcase) |
   | 1998 | Ruth's email (computer), inscription note (counter), the four books, the line Lucy remembers (by the lamp) |
@@ -51,29 +51,29 @@ Damage shows condition, not cover colour. **Smoke or water can be repaired. Scor
 
 ### The planning board (main puzzle, "Finish week")
 
-Clues: Walter's diary page (rain on Wednesday), the glass delivery slip (Wednesday), Walter's repair notes (rubble → shelves → books), and the timber licence (4 planks, £10).
+Clues: Walter's diary page (rain on Wednesday), the glass delivery slip (Wednesday), Walter's repair notes (rubble → shelves → books), and the wood planks and cash (4 wood planks, £10).
 
 **Rules:**
 - **Patch the roof:** Monday or Tuesday, because the rain comes on Wednesday.
 - **Clear the rubble:** before Build shelves.
 - **Build shelves:** before Shelve the books.
 - **Re-glaze the window:** Wednesday or later, when the glass arrives.
-- **Budget:** 4 timber and £10 in total.
+- **Budget:** 4 wood planks and £10 in total.
 
 | Card | Cost |
 |---|---|
-| Patch the roof | 2 timber |
+| Patch the roof | 2 wood planks |
 | Clear the rubble | free |
-| Build shelves | 2 timber |
+| Build shelves | 2 wood planks |
 | Shelve the books | free |
 | Re-glaze the window | £6 |
-| Paint a grand new sign | £6 + 1 timber |
-| Board up the window | 1 timber |
+| Paint a grand new sign | £6 + 1 wood plank |
+| Board up the window | 1 wood plank |
 
 **The reasoning:**
-1. The roof and shelves are essential, and together they use all 4 timber.
+1. The roof and shelves are essential, and together they use all 4 wood planks.
 2. That leaves nothing for boarding up the window, so the window has to be re-glazed (£6).
-3. The sign then can't fit either: it needs timber, and there's only £4 left.
+3. The sign then can't fit either: it needs a wood plank, and there's only £4 left.
 4. So "Not this week" holds **Paint a grand new sign** and **Board up the window**.
 
 **The six valid weeks** (any one succeeds):
