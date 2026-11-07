@@ -4,9 +4,10 @@ module Components.Actor exposing (Person(..), view)
 frame count of its own: everything it draws comes from A's Player.
 -}
 
-import Domain exposing (Facing(..), Player)
-import Html exposing (Html, div, img)
-import Html.Attributes exposing (alt, class, classList, src, style)
+import Content.Characters
+import Domain exposing (Era(..), Facing(..), Player)
+import Html exposing (Html, div, img, p, span, text)
+import Html.Attributes exposing (alt, attribute, class, classList, src, style)
 import Rules.Room
 
 
@@ -40,13 +41,45 @@ view person player =
                 , alt ""
                 ]
                 []
+        who =
+            Content.Characters.person (personEra person)
+
+        -- Hovering the head or body shows who this is. Only this box catches the
+        -- pointer, so labels next to the player stay clickable.
+        nameTag =
+            div
+                [ class "actor__hit"
+                , attribute "role" "img"
+                , attribute "aria-label" (who.title ++ ". " ++ String.join " " who.paragraphs)
+                ]
+                [ div [ class "actor__tag" ]
+                    (span [ class "actor__name" ] [ text who.title ]
+                        :: List.map (\line -> p [ class "actor__relation" ] [ text line ]) who.paragraphs
+                    )
+                ]
     in
     div
         [ classList [ ( "actor", True ), ( "is-facing-left", player.facing == FacingLeft ) ]
         , style "left" (rem (player.x - 96))
         , style "top" (rem (Rules.Room.floorY - 304))
         ]
-        (div [ class "actor__shadow" ] [] :: List.map frame [ Idle, Walk1, Walk2 ])
+        (div [ class "actor__shadow" ] [] :: List.map frame [ Idle, Walk1, Walk2 ] ++ [ nameTag ])
+
+
+personEra : Person -> Maybe Era
+personEra person =
+    case person of
+        EdwinPresent ->
+            Nothing
+
+        Walter ->
+            Just Repairs1950
+
+        Henry ->
+            Just Shadows1973
+
+        EdwinYoung ->
+            Just Search1998
 
 
 {-| The step comes from how far the player has walked, so the legs stay in step
