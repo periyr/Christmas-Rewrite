@@ -201,7 +201,7 @@ Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUse
 | `Rules.Salvage.isSolved placement : Bool` | All nine books placed, each exactly once, all in the right crates. Move order and the space used within a crate don't matter. |
 | `Rules.Placement.inTray Rules.Books.allBooks placement` | Books still to sort. |
 | `Rules.Salvage.crateSlots crate` | A crate's three spaces. Send `SalvageMove (PlaceSelectedInGroup (crateSlots crate))` when a crate is clicked. |
-| `Rules.Shelf.matchedOrder placement : Maybe ShelfOrder` | `Just ByHeight`, `Just ByColour` or `Just Alphabetical` when the shelf is full and in one of the three orders. Otherwise `Nothing`. Use it to show the celebration as soon as an order matches. |
+| `Rules.Shelf.matchedOrder placement : Maybe ShelfOrder` | `Just ByHeight`, `Just TallToSmall`, `Just ByColour` or `Just Alphabetical` when the shelf is full and in one of the four orders (`TallToSmall` was added by C at the team's request after playtesting). Otherwise `Nothing`. Use it to show the celebration as soon as an order matches. |
 
 ### Leaving the warm-ups
 
@@ -212,7 +212,7 @@ Send `Advance` for both. If the warm-up isn't solved yet, the phase and arrangem
 - **`Content.Feedback.notice NotSolvedYet`**: one gentle line that works for both salvage and the shelf, such as "Not quite yet – keep arranging."
 - **`Content.Shelf.matched : ShelfOrder -> String`**: celebration text for each order.
 - **`Content.Books.book`**: titles and damage marks for all nine `BookId`s. Condition must be visible without relying on cover colour.
-- **`Content.Clues.clue ShelfPlaque`**: the plaque text ("Small to tall / rainbow / A–Z").
+- **`Content.Clues.clue ShelfPlaque`**: the plaque text. Since the playtest change it hints that there are four orders.
 - **Hub props** (`HubProp`) and **diary passages**: with `NotRevisited` foundations, i.e. the present before 1950 is played.
 
 ## The walking room (added in v1.3)
@@ -349,8 +349,26 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 | `hubAfterRepairs` | The present after a successful 1950. |
 | `salvageWalking` | 1950 salvage in the room (v1.3): the player mid-walk to the crates, panel closed. |
 | `repairBoardPanelOpen` | `repairBoardInProgress` with the player at the board and its panel open (v1.3). |
+| `shadowOriginalScript` | A fresh 1973 stage after a successful 1950 (original script). Player at the stage, panel open. |
+| `shadowRetelling` | A fresh 1973 stage after a failed 1950 (neighbours' retelling). Player at the stage, panel open. |
+| `shadowFirstAttemptFailed` | `shadowOriginalScript` after performing the retelling's staging: first-attempt feedback open, all three scenes conflicting, stage kept. Only `Retry` works. |
+| `mysteryFamilyArchive` | A fresh 1998 table after a successful 1973 (inscription from the family archive). Player at the books, panel open. |
+| `mysteryFollowUpEmail` | A fresh 1998 table after a failed 1973 (inscription from Ruth's follow-up email). Player at the books, panel open. |
+| `mysteryFirstAttemptFailed` | `mysteryFamilyArchive` after sending book B: first-attempt feedback open (the inscription does not match), B still chosen. Only `Retry` works. |
+| `shadowsSucceeded` / `shadowsFailed` | Resolved 1973 records, after a successful 1950. |
+| `stageFor staging` | Turns a `Staging` into a stage arrangement, like `boardFor`. |
 
-To preview a fixture, temporarily change `init` in `Main.elm` to `\_ -> ( Fixtures.repairBoardInProgress, Cmd.none )`. Don't commit that change.
+The feedback fixtures are produced by the real `Submit`, and `tests/FixtureTests.elm` checks that every fixture derives the variant in its name. Send `ClosePanel` (or press its close button) to see the room behind a panel.
+
+To preview a fixture, make two temporary edits in `src/Main.elm`, then reload the page while `npm start` is running:
+
+```elm
+import Fixtures                                           -- add next to the other imports
+
+        { init = \_ -> ( Fixtures.shadowRetelling, Cmd.none )   -- instead of Update.init
+```
+
+Don't commit either edit: normal startup stays `Update.init`. Check with `git diff src/Main.elm` before committing.
 
 ## 1973 and 1998 validators (added in v1.3)
 
@@ -386,7 +404,8 @@ There are no `Debug.todo` stubs left. `npm run build -- --optimize` builds the r
 
 ## Open coordination items
 
-1. **The walking room (v1.3).** B builds the room, player, hotspots, prompts and panel overlays against the section above. C supplies prompt labels and character poses. A implements the movement in `Update` and `Main`.
+1. **The 1973 and 1998 screens.** The walking room, player and 1950 panels are in (B, #21). The shadow stage and candidate-book panels still show `Views.Shop.unbuiltChapter`. Their rules, attempts and fixtures are ready: see the fixtures table.
 2. **Audio.** There are no ports yet. If B wants sound, agree a port name (suggested: `port playSound : String -> Cmd msg`), and A will add it to `Main.elm`.
 3. **The `svg-art` element in `public/index.html`** sets `innerHTML` from Art.elm strings. That goes beyond the brief's "startup and audio" JavaScript. The team should agree to keep it, or A can add `elm/svg` to `elm.json` instead.
 4. **Keys and window focus.** Elm can see the page being hidden but not the window losing focus. If a key is held while switching to another window, the player keeps walking until the wall (where they stop) or until the key is pressed and released again. Hiding the tab clears it.
+5. **Floor alignment.** B owns the visible fix. The shared values stay as they are while B aligns the view: `Rules.Room.floorY` is 650, and the sprites use anchor (48, 152) at scale 2. If B shows that the shared geometry has to change, A makes one coordinated change here and in `Rules.Room`.
