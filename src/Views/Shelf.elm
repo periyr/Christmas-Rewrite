@@ -11,7 +11,7 @@ import Content.Clues
 import Content.Shelf
 import Domain exposing (..)
 import Html exposing (Html, aside, button, div, h3, p, section, span, text)
-import Html.Attributes exposing (attribute, class, style, type_)
+import Html.Attributes exposing (attribute, class, type_)
 import Html.Events exposing (onClick)
 import Rules.Books
 import Rules.Shelf
@@ -38,7 +38,7 @@ view world placement notice =
             "The Reopening Shelf"
             (Common.helpButton "Back to the shelf"
                 [ "Click a book to pick it up, then click a space on the shelf. Click a filled space to swap."
-                , "Fill the shelf in any order the plaque suggests. You can rearrange as often as you like, and it never costs an attempt."
+                , "There are four different ways to order these books. Find any one of them. You can rearrange as often as you like, and it never costs an attempt."
                 ]
                 ++ [ Common.closePanel True ]
             )
@@ -48,7 +48,6 @@ view world placement notice =
             [ button [ type_ "button", class "paper-note plaque", onClick (Inspect ShelfPlaque) ]
                 (h3 [ class "paper-note__title" ] [ text plaque.title ]
                     :: List.map (\line -> p [ class "plaque__line" ] [ text line ]) plaque.paragraphs
-                    ++ [ span [ class "plaque__swatches" ] (List.map swatch rainbow) ]
                 )
             , case matched of
                 Just order ->
@@ -71,7 +70,7 @@ hint placement =
 
         Nothing ->
             if List.length placement.placed == List.length Rules.Shelf.slots then
-                "The shelf is full, but this isn’t one of the plaque’s orders yet."
+                "The shelf is full, but this isn’t one of the four orders yet."
 
             else
                 "Click a book, then click a space on the shelf."
@@ -82,7 +81,7 @@ placementConfig placement =
     { toMsg = ShelfMove
     , enabled = True
     , placement = placement
-    , items = Rules.Books.recoverableBooks
+    , items = startingOrder
     , name = \book -> (Content.Books.book (Recoverable book)).title
     , cardClass = \_ -> "book--art"
     , cardBody = bookBody
@@ -103,21 +102,14 @@ bookBody book =
     ]
 
 
-{-| The plaque's colour guide, in C's exact order and shades (ASSETS.md). -}
-rainbow : List ( String, String )
-rainbow =
-    [ ( "Red", "#893f43" )
-    , ( "Orange", "#c95937" )
-    , ( "Yellow", "#d9a443" )
-    , ( "Green", "#748b2c" )
-    , ( "Blue", "#496669" )
-    , ( "Violet", "#7687ab" )
-    ]
-
-
-swatch : ( String, String ) -> Html msg
-swatch ( name, colour ) =
-    span [ class "plaque__swatch", style "background" colour, attribute "title" name ] []
+{-| The order the books wait in before they go on the shelf. It's mixed up on
+purpose: it matches none of the four accepted orders, forwards or backwards,
+so lining the books up as they start never solves the shelf.
+Height 5 3 2 6 4 1 · colours orange green violet red blue yellow · L P G W A B.
+-}
+startingOrder : List RecoverableBook
+startingOrder =
+    [ LettersFromTheSea, PocketOfWonders, GardensInWinter, WinterTales, AtlasOfSmallPlaces, BirdsongForBeginners ]
 
 
 colourName : CoverColour -> String

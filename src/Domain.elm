@@ -199,9 +199,12 @@ type ShelfSlot
     = ShelfPosition Int
 
 
-{-| The three accepted shelf orders (plaque: small to tall / rainbow / A–Z). -}
+{-| The four accepted shelf orders: small to tall (ByHeight), tall to small
+(TallToSmall, added at the team's request), rainbow (ByColour) and A–Z.
+-}
 type ShelfOrder
     = ByHeight
+    | TallToSmall
     | ByColour
     | Alphabetical
 

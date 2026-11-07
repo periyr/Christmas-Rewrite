@@ -77,11 +77,8 @@ clue world clueId =
 
         -- 1950 reopening shelf
         ShelfPlaque ->
-            { title = "Shelf plaque"
-            , paragraphs =
-                [ "Small to tall / rainbow / A–Z."
-                , "Rainbow runs red, orange, yellow, green, blue, violet. Any one of the three orders will do."
-                ]
+            { title = "Organize these books."
+            , paragraphs = [ "Hint: There are four different ways to organize them." ]
             }
 
         -- 1973

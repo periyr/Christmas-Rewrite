@@ -1,7 +1,7 @@
 module Rules.Shelf exposing (accepts, matchedOrder, order, slots)
 
-{-| 1950 reopening shelf: arrange the six recovered books in any of three
-ascending orders. Unlimited corrections, never spends attempts, never changes
+{-| 1950 reopening shelf: arrange the six recovered books in any of four
+orders (small to tall, tall to small, rainbow, A–Z). Unlimited corrections, never spends attempts, never changes
 the recorded 1950 outcome.
 -}
 
@@ -19,14 +19,18 @@ accepts _ slot =
     List.member slot slots
 
 
-{-| The three accepted left-to-right orders (brief section 4C).
-Height and colour agree with Rules.Books.height / colour (checked in tests).
+{-| The four accepted left-to-right orders (brief section 4C, plus tall to
+small). Height and colour agree with Rules.Books.height / colour (checked in
+tests).
 -}
 order : ShelfOrder -> List RecoverableBook
 order shelfOrder =
     case shelfOrder of
         ByHeight ->
             [ BirdsongForBeginners, GardensInWinter, PocketOfWonders, AtlasOfSmallPlaces, LettersFromTheSea, WinterTales ]
+
+        TallToSmall ->
+            List.reverse (order ByHeight)
 
         ByColour ->
             [ WinterTales, LettersFromTheSea, BirdsongForBeginners, PocketOfWonders, AtlasOfSmallPlaces, GardensInWinter ]
@@ -38,7 +42,7 @@ order shelfOrder =
 {-| The order a full, well-formed shelf matches, if any.
 
 Nothing while any position is empty, a book is listed twice, two books share
-a position, or the arrangement is not one of the three orders. Safe to show
+a position, or the arrangement is not one of the four orders. Safe to show
 at any time: this is the celebration scene's immediate local feedback.
 
 -}
@@ -53,7 +57,7 @@ matchedOrder placement =
             List.filterMap (\slot -> Placement.itemIn slot placement) slots
     in
     if wellFormed then
-        [ ByHeight, ByColour, Alphabetical ]
+        [ ByHeight, TallToSmall, ByColour, Alphabetical ]
             |> List.filter (\candidate -> order candidate == leftToRight)
             |> List.head
 

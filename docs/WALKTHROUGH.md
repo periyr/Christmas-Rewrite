@@ -93,11 +93,12 @@ Clues: Walter's diary page (rain on Wednesday), the glass delivery slip (Wednesd
 
 ### The reopening shelf (warm-up)
 
-The plaque reads "Small to tall / rainbow / A–Z". Any one of these orders works:
+The plaque only says "Organize these books. Hint: There are four different ways to organize them." The books start in a mixed-up order. Any one of these four orders works:
 
 | Order | Left to right |
 |---|---|
 | Small to tall | Birdsong, Gardens, Pocket, Atlas, Letters, Winter Tales |
+| Tall to small | Winter Tales, Letters, Atlas, Pocket, Gardens, Birdsong |
 | Rainbow | Winter Tales (red), Letters (orange), Birdsong (yellow), Pocket (green), Atlas (blue), Gardens (violet) |
 | A–Z | Atlas, Birdsong, Gardens, Letters, Pocket, Winter Tales |
 
