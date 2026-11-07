@@ -12,6 +12,7 @@ import Timeline
 import Views.Common as Common
 import Views.Labels exposing (eraYear)
 import Views.RepairBoard
+import Views.Room
 import Views.Salvage
 import Views.Shelf
 import Views.Shop
@@ -32,27 +33,37 @@ view model =
 
 screen : World -> Model -> List (Html Msg)
 screen world model =
+    let
+        room =
+            Views.Room.view world model
+
+        station panel =
+            room { emptyScene | panel = panel }
+
+        emptyScene =
+            Views.Room.emptyScene
+    in
     case model.phase of
         Introduction step ->
-            Views.Shop.introduction world step
+            room { emptyScene | front = Views.Shop.introduction step }
 
         PresentHub ->
-            Views.Shop.presentHub world model.history
+            room (Views.Shop.presentHub world model.history)
 
         Salvage placement ->
-            Views.Salvage.view placement model.notice
+            station (Views.Salvage.view placement model.notice)
 
         RepairBoard puzzle ->
-            Views.RepairBoard.view world puzzle model.notice
+            station (Views.RepairBoard.view world puzzle model.notice)
 
         ReopeningShelf placement ->
-            Views.Shelf.view world placement model.notice
+            station (Views.Shelf.view world placement model.notice)
 
         ShadowPuzzle _ ->
-            Views.Shop.unbuiltChapter Shadows1973
+            station (Views.Shop.unbuiltChapter Shadows1973)
 
         BookMystery _ ->
-            Views.Shop.unbuiltChapter Search1998
+            station (Views.Shop.unbuiltChapter Search1998)
 
         Transition (OpeningDiary era) ->
             Views.Shop.openingDiary world era
@@ -61,7 +72,7 @@ screen world model =
             Views.Slideshow.view world model.history era index
 
         Transition ReturningToPresent ->
-            Views.Shop.returning
+            room { emptyScene | front = Views.Shop.returning }
 
         Ending ->
             Views.Shop.ending world
@@ -83,7 +94,7 @@ stageAttributes world model =
             [ eraAttribute "1950" ]
 
         ReopeningShelf _ ->
-            [ eraAttribute "1950" ]
+            eraAttribute "1950" :: Views.Slideshow.atShelvingPause model.history
 
         ShadowPuzzle _ ->
             [ eraAttribute "1973" ]

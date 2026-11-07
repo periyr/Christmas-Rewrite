@@ -31,6 +31,7 @@ view placement notice =
                 , "Look at each book’s damage to decide where it belongs. You can correct mistakes as often as you like."
                 , "Three books belong in each crate. When they are all sorted, press Continue."
                 ]
+                ++ [ Common.closePanel True ]
             )
         , div [ class "crates" ]
             [ crate config Fine "Fine" "No damage at all"

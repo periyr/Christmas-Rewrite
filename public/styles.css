@@ -175,7 +175,7 @@ button:disabled { cursor: not-allowed; }
   white-space: nowrap;
 }
 
-/* Marks text awaiting Person C's final copy. Remove when content lands. */
+/* Marks the 1973 and 1998 screens until they are built. */
 .sample-tag {
   display: inline-block;
   padding: 0 0.4rem;
@@ -265,31 +265,54 @@ button:disabled { cursor: not-allowed; }
 .r-notice { opacity: var(--show-notice); }
 .r-boxes { opacity: var(--show-boxes); }
 
+/* Labels are always visible, so no clue depends on pixel-hunting. Left and top are
+   the anchor from Rules.Room, in logical px / 16. They sit behind the player, who
+   never catches clicks, and the prompt in reach comes to the front. */
 .hotspot {
   position: absolute;
+  z-index: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  padding: 0.25rem 0.7rem 0.25rem 0.5rem;
+  width: max-content;
+  max-width: 8rem;
+  padding: 0.2rem 0.5rem;
   border: 0.1rem solid var(--wood-dark);
   border-radius: 0.25rem;
   background: var(--paper);
   box-shadow: 0.12rem 0.16rem 0 var(--cast);
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  white-space: nowrap;
-}
-
-.hotspot::before {
-  content: "";
-  flex: none;
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 50%;
-  background: var(--interact);
+  line-height: 1.2;
+  text-align: center;
+  transform: translate(-50%, -50%);
 }
 
 .hotspot:hover { background: var(--interact-tint); }
+
+.hotspot.is-near {
+  z-index: 4;
+  max-width: 13rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.35rem;
+  border-color: #0f2f4b;
+  background: var(--interact);
+  color: #fff;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.hotspot__key {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 0.2rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+}
 
 .narration {
   position: absolute;
@@ -1207,55 +1230,90 @@ svg-art { display: contents; }
     drop-shadow(0 0 2.2rem #ffdf8c);
 }
 
-/* ---------- Human figure ---------- */
+/* ---------- The player ---------- */
 
-/* Logical room units are 1/16 rem, so the figure scales with the stage. Its feet
-   sit on the walking line at y 650. Position and facing come from the caller. */
+/* C's sprites at 2 logical px per unit. Left and top come from the player's model
+   through Components.Actor, with the feet point on the walking line at y 650. */
 .actor {
   position: absolute;
-  top: 18.35rem;
-  width: 11.25rem;
-  height: 22.5rem;
-  transform: translateX(-50%);
+  z-index: 2;
+  width: 12rem;
+  height: 20rem;
   pointer-events: none;
-  --actor-coat: #55604a;
-  --actor-coat-back: #434c3b;
-  --actor-legs: #4b3a2d;
-  --actor-legs-back: #3a2d23;
-  --actor-scarf: #893f43;
-  --actor-hair: #4a3120;
-  --actor-cap: 0;
 }
 
-[data-era="1950"] .actor {
-  --actor-coat: #6b5236;
-  --actor-coat-back: #54402a;
-  --actor-legs: #3f3a33;
-  --actor-legs-back: #302c27;
-  --actor-scarf: #4a5f55;
-  --actor-cap: 1;
+.actor.is-facing-left { transform: scaleX(-1); }
+
+.actor__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
 }
 
-.actor__art { display: block; width: 100%; height: 100%; }
-.actor.is-facing-left .actor__art { transform: scaleX(-1); }
+.actor__frame.is-current { visibility: visible; }
 
-.a-ink { fill: none; stroke: #291e1a; stroke-linecap: round; }
-.a-coat { fill: none; stroke: var(--actor-coat); stroke-linecap: round; }
-.a-coat-back { fill: none; stroke: var(--actor-coat-back); stroke-linecap: round; }
-.a-legs { fill: none; stroke: var(--actor-legs); stroke-linecap: round; }
-.a-legs-back { fill: none; stroke: var(--actor-legs-back); stroke-linecap: round; }
-.a-solid { stroke: #291e1a; stroke-width: 3.5; stroke-linejoin: round; }
-.a-coat.a-solid { fill: var(--actor-coat); }
-.a-skin { fill: #e3b58f; }
-.a-hair { fill: var(--actor-hair); }
-.a-cap { fill: #5a4a3a; }
-.a-scarf { fill: var(--actor-scarf); }
-.a-shoe { fill: #291e1a; }
-.a-eye { fill: #291e1a; }
-.a-line { fill: none; stroke: #291e1a; stroke-width: 2.5; stroke-linecap: round; }
-.a-trim { fill: none; stroke: #291e1a; stroke-width: 2.5; }
-.a-button { fill: #291e1a; }
-.r-cap { opacity: var(--actor-cap, 0); }
+.actor__shadow {
+  position: absolute;
+  left: 2.75rem;
+  right: 2.75rem;
+  bottom: 0.75rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: rgba(41, 30, 26, 0.28);
+}
+
+/* ---------- Walking room ---------- */
+
+.room-hotspots { display: contents; }
+
+/* Stops short of the clock, and keeps the floor clear for the player's feet. */
+.narration--top {
+  top: 1rem;
+  right: 14rem;
+  bottom: auto;
+}
+
+.room-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 0.5rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 72rem;
+  padding: 0.3rem 1rem;
+  border: 0.1rem solid var(--paper-edge);
+  border-radius: 0.3rem;
+  background: var(--paper);
+  box-shadow: 0.14rem 0.18rem 0 var(--cast);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.room-bar p { margin: 0; }
+.room-bar__line { font-size: 1.125rem; font-weight: 700; }
+.room-bar__hint { font-size: 0.9375rem; color: var(--ink-soft); }
+
+/* The puzzle stations sit on the room, which stays visible around them. Each one
+   is laid out for the full stage, so it is scaled as a whole. */
+.panel {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: rgba(31, 23, 18, 0.5);
+}
+
+.panel > .board-scene,
+.panel > .salvage-scene {
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0 0.3rem var(--wood-dark), 0.5rem 0.7rem 0 rgba(0, 0, 0, 0.4);
+  transform: scale(0.88);
+}
 
 /* ---------- Book art (Person C's covers) ---------- */
 

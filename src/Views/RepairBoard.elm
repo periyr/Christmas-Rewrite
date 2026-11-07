@@ -44,7 +44,7 @@ view world puzzle notice =
     [ div [ class "board-scene" ]
         [ Common.topbar "1950"
             "The Repair Week"
-            (Common.attemptsDisplay puzzle.attempts :: lastTryNotes puzzle.attempts ++ help)
+            (Common.attemptsDisplay puzzle.attempts :: lastTryNotes puzzle.attempts ++ help ++ [ Common.closePanel (not isReviewing) ])
         , section [ class "cork", attribute "aria-label" "Planning board" ]
             [ div [ class "days" ] (List.map (dayColumn config) Rules.Repair.days)
             , div [ class "cork__lower" ]
