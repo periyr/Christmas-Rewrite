@@ -197,7 +197,7 @@ B owns where these go and when they show. "Player scale" means the same 1 unit �
 
 **Already drawn by B** (inline in `public/index.html`, so there is no C file): the ceiling stain, the rubble, the clock hands, the book crates and a timber pile (`r-crates`, `r-timber`). `room-timber.svg` below is an alternative to B's timber, so B keeps whichever fits the room better.
 
-**Two styles:** `room-cutout-box.svg` and `room-book-stacks.svg` are in the characters' cute cut-out style: a 3-unit outline, a cream border and the character palette. The earlier props below use a thinner 1.5-unit outline and no border. They can be restyled to match if the team wants one look.
+**One look for all room props:** a thin 1.5-unit `#291e1a` outline, no cream border, and a faint ground shadow (ink at 18% opacity) under props that stand on the floor. The characters keep their thicker outline and cream border, so they stand out from the room.
 
 | File | viewBox | Anchor / fitting | Use |
 |---|---|---|---|
@@ -213,7 +213,7 @@ B owns where these go and when they show. "Player scale" means the same 1 unit �
 | `room-story-sheet.svg` | 170 × 124 | Player scale, hanging line at the top | 1973: blank bedsheet stage; puppets and captions go on top as interface |
 | `room-crt-computer.svg` | 64 × 58 | Player scale, rests on y = 56 | 1998: beige CRT monitor and keyboard; screen left blank for interface text |
 | `room-parcels.svg` | 68 × 54 | Player scale, rests on y = 52 | 1998 (succeeded) and present: parcels with blank labels |
-| `room-cutout-box.svg` | 64 × 56 | Player scale, rests on y = 52, centred on x = 32 | 1973: the box of shadow-puppet cut-outs at `ClueSpot CutoutBox` (x 170). An open cardboard box with fox, owl and lantern silhouettes on rods. Drawn with Google Gemini from the team's prompt. |
-| `room-book-stacks.svg` | 80 × 48 | Player scale, rests on y = 44, centred on x = 40 | 1998: the four books at `BookTableSpot` (x 820): a stack of two, one on its own, and one leaning. Plain covers and no titles, so none stands out. Layout from Gemini's design, redrawn with help from Claude so the books read at game size. Fits on the floor, or on a small table if B adds one. |
+| `room-cutout-box.svg` | 64 × 56 | Player scale, rests on y = 50.5, centred on x = 32 | 1973: the box of shadow-puppet cut-outs at `ClueSpot CutoutBox` (x 170). An open cardboard box with fox, owl and lantern silhouettes on rods. Drawn with Google Gemini from the team's prompt; outline thinned to match the other props. |
+| `room-book-stacks.svg` | 80 × 48 | Player scale, rests on y = 42.5, centred on x = 42 | 1998: the four books at `BookTableSpot` (x 820): a stack of two, one on its own, and one leaning. Plain covers and no titles, so none stands out. Layout from Gemini's design, redrawn with help from Claude so the books read at game size. Fits on the floor, or on a small table if B adds one. |
 
 None of these contains text. Any label, address or screen text belongs in the interface.
