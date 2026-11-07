@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Aged Paper Page Background -->
+  <rect width="400" height="300" fill="#d4d3d1" />
+
+  <!-- Night Sky Backdrop Vignette -->
+  <rect x="20" y="20" width="360" height="260" rx="4" fill="#291e1a" />
+  <path d="M20 20 H380 V200 C300 210, 100 210, 20 200 Z" fill="#7687ab" opacity="0.25" />
+
+  <!-- Distant Snow Stars -->
+  <circle cx="60" cy="50" r="1.5" fill="#d4d3d1" opacity="0.8" />
+  <circle cx="120" cy="35" r="1.5" fill="#d4d3d1" opacity="0.8" />
+  <circle cx="310" cy="45" r="1.5" fill="#d4d3d1" opacity="0.8" />
+  <circle cx="350" cy="70" r="1.5" fill="#d4d3d1" opacity="0.8" />
+
+  <!-- Stone Arch Bridge (Prominent Structure) -->
+  <!-- Bridge Shadow -->
+  <path d="M20 130 H380 V175 H340 C310 175, 290 225, 200 225 C110 225, 90 175, 60 175 H20 Z" fill="#291e1a" opacity="0.3" />
+
+  <!-- Main Stone Arch Body -->
+  <path d="M20 120 H380 V165 H330 C290 165, 270 215, 200 215 C130 215, 110 165, 70 165 H20 Z" fill="#496669" />
+
+  <!-- Arch Opening Inner Vault (Deep Shadow Under Bridge) -->
+  <path d="M70 165 C110 165, 130 215, 200 215 C270 215, 290 165, 330 165 V240 H70 Z" fill="#291e1a" />
+
+  <!-- Masonry / Cut-Paper Stone Texture Lines -->
+  <path d="M20 140 H380 M80 120 V140 M160 120 V140 M240 120 V140 M320 120 V140 M120 140 V165 M200 140 V165 M280 140 V165" stroke="#393e26" stroke-width="2" opacity="0.4" />
+  <!-- Arch Voussoir Stones Ring -->
+  <path d="M70 165 C110 165, 130 215, 200 215 C270 215, 290 165, 330 165" fill="none" stroke="#d9a443" stroke-width="4" opacity="0.3" />
+
+  <!-- Stream / Water Flowing Under Arch -->
+  <!-- Stream Bed Shadow -->
+  <path d="M20 250 C100 245, 300 245, 380 250 V280 H20 Z" fill="#291e1a" />
+  <!-- Wavy Ice / Water Surface -->
+  <path d="M20 245 Q100 240 200 248 T380 245 V280 H20 Z" fill="#7687ab" opacity="0.8" />
+  <!-- Stream Water Highlights -->
+  <path d="M40 258 Q120 252 220 262 T360 256" fill="none" stroke="#d4d3d1" stroke-width="2" opacity="0.6" />
+  <path d="M80 268 Q180 262 280 270" fill="none" stroke="#496669" stroke-width="2" opacity="0.8" />
+
+  <!-- Snowy Bank Under Bridge Footing -->
+  <path d="M20 235 Q100 230 180 240 T380 235 V250 H20 Z" fill="#d4d3d1" />
+
+  <!-- Lantern Warm Light Radial Glow (Beneath Arch) -->
+  <circle cx="210" cy="205" r="55" fill="#d9a443" opacity="0.25" />
+  <circle cx="210" cy="205" r="30" fill="#d9a443" opacity="0.4" />
+
+  <!-- Fox Walking BENEATH Bridge (Side Profile Walking Right) -->
+  <g transform="translate(130, 160)">
+    <!-- Fox Shadow on Snow -->
+    <ellipse cx="60" cy="64" rx="35" ry="6" fill="#291e1a" opacity="0.4" />
+
+    <!-- Bushy Tail -->
+    <path d="M15 42 C-5 35, -15 20, -10 10 C0 15, 15 25, 25 35 Z" fill="#c95937" />
+    <path d="M-10 10 C-5 12, 5 20, 10 25 Z" fill="#d4d3d1" />
+
+    <!-- Fox Body -->
+    <path d="M18 38 C25 28, 45 28, 65 32 C75 34, 82 25, 88 18 C92 24, 88 34, 78 42 C68 46, 35 48, 18 38 Z" fill="#c95937" />
+    <path d="M55 36 C68 36, 78 40, 85 45 L74 46 Z" fill="#d4d3d1" /> <!-- Chest fur -->
+
+    <!-- Head & Mouth Holding Lantern Handle -->
+    <path d="M82 22 L98 20 L94 28 L84 28 Z" fill="#c95937" />
+    <path d="M88 20 L80 12 L84 22 Z" fill="#5a3428" /> <!-- Ear -->
+
+    <!-- Legs Walking -->
+    <path d="M28 44 L22 62 H28 L34 46 Z" fill="#291e1a" />
+    <path d="M38 45 L44 62 H50 L42 45 Z" fill="#c95937" />
+    <path d="M62 44 L56 62 H62 L68 45 Z" fill="#291e1a" />
+    <path d="M72 43 L78 62 H84 L78 43 Z" fill="#c95937" />
+
+    <!-- LIT LANTERN (Handle in Mouth) -->
+    <!-- Metal Handle Wire -->
+    <path d="M96 24 C100 24, 104 28, 104 36" fill="none" stroke="#291e1a" stroke-width="1.5" />
+    <!-- Lantern Housing -->
+    <rect x="98" y="36" width="12" height="18" rx="1" fill="#291e1a" />
+    <rect x="100" y="38" width="8" height="14" fill="#d9a443" />
+    <rect x="102" y="40" width="4" height="10" fill="#d4d3d1" />
+  </g>
+</svg>

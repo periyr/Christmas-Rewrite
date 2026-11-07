@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="176" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="176" rx="4" fill="#7687ab" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v176 h-14 a4 4 0 0 1 -4 -4 v-168 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v176 h-12 a4 4 0 0 1 -4 -4 v-168 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.4" />
+  <rect x="24" y="8" width="2" height="176" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Moon Phases -->
+  <!-- Shadow of Moon Set -->
+  <g fill="#291e1a" opacity="0.2" transform="translate(2, 3)">
+    <circle cx="44" cy="98" r="8" />
+    <circle cx="68" cy="98" r="13" />
+    <circle cx="92" cy="98" r="8" />
+  </g>
+
+  <!-- Left Crescent Moon -->
+  <path d="M48 90 A8 8 0 1 0 48 106 A6 6 0 1 1 48 90 Z" fill="#d9a443" />
+
+  <!-- Center Full Moon -->
+  <circle cx="66" cy="96" r="13" fill="#d9a443" />
+  <circle cx="62" cy="92" r="3" fill="#d4d3d1" opacity="0.3" />
+
+  <!-- Right Crescent Moon -->
+  <path d="M84 90 A8 8 0 1 1 84 106 A6 6 0 1 0 84 90 Z" fill="#d9a443" />
+
+  <!-- Stars Accent -->
+  <path d="M66 70 L67 73 L70 74 L67 75 L66 78 L65 75 L62 74 L65 73 Z" fill="#d4d3d1" />
+  <path d="M66 114 L67 117 L70 118 L67 119 L66 122 L65 119 L62 118 L65 117 Z" fill="#d4d3d1" />
+</svg>

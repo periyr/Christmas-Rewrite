@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <!-- Soft drop shadow -->
+  <rect x="56" y="44" width="200" height="320" rx="8" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Leather Cover -->
+  <rect x="50" y="36" width="200" height="320" rx="8" fill="#5a3428" />
+
+  <!-- Spine Layer (Paper Theatre Depth) -->
+  <path d="M50 36 h22 v320 h-22 a8 8 0 0 1 -8 -8 v-304 a8 8 0 0 1 8 -8 z" fill="#291e1a" opacity="0.18" />
+  <path d="M50 36 h14 v320 h-14 a8 8 0 0 1 -8 -8 v-304 a8 8 0 0 1 8 -8 z" fill="#291e1a" opacity="0.1" />
+
+  <!-- Worn Edges / Scuffs (Hand-Cut Paper Layering) -->
+  <path d="M52 38 C90 37, 140 40, 246 38 C248 90, 246 180, 248 352 C180 354, 110 353, 52 354 Z" fill="#d9a443" opacity="0.08" />
+  <path d="M55 42 C110 40, 170 43, 242 41 C244 120, 243 230, 244 348 C160 349, 100 347, 55 348 Z" fill="#5a3428" />
+
+  <path d="M68 60 Q120 54 220 62 Q180 68 68 60 Z" fill="#291e1a" opacity="0.12" />
+  <path d="M245 140 Q230 200 243 280 Q238 220 245 140 Z" fill="#291e1a" opacity="0.15" />
+  <path d="M75 330 Q140 338 210 328 Q130 332 75 330 Z" fill="#d4d3d1" opacity="0.12" />
+
+  <!-- Brass Corner Protectors (Shadows then Shapes) -->
+  <!-- Top Left -->
+  <path d="M50 82 V38 A2 2 0 0 1 52 36 H94 L84 48 H62 V70 Z" fill="#291e1a" opacity="0.2" />
+  <path d="M48 80 V36 A2 2 0 0 1 50 34 H92 L82 46 H60 V68 Z" fill="#d9a443" />
+  <circle cx="60" cy="46" r="3" fill="#291e1a" opacity="0.4" />
+
+  <!-- Top Right -->
+  <path d="M252 82 V38 A2 2 0 0 0 250 36 H208 L218 48 H240 V70 Z" fill="#291e1a" opacity="0.2" />
+  <path d="M250 80 V36 A2 2 0 0 0 248 34 H206 L216 46 H238 V68 Z" fill="#d9a443" />
+  <circle cx="238" cy="46" r="3" fill="#291e1a" opacity="0.4" />
+
+  <!-- Bottom Left -->
+  <path d="M50 310 V354 A2 2 0 0 0 52 356 H94 L84 344 H62 V322 Z" fill="#291e1a" opacity="0.2" />
+  <path d="M48 308 V352 A2 2 0 0 0 50 354 H92 L82 342 H60 V320 Z" fill="#d9a443" />
+  <circle cx="60" cy="342" r="3" fill="#291e1a" opacity="0.4" />
+
+  <!-- Bottom Right -->
+  <path d="M252 310 V354 A2 2 0 0 1 250 356 H208 L218 344 H240 V322 Z" fill="#291e1a" opacity="0.2" />
+  <path d="M250 308 V352 A2 2 0 0 1 248 354 H206 L216 342 H238 V320 Z" fill="#d9a443" />
+  <circle cx="238" cy="342" r="3" fill="#291e1a" opacity="0.4" />
+
+  <!-- Faded Leather Closure Strap -->
+  <!-- Strap Shadow -->
+  <path d="M38 183 H262 V215 H38 Z" fill="#291e1a" opacity="0.2" />
+  <!-- Main Strap Layer -->
+  <path d="M36 179 C100 181, 180 178, 258 180 V210 C170 208, 90 211, 36 209 Z" fill="#a6652b" />
+  <path d="M36 179 C100 181, 180 178, 258 180 V210 C170 208, 90 211, 36 209 Z" fill="#291e1a" opacity="0.15" />
+  <!-- Strap Keeper Loop -->
+  <rect x="210" y="174" width="14" height="42" rx="2" fill="#291e1a" opacity="0.2" />
+  <rect x="208" y="172" width="14" height="42" rx="2" fill="#5a3428" />
+  <!-- Brass Buckle Frame -->
+  <rect x="228" y="172" width="26" height="44" rx="4" fill="#291e1a" opacity="0.2" />
+  <rect x="226" y="170" width="26" height="44" rx="4" fill="#d9a443" />
+  <rect x="232" y="176" width="14" height="32" rx="2" fill="#a6652b" />
+  <rect x="224" y="189" width="14" height="6" rx="1" fill="#291e1a" />
+</svg>

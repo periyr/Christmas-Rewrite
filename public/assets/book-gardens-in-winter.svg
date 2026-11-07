@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 170">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="146" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="146" rx="4" fill="#7687ab" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v146 h-14 a4 4 0 0 1 -4 -4 v-138 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v146 h-12 a4 4 0 0 1 -4 -4 v-138 a4 4 0 0 1 4 -4 z" fill="#496669" />
+  <rect x="24" y="8" width="2" height="146" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Bare Branch -->
+  <!-- Motif Shadow -->
+  <g fill="none" stroke="#291e1a" stroke-width="2.5" opacity="0.2" transform="translate(2, 3)">
+    <path d="M42 112 C52 98 62 82 66 52 M57 91 C68 85 76 80 82 82 M64 68 C74 61 80 58 84 59 M50 102 C42 97 38 95 35 96" stroke-linecap="round" />
+  </g>
+  <!-- Main Motif Shape -->
+  <g fill="none" stroke="#291e1a" stroke-width="2.5" stroke-linecap="round">
+    <path d="M42 112 C52 98 62 82 66 52 M57 91 C68 85 76 80 82 82 M64 68 C74 61 80 58 84 59 M50 102 C42 97 38 95 35 96" />
+  </g>
+  <!-- Small Winter Berries -->
+  <circle cx="83" cy="82" r="3" fill="#c95937" />
+  <circle cx="85" cy="59" r="3" fill="#c95937" />
+  <circle cx="34" cy="96" r="3" fill="#c95937" />
+</svg>

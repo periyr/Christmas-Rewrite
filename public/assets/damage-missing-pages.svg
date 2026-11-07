@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <!-- Cut-away Mask Shadow (Creates Depth Behind Torn Edge) -->
+  <path d="M100 22 L72 34 L82 48 L68 62 L85 78 L74 92 L100 98 Z" fill="#291e1a" opacity="0.25" />
+
+  <!-- Exposed Page Layer 3 (Deepest / Darkened Paper) -->
+  <path d="M100 20 L74 32 L83 46 L70 60 L86 76 L76 90 L100 96 Z" fill="#291e1a" opacity="0.3" />
+
+  <!-- Exposed Page Layer 2 (Middle Paper Sheet) -->
+  <path d="M100 18 L76 30 L84 44 L72 58 L87 74 L78 88 L100 94 Z" fill="#d4d3d1" opacity="0.6" />
+  <path d="M76 30 L84 44 L72 58 L87 74 L78 88" fill="none" stroke="#291e1a" stroke-width="1" opacity="0.2" />
+
+  <!-- Exposed Page Layer 1 (Top Paper Sheet - Main Jagged Tear) -->
+  <path d="M100 15 L78 28 L86 42 L74 56 L89 72 L80 86 L100 92 Z" fill="#d4d3d1" />
+
+  <!-- Jagged Paper Fiber Shadow Details along top tear edge -->
+  <path d="M100 15 L78 28 L86 42 L74 56 L89 72 L80 86 L100 92" fill="none" stroke="#291e1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4" />
+
+  <!-- Loose Paper Fringe / Tiny Fiber Flaps -->
+  <path d="M78 28 L74 31 L80 33 M86 42 L82 44 L88 47 M74 56 L70 59 L75 61 M89 72 L84 74 L90 77" fill="#d4d3d1" stroke="#291e1a" stroke-width="0.5" opacity="0.9" />
+</svg>

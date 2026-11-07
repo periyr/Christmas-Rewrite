@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 340">
+  <!-- Drop Shadow -->
+  <rect x="26" y="24" width="188" height="288" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Sturdy Library-Style Binding Cover -->
+  <rect x="20" y="18" width="188" height="288" rx="4" fill="#893f43" />
+
+  <!-- Reinforced Library Spine (Dark Leather/Fabric Buckram Corner & Spine) -->
+  <path d="M20 18 h36 v288 h-36 a4 4 0 0 1 -4 -4 v-280 a4 4 0 0 1 4 -4 z" fill="#5a3428" />
+  <rect x="56" y="18" width="3" height="288" fill="#291e1a" opacity="0.25" />
+
+  <!-- Library Corner Reinforcements -->
+  <path d="M178 18 L208 18 V48 Z" fill="#5a3428" />
+  <path d="M208 276 L208 306 H178 Z" fill="#5a3428" />
+
+  <!-- Blank Inset Label Panel -->
+  <rect x="78" y="70" width="106" height="66" rx="3" fill="#291e1a" opacity="0.2" />
+  <rect x="76" y="68" width="106" height="66" rx="3" fill="#d4d3d1" />
+  <rect x="82" y="74" width="94" height="54" rx="1" fill="none" stroke="#a6652b" stroke-width="1.5" opacity="0.6" />
+
+  <!-- Library Sticker Shape (Peeled/Scuffed Corner) -->
+  <g transform="translate(86, 210)">
+    <!-- Sticker Shadow -->
+    <rect x="2" y="2" width="84" height="52" fill="#291e1a" opacity="0.18" />
+    <!-- Main Sticker Body -->
+    <rect x="0" y="0" width="84" height="52" fill="#d4d3d1" />
+    <!-- Red Library Stripe on Sticker -->
+    <rect x="0" y="0" width="84" height="12" fill="#c95937" />
+    <!-- Faded Barcode / Grid Line Blocks (No Letters/Numbers) -->
+    <rect x="10" y="22" width="4" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="17" y="22" width="8" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="28" y="22" width="3" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="34" y="22" width="6" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="43" y="22" width="2" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="48" y="22" width="9" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="60" y="22" width="4" height="20" fill="#291e1a" opacity="0.7" />
+    <rect x="67" y="22" width="7" height="20" fill="#291e1a" opacity="0.7" />
+    <!-- Dog-eared Peeled Sticker Corner -->
+    <path d="M84 40 L72 52 H84 Z" fill="#291e1a" opacity="0.2" />
+    <path d="M84 40 L72 52 H72 Z" fill="#d4d3d1" opacity="0.7" />
+  </g>
+
+  <!-- Equal Wear & Scuffs -->
+  <path d="M20 18 L32 18 L20 30 Z" fill="#d4d3d1" opacity="0.35" />
+  <path d="M208 306 L194 306 L208 292 Z" fill="#d4d3d1" opacity="0.3" />
+</svg>

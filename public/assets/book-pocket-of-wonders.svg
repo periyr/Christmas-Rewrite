@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 190">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="166" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="166" rx="4" fill="#748b2c" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v166 h-14 a4 4 0 0 1 -4 -4 v-158 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v166 h-12 a4 4 0 0 1 -4 -4 v-158 a4 4 0 0 1 4 -4 z" fill="#31542f" />
+  <rect x="24" y="8" width="2" height="166" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Compass / Star Motif -->
+  <!-- Outer Ring Shadow & Ring -->
+  <circle cx="68" cy="93" r="25" fill="#291e1a" opacity="0.2" />
+  <circle cx="66" cy="91" r="25" fill="none" stroke="#d9a443" stroke-width="2" />
+
+  <!-- Star Points Shadow -->
+  <g fill="#291e1a" opacity="0.2" transform="translate(2, 3)">
+    <path d="M66 63 L72 85 L94 91 L72 97 L66 119 L60 97 L38 91 L60 85 Z" />
+  </g>
+
+  <!-- Star Points Layered Cut Paper -->
+  <path d="M66 63 L72 85 L94 91 L72 97 L66 119 L60 97 L38 91 L60 85 Z" fill="#d9a443" />
+  <path d="M66 63 L66 91 L94 91 L66 91 L66 119 L66 91 L38 91 L66 91 Z" fill="#291e1a" opacity="0.15" />
+  <circle cx="66" cy="91" r="4" fill="#d4d3d1" />
+</svg>

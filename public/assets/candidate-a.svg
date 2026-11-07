@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 340">
+  <!-- Drop Shadow -->
+  <rect x="26" y="24" width="188" height="288" rx="6" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cloth Cover -->
+  <rect x="20" y="18" width="188" height="288" rx="6" fill="#31542f" />
+
+  <!-- Spine Layer -->
+  <path d="M20 18 h20 v288 h-20 a6 6 0 0 1 -6 -6 v-276 a6 6 0 0 1 6 -6 z" fill="#291e1a" opacity="0.25" />
+  <rect x="40" y="18" width="2" height="288" fill="#291e1a" opacity="0.18" />
+
+  <!-- Corner Wear & Scuffs (Paper Theatre Layering) -->
+  <path d="M20 18 L32 18 L20 30 Z" fill="#d4d3d1" opacity="0.4" />
+  <path d="M208 18 L196 18 L208 30 Z" fill="#d4d3d1" opacity="0.3" />
+  <path d="M208 306 L194 306 L208 292 Z" fill="#d4d3d1" opacity="0.35" />
+  <path d="M20 306 L34 306 L20 292 Z" fill="#d4d3d1" opacity="0.25" />
+
+  <!-- Framed Vignette Outer Border (Gold/Brass Foil) -->
+  <rect x="68" y="98" width="112" height="132" rx="4" fill="#291e1a" opacity="0.2" />
+  <rect x="66" y="96" width="112" height="132" rx="4" fill="#d9a443" />
+  <rect x="72" y="102" width="100" height="120" rx="2" fill="#291e1a" />
+
+  <!-- Vignette Background (TEAL SLATE) -->
+  <rect x="74" y="104" width="96" height="116" fill="#496669" />
+
+  <!-- Small Framed Vignette: crescent moon and stars -->
+  <circle cx="120" cy="164" r="24" fill="#d9a443" />
+  <circle cx="132" cy="155" r="20" fill="#496669" />
+  <circle cx="146" cy="128" r="2.5" fill="#d4d3d1" />
+  <circle cx="96" cy="196" r="2" fill="#d4d3d1" />
+  <circle cx="150" cy="198" r="1.5" fill="#d4d3d1" />
+
+  <!-- Cover Wear Marks (Equalized Aging) -->
+  <path d="M50 40 Q110 50 190 38 Q120 44 50 40 Z" fill="#291e1a" opacity="0.12" />
+  <path d="M60 270 Q130 262 195 272 Q120 266 60 270 Z" fill="#291e1a" opacity="0.1" />
+</svg>

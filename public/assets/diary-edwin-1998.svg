@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <!-- Soft drop shadow -->
+  <path d="M56 44 H256 V356 H94 L56 318 Z" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Hardback Cover (Teal Slate) -->
+  <!-- Note: Bottom-right corner missing for dog-eared page effect beneath -->
+  <path d="M50 36 H250 V320 L214 356 H50 Z" fill="#496669" />
+
+  <!-- Paper Block Exposed (Bottom Right Corner Behind Fold) -->
+  <path d="M210 316 L252 316 L252 358 Z" fill="#291e1a" opacity="0.2" />
+  <path d="M212 318 L250 318 L250 356 Z" fill="#d4d3d1" />
+
+  <!-- Dog-Eared Turned Page Corner -->
+  <path d="M214 356 L250 320 H214 Z" fill="#291e1a" opacity="0.2" />
+  <path d="M212 356 L250 318 H212 Z" fill="#d4d3d1" opacity="0.85" />
+  <path d="M212 356 L244 324 H212 Z" fill="#7687ab" opacity="0.3" />
+
+  <!-- Spine Layer & Imprinted Seam -->
+  <path d="M50 36 h16 v320 h-16 a4 4 0 0 1 -4 -4 v-312 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <line x1="72" y1="36" x2="72" y2="356" stroke="#291e1a" stroke-width="3" opacity="0.3" />
+
+  <!-- Minimalist 90s Embossed Frame Line -->
+  <rect x="84" y="52" width="148" height="286" rx="2" fill="none" stroke="#291e1a" stroke-width="2" opacity="0.25" />
+  <rect x="86" y="54" width="144" height="282" rx="2" fill="none" stroke="#7687ab" stroke-width="1.5" opacity="0.4" />
+
+  <!-- Off-Center Off-White Elastic Closure Band -->
+  <!-- Elastic Band Shadow -->
+  <rect x="194" y="36" width="16" height="320" fill="#291e1a" opacity="0.22" />
+  <!-- Elastic Band Body -->
+  <rect x="190" y="36" width="16" height="320" fill="#d4d3d1" />
+  <!-- Elastic Texture/Shadow Edges -->
+  <rect x="190" y="36" width="3" height="320" fill="#291e1a" opacity="0.12" />
+  <rect x="203" y="36" width="3" height="320" fill="#291e1a" opacity="0.12" />
+</svg>

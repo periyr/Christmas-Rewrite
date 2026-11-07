@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+
+  <!-- Holding Rod -->
+  <rect x="150" y="160" width="6" height="140" rx="1" fill="#291e1a" />
+  <circle cx="153" cy="170" r="4" fill="#291e1a" />
+
+  <!-- Child Silhouette (Side Profile Standing in Winter Gear) -->
+  <g fill="#291e1a">
+    <!-- Bobble Hat / Head Profile -->
+    <circle cx="136" cy="54" r="8" /> <!-- Pom-pom -->
+    <path d="M125 80 C120 74, 120 62, 134 60 C148 58, 158 68, 155 82 C148 85, 135 84, 125 80 Z" />
+
+    <!-- Face Side Profile (Nose & Chin Contour) -->
+    <path d="M127 78 C120 80, 116 84, 118 89 C120 92, 124 93, 128 95 Z" />
+
+    <!-- Wrapped Scarf (Bulky Layers with Trailing End Behind) -->
+    <path d="M120 92 C115 95, 118 108, 135 110 C152 112, 160 102, 155 94 C142 90, 128 90, 120 92 Z" />
+    <!-- Scarf Tails Floating Behind -->
+    <path d="M152 98 C168 102, 182 110, 192 122 L180 128 C168 118, 158 112, 148 108 Z" />
+
+    <!-- Heavy Winter Coat A-Line Silhouette -->
+    <path d="M122 108 C112 125, 102 165, 96 195 C122 200, 160 198, 178 190 C172 160, 162 125, 150 108 Z" />
+
+    <!-- Mittened Arms Standing Side-By-Side (Empty Hands) -->
+    <path d="M128 115 C118 135, 114 155, 118 170 C124 172, 130 168, 132 160 C132 145, 136 130, 140 118 Z" />
+
+    <!-- Trousers & Winter Boots -->
+    <!-- Front Leg -->
+    <path d="M115 194 L118 240 H136 L140 196 Z" />
+    <path d="M110 236 C110 236, 104 242, 106 248 H140 V236 Z" /> <!-- Boot -->
+
+    <!-- Back Leg -->
+    <path d="M142 192 L146 240 H162 L164 190 Z" />
+    <path d="M140 236 C140 236, 134 242, 136 248 H166 V236 Z" />
+  </g>
+
+  <!-- Cut-out Detail Holes -->
+  <!-- Eye Cut-out Hole -->
+  <circle cx="125" cy="84" r="2.5" fill="#d4d3d1" />
+
+  <!-- Scarf Fringe Cut-outs -->
+  <path d="M188 122 L182 127 M192 125 L186 130" stroke="#d4d3d1" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Coat Button & Pocket Cut-out Lines -->
+  <circle cx="118" cy="132" r="2" fill="#d4d3d1" />
+  <circle cx="114" cy="148" r="2" fill="#d4d3d1" />
+  <circle cx="110" cy="164" r="2" fill="#d4d3d1" />
+  <path d="M124 165 L136 163" stroke="#d4d3d1" stroke-width="2" stroke-linecap="round" />
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200">
+  <!-- Soft drop shadow -->
+  <rect x="18" y="14" width="92" height="176" rx="4" fill="#291e1a" opacity="0.22" />
+
+  <!-- Main Cover -->
+  <rect x="12" y="8" width="92" height="176" rx="4" fill="#31542f" />
+
+  <!-- Spine Strip Shadow & Spine Layer -->
+  <path d="M12 8 h14 v176 h-14 a4 4 0 0 1 -4 -4 v-168 a4 4 0 0 1 4 -4 z" fill="#291e1a" opacity="0.2" />
+  <path d="M12 8 h12 v176 h-12 a4 4 0 0 1 -4 -4 v-168 a4 4 0 0 1 4 -4 z" fill="#748b2c" />
+  <rect x="24" y="8" width="2" height="176" fill="#291e1a" opacity="0.15" />
+
+  <!-- Decorative Motif: Sailboat -->
+  <!-- Sailboat Shadow -->
+  <g fill="#291e1a" opacity="0.2" transform="translate(2, 3)">
+    <path d="M40 115 L92 115 L84 127 H48 Z" />
+    <path d="M64 71 L64 111 L42 111 Z" />
+    <path d="M67 76 L67 111 L86 111 Z" />
+  </g>
+
+  <!-- Hull -->
+  <path d="M38 113 L90 113 L82 125 H46 Z" fill="#a6652b" />
+  <!-- Main Sail -->
+  <path d="M62 69 L62 109 L40 109 Z" fill="#d4d3d1" />
+  <!-- Fore Sail -->
+  <path d="M65 74 L65 109 L84 109 Z" fill="#d9a443" />
+  <!-- Mast -->
+  <rect x="62" y="67" width="3" height="44" fill="#291e1a" />
+</svg>
