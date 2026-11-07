@@ -4,7 +4,9 @@ module Views.Salvage exposing (view)
 show correctness straight away, unlike the repair board.
 -}
 
+import Components.Art as Art
 import Components.Placement as PlacementUI
+import Content.Books
 import Domain exposing (..)
 import Html exposing (Html, button, div, section, span, text)
 import Html.Attributes exposing (attribute, class, classList, disabled, type_)
@@ -13,7 +15,6 @@ import Rules.Books
 import Rules.Placement
 import Rules.Salvage
 import Views.Common as Common
-import Views.TempContent as Content
 
 
 view : Placement BookId SalvageSlot -> Maybe Notice -> List (Html Msg)
@@ -27,14 +28,14 @@ view placement notice =
             "Salvage the Books"
             (Common.helpButton "Back to the crates"
                 [ "Click a book to pick it up, then click a crate to put it in. Click a book in a crate to move it again."
-                , "Look at each book's damage to decide where it belongs. You can correct mistakes as often as you like."
+                , "Look at each book’s damage to decide where it belongs. You can correct mistakes as often as you like."
                 , "Three books belong in each crate. When they are all sorted, press Continue."
                 ]
             )
         , div [ class "crates" ]
-            [ crate config Fine "Fine" "Sound and ready to shelve"
-            , crate config NeedsRepair "Needs repair" "Smoke or water damage, still recoverable"
-            , crate config TooFarGone "Too far gone" "Pages lost for good"
+            [ crate config Fine "Fine" "No damage at all"
+            , crate config NeedsRepair "Needs repair" "Smoke or water damage only"
+            , crate config TooFarGone "Too far gone" "Scorched, or pages missing"
             ]
         , PlacementUI.tray config
         , div [ class "scene-foot" ]
@@ -55,8 +56,8 @@ placementConfig placement =
     , enabled = True
     , placement = placement
     , items = Rules.Books.allBooks
-    , name = \book -> (Content.book book).title
-    , cardClass = cover
+    , name = \book -> (Content.Books.book book).title
+    , cardClass = \_ -> "book--art"
     , cardBody = bookBody
     , marks =
         \book ->
@@ -99,7 +100,7 @@ progress placement =
             List.length (Rules.Placement.inTray Rules.Books.allBooks placement)
 
         title book =
-            "“" ++ (Content.book book).title ++ "”"
+            "“" ++ (Content.Books.book book).title ++ "”"
     in
     case ( Rules.Salvage.misplaced placement, placement.selected ) of
         ( book :: [], _ ) ->
@@ -119,13 +120,15 @@ progress placement =
                 String.fromInt unsorted ++ " still to sort. Click a book, then click a crate."
 
 
+{-| Damage is drawn over the cover and also named, so the art isn't the only signal. -}
 bookBody : BookId -> List (Html Msg)
 bookBody book =
     let
         content =
-            Content.book book
+            Content.Books.book book
     in
-    [ span [ class "book__label" ]
+    [ Art.bookCover book content.damage
+    , span [ class "book__caption" ]
         (span [ class "book__title" ] [ text content.title ]
             :: (case content.damage of
                     [] ->
@@ -152,60 +155,3 @@ damageName damage =
 
         MissingPages ->
             "Missing pages"
-
-
-{-| Damage is drawn on the cover as well as named, separately from its colour. -}
-cover : BookId -> String
-cover book =
-    let
-        base =
-            case book of
-                Recoverable recoverable ->
-                    colourClass (Rules.Books.colour recoverable)
-
-                Ruined HarbourTales ->
-                    "book--slate"
-
-                Ruined MountainPaths ->
-                    "book--forest"
-
-                Ruined WinterAlmanac ->
-                    "book--plum"
-
-        damageClass damage =
-            case damage of
-                ScorchedEdges ->
-                    "book--scorched"
-
-                WaterStains ->
-                    "book--stained"
-
-                SmokeStains ->
-                    "book--smoked"
-
-                MissingPages ->
-                    "book--torn"
-    in
-    String.join " " (base :: List.map damageClass (Content.book book).damage)
-
-
-colourClass : CoverColour -> String
-colourClass colour =
-    case colour of
-        Red ->
-            "book--red"
-
-        Orange ->
-            "book--orange"
-
-        Yellow ->
-            "book--yellow"
-
-        Green ->
-            "book--green"
-
-        Blue ->
-            "book--blue"
-
-        Violet ->
-            "book--violet"

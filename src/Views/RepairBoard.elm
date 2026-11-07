@@ -6,6 +6,10 @@ about correctness comes from puzzle.attempts, never from calling the validator.
 
 import Components.Art as Art
 import Components.Placement as PlacementUI
+import Content.Clues
+import Content.Feedback
+import Content.Repair
+import Content.Words exposing (dayName)
 import Domain exposing (..)
 import Html exposing (Html, aside, button, div, h3, li, p, section, span, text, ul)
 import Html.Attributes exposing (attribute, class, classList, disabled, type_)
@@ -13,8 +17,6 @@ import Html.Events exposing (onClick)
 import Rules.Placement
 import Rules.Repair
 import Views.Common as Common
-import Views.Labels exposing (dayName)
-import Views.TempContent as Content
 
 
 type alias Puzzle =
@@ -92,7 +94,7 @@ placementConfig puzzle numbered =
                 True
     , placement = puzzle.arrangement
     , items = Rules.Repair.allTasks
-    , name = \task -> (Content.taskCard task).title
+    , name = \task -> (Content.Repair.taskCard task).title
     , cardClass = cover
     , cardBody = cardBody
     , marks = \task -> List.filterMap (\( mark, violation ) -> markIf (blamedTask violation == Just task) mark) numbered
@@ -128,7 +130,7 @@ lastTryNotes attempts =
             , Common.popoverSheet "last-try"
                 "What went wrong last time"
                 "Back to the board"
-                [ ul [] (List.map (\violation -> li [] [ text (Content.violation violation) ]) violations) ]
+                [ ul [] (List.map (\violation -> li [] [ text (Content.Feedback.violation violation) ]) violations) ]
             ]
 
         _ ->
@@ -147,7 +149,7 @@ hint puzzle isReviewing =
     else
         case puzzle.arrangement.selected of
             Just task ->
-                "Click where “" ++ (Content.taskCard task).title ++ "” should go."
+                "Click where “" ++ (Content.Repair.taskCard task).title ++ "” should go."
 
             Nothing ->
                 if Rules.Repair.complete puzzle.arrangement /= Nothing then
@@ -198,7 +200,7 @@ clueNote world puzzle clue =
         , classList [ ( "clue", True ), ( "clue--slip", clue == GlassDeliverySlip ) ]
         , onClick (Inspect clue)
         ]
-        (text (Content.clue world clue).title
+        (text (Content.Clues.clue world clue).title
             :: (if List.member clue puzzle.inspected then
                     [ span [ class "clue__read" ] [ text "Read" ] ]
 
@@ -212,7 +214,7 @@ cardBody : TaskId -> List (Html Msg)
 cardBody task =
     [ span [ class "book__label" ]
         [ Art.icon (iconName task)
-        , span [ class "book__title" ] [ text (Content.taskCard task).title ]
+        , span [ class "book__title" ] [ text (Content.Repair.taskCard task).title ]
         ]
     , span [ class "book__cost" ] [ text (costText (Rules.Repair.cost task)) ]
     ]
@@ -384,7 +386,7 @@ goals numbered isReviewing =
                     ]
                 ]
                 (span []
-                    (text (Content.goal goal)
+                    (text (Content.Repair.goal goal)
                         :: (if isReviewing then
                                 [ span [ class "visually-hidden" ]
                                     [ text
@@ -420,7 +422,7 @@ feedback numbered =
                     (\( mark, violation ) ->
                         li [ class "feedback__item" ]
                             [ span [ class "mark mark--inline" ] [ text mark ]
-                            , span [] [ text (Content.violation violation) ]
+                            , span [] [ text (Content.Feedback.violation violation) ]
                             ]
                     )
                     numbered

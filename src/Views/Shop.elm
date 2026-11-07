@@ -1,18 +1,21 @@
-module Views.Shop exposing (introduction, openingDiary, presentHub, returning, unbuiltChapter, ending)
+module Views.Shop exposing (ending, introduction, openingDiary, presentHub, returning, unbuiltChapter)
 
-{-| The room-based screens: introduction, present hub, diary openings, and the
-temporary screens for chapters that aren't built yet.
+{-| The room-based screens: introduction, present hub, diary openings, endings,
+and the temporary screen for chapters that aren't built yet.
 -}
 
 import Components.Art as Art
+import Content.Clues
+import Content.Diaries
+import Content.Endings
+import Content.Intro
 import Domain exposing (..)
-import Html exposing (Attribute, Html, button, div, h2, p, span, text)
-import Html.Attributes exposing (class, classList, disabled, style, type_)
+import Html exposing (Attribute, Html, button, div, footer, h2, h3, header, p, section, span, text)
+import Html.Attributes exposing (attribute, class, classList, disabled, style, type_)
 import Html.Events exposing (onClick)
 import Timeline
 import Views.Common as Common
 import Views.Labels exposing (eraYear)
-import Views.TempContent as Content
 
 
 {-| A labelled button placed over the room. Labels are always visible, so no
@@ -37,12 +40,12 @@ introduction : World -> IntroStep -> List (Html Msg)
 introduction world step =
     let
         clueSpot position clue =
-            hotspot position (Content.clue world clue).title (Inspect clue)
+            hotspot position (Content.Clues.clue world clue).title (Inspect clue)
     in
     [ Art.room
-    , clueSpot ( "50rem", "9rem" ) ClosureNotice
-    , clueSpot ( "8.5rem", "9rem" ) FamilyPhotograph
-    , Common.narration (Content.introStep step)
+    , clueSpot ( "3.5rem", "27.5rem" ) ClosureNotice
+    , clueSpot ( "66rem", "23.25rem" ) FamilyPhotograph
+    , Common.narration (Content.Intro.step step)
         (advanceButton
             (case step of
                 PackingUp ->
@@ -62,7 +65,7 @@ presentHub : World -> History -> List (Html Msg)
 presentHub world history =
     let
         propSpot position prop =
-            hotspot position (Content.clue world (HubProp prop)).title (Inspect (HubProp prop))
+            hotspot position (Content.Clues.clue world (HubProp prop)).title (Inspect (HubProp prop))
 
         line =
             case world.nextDiary of
@@ -73,9 +76,9 @@ presentHub world history =
                     "All three diaries are closed."
     in
     [ Art.room
-    , propSpot ( "8.5rem", "9rem" ) RoofAndShelves
-    , propSpot ( "29rem", "9rem" ) CommunityWall
-    , propSpot ( "57rem", "21rem" ) OrderDesk
+    , propSpot ( "11rem", "7.5rem" ) RoofAndShelves
+    , propSpot ( "34.25rem", "29.5rem" ) CommunityWall
+    , propSpot ( "11rem", "20rem" ) OrderDesk
     , div [ class "diaries" ] (List.map (diary world history) Timeline.eras)
     , div [ class "narration" ] [ p [] [ text line ] ]
     ]
@@ -90,33 +93,33 @@ diary world history era =
         owner =
             case era of
                 Repairs1950 ->
-                    "Walter"
+                    "Walter’s diary"
 
                 Shadows1973 ->
-                    "Henry"
+                    "Henry’s diary"
 
                 Search1998 ->
-                    "Edwin"
+                    "Edwin’s journal"
 
         state =
             if isNext then
-                "Open"
+                "open"
 
             else if Timeline.recordFor era history /= Nothing then
-                "Closed"
+                "closed"
 
             else
-                "Waiting"
+                "waiting"
     in
     button
         [ type_ "button"
         , classList [ ( "diary", True ), ( "is-glowing", isNext ) ]
+        , attribute "aria-label" (owner ++ ", " ++ eraYear era ++ ": " ++ state)
         , disabled (not isNext)
         , onClick OpenNextDiary
         ]
-        [ span [ class "diary__owner" ] [ text owner ]
+        [ Art.diaryCover era
         , span [ class "diary__year" ] [ text (eraYear era) ]
-        , span [ class "diary__state" ] [ text state ]
         ]
 
 
@@ -125,17 +128,24 @@ openingDiary world era =
     [ Art.room
     , Common.documentSheet
         { variant = "sheet--diary"
-        , document = Content.diaryPassage world era
+        , document = Content.Diaries.passage world era
         , buttonLabel = "Step into " ++ eraYear era
         , onPress = Advance
         }
     ]
 
 
+{-| The contract has no Content function for this moment, so the words live here
+for now.
+-}
 returning : List (Html Msg)
 returning =
     [ Art.room
-    , Common.narration Content.returningToPresent (advanceButton "Look around the shop")
+    , Common.narration
+        { title = "Back to the present"
+        , paragraphs = [ "The pages settle. The room changes back around Edwin, and the clock still hasn’t moved." ]
+        }
+        (advanceButton "Look around the shop")
     ]
 
 
@@ -160,29 +170,39 @@ unbuiltChapter era =
     ]
 
 
-{-| Development only. Not reachable until 1973 and 1998 can be resolved. -}
+{-| Not reachable until the 1973 and 1998 chapters can be resolved. -}
 ending : World -> List (Html Msg)
 ending world =
     let
-        title =
+        documents =
             case world.fate of
-                Just ShopSaved ->
-                    "The shop is saved"
+                Just (ShopClosed failedEras) ->
+                    List.map Content.Endings.missing failedEras
 
                 _ ->
+                    [ Content.Endings.saved ]
+
+        section_ document =
+            h3 [] [ text document.title ]
+                :: List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
+
+        title =
+            case world.fate of
+                Just (ShopClosed _) ->
                     "The shop closes"
+
+                _ ->
+                    Content.Endings.saved.title
 
         reopen era =
             button [ type_ "button", class "btn", onClick (ReopenDiary era) ] [ text ("Reopen " ++ eraYear era) ]
     in
     [ Art.room
     , div [ class "overlay" ]
-        [ div [ class "sheet" ]
-            [ div [ class "sheet__head" ]
-                [ h2 [ class "sheet__title" ] [ text title ]
-                , span [ class "sample-tag" ] [ text "Development placeholder" ]
-                ]
-            , div [ class "sheet__foot" ]
+        [ section [ class "sheet", attribute "role" "dialog", attribute "aria-modal" "true" ]
+            [ header [ class "sheet__head" ] [ h2 [ class "sheet__title" ] [ text title ] ]
+            , div [ class "sheet__body" ] (List.concatMap section_ documents)
+            , footer [ class "sheet__foot sheet__foot--ending" ]
                 (List.map reopen Timeline.eras
                     ++ [ button [ type_ "button", class "btn", onClick StartAgain ] [ text "Start again" ] ]
                 )
