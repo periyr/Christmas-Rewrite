@@ -5,13 +5,13 @@ it points at and sends Advance.
 -}
 
 import Components.Art as Art
+import Content.Slides
 import Domain exposing (..)
 import Html exposing (Attribute, Html, button, text)
 import Html.Attributes exposing (attribute, class, type_)
 import Html.Events exposing (onClick)
 import Timeline
 import Views.Common as Common
-import Views.TempContent as Content
 
 
 view : World -> History -> Era -> Int -> List (Html Msg)
@@ -43,7 +43,7 @@ view world history era index =
 
         document =
             current
-                |> Maybe.map (Content.slide world)
+                |> Maybe.map (Content.Slides.slide world)
                 |> Maybe.withDefault { title = "", paragraphs = [] }
     in
     [ Art.room

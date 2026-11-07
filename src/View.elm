@@ -4,6 +4,7 @@ module View exposing (view)
 document over it. All game state stays in the model.
 -}
 
+import Content.Clues
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (attribute, class)
@@ -15,7 +16,6 @@ import Views.Salvage
 import Views.Shelf
 import Views.Shop
 import Views.Slideshow
-import Views.TempContent as Content
 
 
 view : Model -> Html Msg
@@ -101,12 +101,22 @@ stageAttributes world model =
             eraAttribute "present" :: premisesAttribute world
 
         Ending ->
-            eraAttribute "present" :: premisesAttribute world
+            endingAttributes world
 
 
 eraAttribute : String -> Attribute msg
 eraAttribute era =
     attribute "data-era" era
+
+
+endingAttributes : World -> List (Attribute msg)
+endingAttributes world =
+    case world.fate of
+        Just (ShopClosed _) ->
+            eraAttribute "closed" :: premisesAttribute world
+
+        _ ->
+            [ eraAttribute "saved" ]
 
 
 {-| The hub's room shows how 1950 went. -}
@@ -129,7 +139,7 @@ inspection world model =
         Just clue ->
             [ Common.documentSheet
                 { variant = sheetVariant clue
-                , document = Content.clue world clue
+                , document = Content.Clues.clue world clue
                 , buttonLabel = "Put it back"
                 , onPress = CloseInspection
                 }

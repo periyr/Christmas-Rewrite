@@ -1,19 +1,13 @@
-module Views.Common exposing (attemptsDisplay, documentSheet, draftTag, helpButton, narration, popoverSheet, popoverToggle, primaryButton, statusLine, topbar)
+module Views.Common exposing (attemptsDisplay, documentSheet, helpButton, narration, popoverSheet, popoverToggle, primaryButton, statusLine, topbar)
 
 {-| Pieces shared by several screens. -}
 
+import Content.Feedback
 import Domain exposing (Attempts, Document, Msg(..), Notice)
 import Html exposing (Attribute, Html, button, div, footer, h2, header, p, section, span, text)
 import Html.Attributes exposing (attribute, class, classList, id, type_)
 import Html.Events exposing (onClick)
 import Rules.Attempts
-import Views.TempContent as Content
-
-
-{-| Marks text from Views.TempContent. Remove with that module. -}
-draftTag : Html msg
-draftTag =
-    span [ class "sample-tag" ] [ text "Draft text" ]
 
 
 topbar : String -> String -> List (Html msg) -> Html msg
@@ -53,7 +47,7 @@ statusLine notice hint =
     case notice of
         Just shown ->
             p [ class "status", attribute "role" "status" ]
-                [ span [] [ text (Content.notice shown) ]
+                [ span [] [ text (Content.Feedback.notice shown) ]
                 , button [ type_ "button", class "status__dismiss", attribute "aria-label" "Dismiss message", onClick DismissNotice ] [ text "×" ]
                 ]
 
@@ -72,9 +66,7 @@ documentSheet { variant, document, buttonLabel, onPress } =
     div [ class "overlay" ]
         [ section [ class ("sheet " ++ variant), attribute "role" "dialog", attribute "aria-modal" "true", attribute "aria-labelledby" "sheet-title" ]
             [ header [ class "sheet__head" ]
-                [ h2 [ class "sheet__title", id "sheet-title" ] [ text document.title ]
-                , draftTag
-                ]
+                [ h2 [ class "sheet__title", id "sheet-title" ] [ text document.title ] ]
             , div [ class "sheet__body" ] (List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs)
             , footer [ class "sheet__foot" ]
                 [ button [ type_ "button", class "btn", onClick onPress ] [ text buttonLabel ] ]
@@ -87,7 +79,7 @@ narration : Document -> Html msg -> Html msg
 narration document action =
     div [ class "narration" ]
         [ div [ class "narration__text" ]
-            (h2 [ class "narration__title" ] [ text document.title, text " ", draftTag ]
+            (h2 [ class "narration__title" ] [ text document.title ]
                 :: List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
             )
         , action

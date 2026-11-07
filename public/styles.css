@@ -1060,6 +1060,40 @@ button:disabled { cursor: not-allowed; }
 
 .overlay--popover:popover-open { display: grid; }
 
+/* ---------- Room pictures ---------- */
+
+.room-art {
+  position: absolute;
+  inset: 0;
+  background: url("assets/room-present.jpg") center / cover no-repeat;
+}
+
+/* 1998 borrows the plainest room until it has its own picture. */
+[data-era="1950"] .room-art,
+[data-era="1998"] .room-art { background-image: url("assets/room-1950.jpg"); }
+[data-era="1973"] .room-art { background-image: url("assets/room-1973.jpg"); }
+[data-era="saved"] .room-art { background-image: url("assets/room-saved.jpg"); }
+[data-era="closed"] .room-art { filter: brightness(0.5) saturate(0.6); }
+
+[data-era="saved"],
+[data-era="closed"] {
+  --show-stain: 0;
+  --show-rubble: 0;
+}
+
+/* The clock's hands: a minute to midnight in the present, ordinary times elsewhere. */
+.stage { --hour: -0.5deg; --minute: -6deg; }
+.stage[data-era="1950"] { --hour: 305deg; --minute: 60deg; }
+.stage[data-era="1973"] { --hour: 212.5deg; --minute: 30deg; }
+.stage[data-era="1998"] { --hour: 70deg; --minute: 120deg; }
+
+/* The saved room's clock is slightly up and to the right of the others. */
+.stage[data-era="saved"] { --hour: 0deg; --minute: 0deg; --clock-x: 22px; --clock-y: -25px; }
+
+.r-hands { transform: translate(var(--clock-x, 0px), var(--clock-y, 0px)); }
+.r-hand-hour { transform-origin: 1141px 136px; transform: rotate(var(--hour)); }
+.r-hand-minute { transform-origin: 1141px 136px; transform: rotate(var(--minute)); }
+
 /* ---------- Shop scenes ---------- */
 
 .stage[data-premises="missing"] { --show-stain: 1; }
@@ -1080,7 +1114,8 @@ svg-art { display: contents; }
 .narration { z-index: 2; }
 
 .narration__text { flex: 1; }
-.narration__text p + p { margin-top: 0.3rem; }
+.narration__text p { font-size: 1.125rem; line-height: 1.25; }
+.narration__text p + p { margin-top: 0.2rem; }
 
 .narration__title {
   margin: 0 0 0.2rem;
@@ -1090,71 +1125,118 @@ svg-art { display: contents; }
 
 .narration .btn { flex: none; }
 
+/* The covers have clear space round the book, so they overlap inside the row. */
 .diaries {
   position: absolute;
-  left: 30rem;
-  top: 20.25rem;
+  left: 20.1rem;
+  top: 23rem;
   display: flex;
-  gap: 0.6rem;
+  gap: 0.05rem;
 }
 
 .diary {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 6.25rem;
-  height: 6rem;
-  padding: 0.35rem;
-  border: 0.14rem solid var(--wood-dark);
-  border-radius: 0.2rem 0.4rem 0.4rem 0.2rem;
-  background: #5a4a3c;
-  box-shadow: inset 0.5rem 0 0 rgba(0, 0, 0, 0.26);
-  color: var(--paper);
-  line-height: 1.2;
+  position: relative;
+  width: 4rem;
+  height: 6.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  filter: brightness(0.72) saturate(0.7);
 }
 
-.diary:disabled { background: #4d443c; color: #d8ccb4; }
+.diary:disabled { cursor: default; }
 
-.diary__owner { font-size: 0.9375rem; }
-.diary__year { font-size: 1.375rem; font-weight: 700; }
-.diary__state { margin-top: auto; font-size: 0.875rem; }
+.diary__cover {
+  display: block;
+  width: 5.6rem;
+  max-width: none;
+  margin-left: -0.8rem;
+}
+
+.diary__year {
+  position: absolute;
+  top: 6.8rem;
+  left: 50%;
+  padding: 0 0.4rem;
+  border-radius: 0.2rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  transform: translateX(-50%);
+}
 
 .diary.is-glowing {
-  background: var(--interact);
-  box-shadow:
-    inset 0.5rem 0 0 rgba(0, 0, 0, 0.26),
-    0 0 0 0.2rem #f0d9a4,
-    0 0 2.2rem 0.9rem rgba(255, 222, 140, 0.85);
+  filter:
+    brightness(1.2)
+    drop-shadow(0 0 0.3rem #fff1c4)
+    drop-shadow(0 0 0.8rem #ffdf8c)
+    drop-shadow(0 0 1.8rem #ffdf8c);
 }
 
-.diary.is-glowing:hover { background: #245c8c; }
+.diary.is-glowing:hover {
+  filter:
+    brightness(1.3)
+    drop-shadow(0 0 0.4rem #fff1c4)
+    drop-shadow(0 0 1rem #ffdf8c)
+    drop-shadow(0 0 2.2rem #ffdf8c);
+}
 
-/* ---------- Cover colours and damage ---------- */
+/* ---------- Book art (Person C's covers) ---------- */
 
-.book--red { --cover: #8e2f27; }
-.book--orange { --cover: #b4611c; }
-.book--yellow { --cover: #a98a1c; }
-.book--green { --cover: #3c6b3f; }
-.book--blue { --cover: #2b5586; }
-.book--violet { --cover: #5f3d86; }
+.book--art {
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--ink);
+  text-align: center;
+}
+
+.book--art::after { content: none; }
+.book.book--art.is-selected { box-shadow: none; }
+
+.book__art {
+  position: relative;
+  display: block;
+  flex: none;
+}
+
+.book__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Stretched over the cover itself, inside the file's margin and drop shadow. */
+.book__overlay {
+  position: absolute;
+  top: 4%;
+  left: 10%;
+  width: 76.7%;
+  height: 88%;
+}
+
+.book__caption {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.2rem;
+  padding: 0.15rem 0.25rem;
+  border-radius: 0.2rem;
+  background: var(--paper);
+}
+
+.book__caption .book__title { font-size: 0.9375rem; line-height: 1.08; }
 
 .book__damage {
   font-size: 0.8125rem;
-  line-height: 1.15;
+  line-height: 1.12;
   color: var(--ink-soft);
-}
-
-.book__title + .book__damage { margin-top: 0.2rem; }
-
-.book--scorched { background: radial-gradient(ellipse at center, var(--cover) 45%, #17100b 100%); }
-.book--stained { background: radial-gradient(circle at 75% 85%, rgba(205, 195, 165, 0.65) 0 1.6rem, transparent 1.7rem), var(--cover); }
-.book--smoked { background: linear-gradient(to top, rgba(20, 16, 12, 0.72), transparent 70%), var(--cover); }
-.book--stained.book--smoked { background: radial-gradient(circle at 75% 85%, rgba(205, 195, 165, 0.65) 0 1.6rem, transparent 1.7rem), linear-gradient(to top, rgba(20, 16, 12, 0.72), transparent 70%), var(--cover); }
-
-/* Gaps in the page block. */
-.book--torn::after {
-  height: 0.5rem;
-  background: repeating-linear-gradient(90deg, var(--paper) 0 0.5rem, transparent 0.5rem 1.1rem);
 }
 
 /* ---------- Salvage ---------- */
@@ -1170,10 +1252,9 @@ svg-art { display: contents; }
 }
 
 .salvage-scene .topbar { flex: 0 0 3.75rem; }
-.salvage-scene .slot { width: 7.5rem; height: 10rem; }
-.salvage-scene .book { padding: 0.3rem 0.3rem 0.6rem 0.8rem; }
-.salvage-scene .book__label { padding: 0.25rem 0.3rem; }
-.salvage-scene .book__title { font-size: 1rem; line-height: 1.12; }
+.salvage-scene .slot { width: 7.5rem; height: 14.25rem; }
+.salvage-scene .book__art { width: 4.7rem; }
+.salvage-scene .book__caption { height: 4.2rem; }
 .salvage-scene .tray { flex: none; padding-block: 0.5rem; background: var(--wood); }
 .salvage-scene .tray__slots { grid-template-columns: repeat(9, 7.5rem); gap: 0.45rem; }
 
@@ -1246,8 +1327,6 @@ svg-art { display: contents; }
 /* ---------- Reopening shelf ---------- */
 
 .shelf-scene { grid-template-rows: 3.75rem 19.5rem 20rem; }
-.shelf-scene .book__selected-tag,
-.salvage-scene .book__selected-tag { top: auto; bottom: 0.75rem; right: 0.35rem; }
 .shelf-scene .tray { grid-column: 1; padding-block: 0.5rem; background: var(--wood); }
 .shelf-scene .tray__slots { grid-template-columns: repeat(6, 8.25rem); }
 .shelf-scene .side { grid-column: 2; grid-row: 2 / 4; }
@@ -1278,15 +1357,10 @@ svg-art { display: contents; }
 }
 
 .shelf .slot__empty { border-color: rgba(246, 238, 219, 0.45); color: var(--paper); }
-.shelf-scene .book__title { font-size: 1rem; line-height: 1.15; }
 
-/* Height ranks 1 to 6, so "small to tall" can be seen rather than told. */
-.shelf-scene .book--h1 { height: 7.25rem; }
-.shelf-scene .book--h2 { height: 8.75rem; }
-.shelf-scene .book--h3 { height: 10.25rem; }
-.shelf-scene .book--h4 { height: 11.75rem; }
-.shelf-scene .book--h5 { height: 13.25rem; }
-.shelf-scene .book--h6 { height: 15rem; }
+/* One width for every cover, so the height ranks show with bottoms aligned. */
+.shelf-scene .book__art { width: 5.6rem; }
+.shelf-scene .book__caption { height: 3.4rem; }
 
 .plaque {
   display: block;
@@ -1296,6 +1370,24 @@ svg-art { display: contents; }
 
 .plaque:hover { background: var(--interact-tint); }
 .plaque__line { margin: 0 0 0.3rem; font-size: 1.0625rem; line-height: 1.25; }
+
+.plaque__swatches {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+}
+
+.plaque__swatch {
+  flex: 1;
+  height: 1.1rem;
+  border: 0.08rem solid var(--wood-dark);
+}
+
+.sheet__body:has(h3) { font-size: 1.1875rem; line-height: 1.35; }
+.sheet__body h3 { margin: 0.6rem 0 0.2rem; font-size: 1.3125rem; }
+.sheet__body h3:first-child { margin-top: 0; }
+.sheet__foot--ending { flex-wrap: wrap; justify-content: flex-end; }
+.sheet__foot--ending .btn { margin-left: 0; }
 
 .celebration {
   flex: 1;

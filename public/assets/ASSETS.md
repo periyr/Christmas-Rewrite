@@ -1,6 +1,6 @@
 # Asset manifest (Person C)
 
-All art is flat SVG in the shared palette. No text is drawn into any image: titles, clues and labels are interface text. File names match the constructors in `src/Domain.elm`, in kebab case.
+All art except the room pictures is flat SVG in the shared palette. No text is drawn into any image: titles, clues and labels are interface text. File names match the constructors in `src/Domain.elm`, in kebab case.
 
 **Origin and licence:** drawn for this project. Generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand. Free to use in this game.
 
@@ -16,6 +16,19 @@ All art is flat SVG in the shared palette. No text is drawn into any image: titl
 | `#893f43` | wine | `#31542f` | deep green |
 
 ## Files
+
+### Room pictures (JPEG, 1920 × 1080, added by Person B)
+
+Generated with Google Gemini from the team's prompt. Only cropped to 16:9 and resized.
+
+| File | Use |
+|---|---|
+| `room-present.jpg` | Present day: introduction, hub, return from a diary. Dimmed by CSS for the closed ending until it has its own picture. |
+| `room-1950.jpg` | 1950, and a stand-in for 1998 until that has its own picture. |
+| `room-1973.jpg` | 1973 |
+| `room-saved.jpg` | The saved ending. Cut from the original reference picture, inside its dark border. |
+
+The ceiling stain, rubble and clock hands are small SVG overlays in `public/index.html`, so one picture can show a room before and after the work.
 
 ### Diary covers (`viewBox 0 0 300 400`)
 
