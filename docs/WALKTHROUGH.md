@@ -4,9 +4,27 @@
 
 ## The basics
 
-- **Walking (planned, not yet in the game):** the player will walk Walter, Henry or Edwin around the shop. This guide will add the exact controls once B builds it. Nothing below depends on walking: every solution stays the same.
-- **Controls:** click an object to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click a placed object to move it again. Click the same object again to put it down.
-- **Clues:** click documents and objects in the scene to read them. Reading never costs anything.
+- **Walking** (built in the game's logic, not yet on screen; confirm once B wires it in):
+  - Hold **A**/**D** or **← →** to walk.
+  - Press **E** to use whatever is nearby when its prompt appears, or **click** an object to walk there and use it.
+  - Walking never costs anything and never changes an answer. Every solution below stays the same.
+- **Where things are** (left to right in the room):
+
+  | Scene | Objects |
+  |---|---|
+  | Introduction | closure notice (door), box beneath the counter, family photographs (right wall) |
+  | Present-day shop | order desk (till), glowing diary (counter), community wall (cork board), roof and shelves (right bookcase) |
+  | 1950 sorting | book crates |
+  | 1950 planning | glass slip (door), timber licence (till), Walter's diary page (counter), planning board (cork board), repair notes (by the rubble) |
+  | 1950 shelving day | reopening shelf (right bookcase) |
+  | 1973 | box of cut-outs, script (counter), shadow stage (sheet across the window), stage sketch (by the bookcase) |
+  | 1998 | Ruth's email (computer), inscription note (counter), the four books, the line Lucy remembers (by the lamp) |
+
+- **Puzzle controls:**
+  - Click an object to pick it up, then click where it should go.
+  - Click a crate or the "Not this week" box to drop it into the first free space.
+  - Click a placed object to move it again. Click the same object again to put it down.
+- **Clues:** reading documents and objects never costs anything.
 - **Main puzzles** (1950 planning board, 1973 shadow story, 1998 forgotten book) give **two attempts**.
   - An incomplete submission is refused and costs nothing.
   - A first wrong answer shows which rules were broken, and you keep your arrangement to fix it.
