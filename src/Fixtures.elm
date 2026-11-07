@@ -21,6 +21,7 @@ To preview one, temporarily start Main from it instead of Update.init.
 
 import Domain exposing (..)
 import Rules.Repair
+import Rules.Room
 import Update
 
 
@@ -52,6 +53,7 @@ repairBoardInProgress =
             }
     , inspecting = Nothing
     , notice = Nothing
+    , room = Rules.Room.initialRoom
     }
 
 
@@ -116,6 +118,7 @@ repairBoard arrangement attempts =
             }
     , inspecting = Nothing
     , notice = Nothing
+    , room = Rules.Room.initialRoom
     }
 
 
@@ -164,4 +167,5 @@ hubAfterRepairs =
     , phase = PresentHub
     , inspecting = Nothing
     , notice = Nothing
+    , room = Rules.Room.initialRoom
     }

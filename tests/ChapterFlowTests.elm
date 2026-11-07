@@ -13,6 +13,7 @@ import Expect
 import Fixtures
 import Rules.Placement as Placement
 import Rules.Repair as Repair
+import Rules.Room
 import Rules.Salvage as Salvage
 import Test exposing (Test, describe, test)
 import Timeline
@@ -182,6 +183,7 @@ reachingTheBoard =
                         , phase = RepairBoard { arrangement = Placement.empty, inspected = [], attempts = NoAttemptUsed }
                         , inspecting = Nothing
                         , notice = Nothing
+                        , room = Rules.Room.initialRoom
                         }
         , test "continuing with books still on the table stays in salvage with a notice" <|
             \_ ->

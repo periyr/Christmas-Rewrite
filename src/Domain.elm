@@ -10,6 +10,7 @@ module Domain exposing
     , Violation(..), Attempts(..), MainPuzzle
     , FinalSubmission(..), ChapterRecord, History, World
     , IntroStep(..), Transition(..), Slide(..), Phase(..), Model
+    , Facing(..), WalkKey(..), Hotspot(..), Player, Room
     , Msg(..)
     , Document, TaskCardContent, BookContent, CandidateContent, ShadowSceneContent
     )
@@ -519,6 +520,78 @@ type alias Model =
     , phase : Phase
     , inspecting : Maybe ClueId
     , notice : Maybe Notice
+    , room : Room
+    }
+
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- ROOM: THE WALKING PLAYER (added in contract v1.3)
+-- ═══════════════════════════════════════════════════════════════════════
+
+
+{-| Which way the walking player faces. -}
+type Facing
+    = FacingLeft
+    | FacingRight
+
+
+{-| A held movement key: A or the left arrow, D or the right arrow. -}
+type WalkKey
+    = WalkLeft
+    | WalkRight
+
+
+{-| Something in the room the player can walk up to and use.
+
+Where it is: `Rules.Room.position`. Which ones can be used right now:
+`Rules.Room.hotspots model.phase`. Using one does exactly what the existing
+action does, so the rules and the chapter flow are unchanged:
+
+  - ClueSpot clue: same as `Inspect clue`.
+  - BoxSpot: the box beneath the counter (introduction). Same as `Advance`.
+  - DiarySpot: the glowing diary on the counter (present). Same as `OpenNextDiary`.
+  - CratesSpot, BoardSpot, ShelfSpot, StageSpot, BookTableSpot: open the
+    current phase's puzzle panel (salvage, repair board, reopening shelf,
+    shadow stage, candidate books).
+
+-}
+type Hotspot
+    = ClueSpot ClueId
+    | BoxSpot
+    | DiarySpot
+    | CratesSpot
+    | BoardSpot
+    | ShelfSpot
+    | StageSpot
+    | BookTableSpot
+
+
+{-| The human the player walks around: Edwin, or the ancestor whose diary is
+open. Not the shadow-puzzle `Character`. Purely presentation: walking never
+touches history, attempts or arrangements.
+
+  - x: the centre of the feet, in logical room pixels (Rules.Room.minX to
+    Rules.Room.maxX). The feet always stand on Rules.Room.floorY.
+  - facing, walking: for drawing (walk cycle while walking, idle when not).
+  - held: movement keys held down, most recent first. The most recent wins.
+  - target: a clicked hotspot the player is walking to. It is used on arrival.
+
+-}
+type alias Player =
+    { x : Float
+    , facing : Facing
+    , walking : Bool
+    , held : List WalkKey
+    , target : Maybe Hotspot
+    }
+
+
+{-| Room presentation state. panelOpen: the current phase's puzzle panel (the
+salvage crates, repair board, shelf, stage or candidate books) is open.
+-}
+type alias Room =
+    { player : Player
+    , panelOpen : Bool
     }
 
 
@@ -543,6 +616,15 @@ type Msg
     | OpenNextDiary
     | ReopenDiary Era
     | StartAgain
+      -- Room (added in contract v1.3). Main sends the keys, frames and page visibility;
+      -- views send ApproachHotspot (click a hotspot) and ClosePanel.
+    | WalkKeyDown WalkKey
+    | WalkKeyUp WalkKey
+    | InteractNearby
+    | ApproachHotspot Hotspot
+    | AnimationFrame Float
+    | ClosePanel
+    | PageVisibilityChanged Bool
 
 
 

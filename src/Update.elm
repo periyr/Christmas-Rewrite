@@ -12,6 +12,7 @@ import Rules.Attempts as Attempts exposing (SubmitResult(..))
 import Rules.Mystery
 import Rules.Placement as Placement
 import Rules.Repair
+import Rules.Room
 import Rules.Salvage
 import Rules.Shadow
 import Rules.Shelf
@@ -24,6 +25,7 @@ init =
     , phase = Introduction PackingUp
     , inspecting = Nothing
     , notice = Nothing
+    , room = Rules.Room.initialRoom
     }
 
 
@@ -157,6 +159,28 @@ update msg model =
 
                 _ ->
                     model
+
+        -- Room messages (contract v1.3): accepted now, implemented in the next checkpoint.
+        WalkKeyDown _ ->
+            model
+
+        WalkKeyUp _ ->
+            model
+
+        InteractNearby ->
+            model
+
+        ApproachHotspot _ ->
+            model
+
+        AnimationFrame _ ->
+            model
+
+        ClosePanel ->
+            model
+
+        PageVisibilityChanged _ ->
+            model
 
 
 
