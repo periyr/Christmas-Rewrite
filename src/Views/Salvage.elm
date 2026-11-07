@@ -46,12 +46,9 @@ view placement notice =
     ]
 
 
+{-| No per-book marks: the player is told how many books are misplaced, not which. -}
 placementConfig : Placement BookId SalvageSlot -> PlacementUI.Config BookId SalvageSlot Msg
 placementConfig placement =
-    let
-        misplaced =
-            Rules.Salvage.misplaced placement
-    in
     { toMsg = SalvageMove
     , enabled = True
     , placement = placement
@@ -59,13 +56,7 @@ placementConfig placement =
     , name = \book -> (Content.Books.book book).title
     , cardClass = \_ -> "book--art"
     , cardBody = bookBody
-    , marks =
-        \book ->
-            if List.member book misplaced then
-                [ "!" ]
-
-            else
-                []
+    , marks = \_ -> []
     }
 
 
@@ -92,7 +83,7 @@ crate config condition name description =
         ]
 
 
-{-| Hints mention only books in the wrong crate, as the brief allows here. -}
+{-| Says how many books are in the wrong crate, never which ones. -}
 progress : Placement BookId SalvageSlot -> String
 progress placement =
     let
@@ -103,11 +94,11 @@ progress placement =
             "“" ++ (Content.Books.book book).title ++ "”"
     in
     case ( Rules.Salvage.misplaced placement, placement.selected ) of
-        ( book :: [], _ ) ->
-            title book ++ " is in the wrong crate."
+        ( _ :: [], _ ) ->
+            "1 book is in the wrong crate."
 
         ( _ :: others, _ ) ->
-            String.fromInt (List.length others + 1) ++ " books marked ! are in the wrong crates."
+            String.fromInt (List.length others + 1) ++ " books are in the wrong crates."
 
         ( [], Just book ) ->
             "Click a crate for " ++ title book ++ "."
@@ -120,7 +111,9 @@ progress placement =
                 String.fromInt unsorted ++ " still to sort. Click a book, then click a crate."
 
 
-{-| Damage is drawn over the cover and also named, so the art isn't the only signal. -}
+{-| The cover with its damage drawn on, and the title. Damage isn't written out:
+the player reads it from the art.
+-}
 bookBody : BookId -> List (Html Msg)
 bookBody book =
     let
@@ -128,30 +121,5 @@ bookBody book =
             Content.Books.book book
     in
     [ Art.bookCover book content.damage
-    , span [ class "book__caption" ]
-        (span [ class "book__title" ] [ text content.title ]
-            :: (case content.damage of
-                    [] ->
-                        [ span [ class "book__damage" ] [ text "No damage" ] ]
-
-                    marks ->
-                        List.map (\damage -> span [ class "book__damage" ] [ text (damageName damage) ]) marks
-               )
-        )
+    , span [ class "book__caption" ] [ span [ class "book__title" ] [ text content.title ] ]
     ]
-
-
-damageName : Damage -> String
-damageName damage =
-    case damage of
-        ScorchedEdges ->
-            "Scorched edges"
-
-        WaterStains ->
-            "Water stains"
-
-        SmokeStains ->
-            "Smoke stains"
-
-        MissingPages ->
-            "Missing pages"
