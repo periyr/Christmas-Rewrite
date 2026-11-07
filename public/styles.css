@@ -6,7 +6,8 @@
 
    Colour rule: --interact means "you can act here" and never implies right or
    wrong. --warn appears only in post-submission feedback (.is-flagged, .mark,
-   .feedback, .goal.is-unmet). Nothing that renders before submission uses it. */
+   .feedback, .goal.is-unmet) and in the forgiving salvage warm-up, whose live
+   feedback the brief allows. Nothing on the main puzzles uses it before submission. */
 
 :root {
   font-size: min(1.25vw, 2.2222vh);
@@ -683,7 +684,7 @@ button:disabled { cursor: not-allowed; }
   background: repeating-linear-gradient(0deg, var(--paper) 0 0.06rem, var(--paper-edge) 0.06rem 0.12rem);
 }
 
-.book:hover { transform: translateY(-0.12rem); }
+.book:hover:not(:disabled) { transform: translateY(-0.12rem); }
 
 .book__label {
   flex: 1;
@@ -1026,6 +1027,284 @@ button:disabled { cursor: not-allowed; }
   font-size: 1.0625rem;
   line-height: 1.25;
   text-align: center;
+}
+
+/* ---------- Status line and popover sheets ---------- */
+
+.status { gap: 0.4rem; }
+.status > span { flex: 1; }
+
+.status__dismiss {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 0.1rem solid var(--wood-dark);
+  border-radius: 50%;
+  background: var(--paper);
+  line-height: 1;
+}
+
+/* Help and notes use the browser's popover, so they hold no game state. */
+.overlay--popover {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: var(--ink);
+}
+
+.overlay--popover:popover-open { display: grid; }
+
+/* ---------- Shop scenes ---------- */
+
+.stage[data-premises="missing"] { --show-stain: 1; }
+.stage[data-roof="patched"] { --show-stain: 0; }
+.stage[data-rubble="cleared"] { --show-rubble: 0; }
+
+/* Wednesday's rain over the room. */
+.stage[data-weather="rain"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(105deg, transparent 0 0.9rem, rgba(190, 210, 225, 0.4) 0.9rem 1rem);
+  pointer-events: none;
+}
+
+svg-art { display: contents; }
+
+.narration { z-index: 2; }
+
+.narration__text { flex: 1; }
+.narration__text p + p { margin-top: 0.3rem; }
+
+.narration__title {
+  margin: 0 0 0.2rem;
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.narration .btn { flex: none; }
+
+.diaries {
+  position: absolute;
+  left: 30rem;
+  top: 20.25rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.diary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 6.25rem;
+  height: 6rem;
+  padding: 0.35rem;
+  border: 0.14rem solid var(--wood-dark);
+  border-radius: 0.2rem 0.4rem 0.4rem 0.2rem;
+  background: #5a4a3c;
+  box-shadow: inset 0.5rem 0 0 rgba(0, 0, 0, 0.26);
+  color: var(--paper);
+  line-height: 1.2;
+}
+
+.diary:disabled { background: #4d443c; color: #d8ccb4; }
+
+.diary__owner { font-size: 0.9375rem; }
+.diary__year { font-size: 1.375rem; font-weight: 700; }
+.diary__state { margin-top: auto; font-size: 0.875rem; }
+
+.diary.is-glowing {
+  background: var(--interact);
+  box-shadow:
+    inset 0.5rem 0 0 rgba(0, 0, 0, 0.26),
+    0 0 0 0.2rem #f0d9a4,
+    0 0 2.2rem 0.9rem rgba(255, 222, 140, 0.85);
+}
+
+.diary.is-glowing:hover { background: #245c8c; }
+
+/* ---------- Cover colours and damage ---------- */
+
+.book--red { --cover: #8e2f27; }
+.book--orange { --cover: #b4611c; }
+.book--yellow { --cover: #a98a1c; }
+.book--green { --cover: #3c6b3f; }
+.book--blue { --cover: #2b5586; }
+.book--violet { --cover: #5f3d86; }
+
+.book__damage {
+  font-size: 0.8125rem;
+  line-height: 1.15;
+  color: var(--ink-soft);
+}
+
+.book__title + .book__damage { margin-top: 0.2rem; }
+
+.book--scorched { background: radial-gradient(ellipse at center, var(--cover) 45%, #17100b 100%); }
+.book--stained { background: radial-gradient(circle at 75% 85%, rgba(205, 195, 165, 0.65) 0 1.6rem, transparent 1.7rem), var(--cover); }
+.book--smoked { background: linear-gradient(to top, rgba(20, 16, 12, 0.72), transparent 70%), var(--cover); }
+.book--stained.book--smoked { background: radial-gradient(circle at 75% 85%, rgba(205, 195, 165, 0.65) 0 1.6rem, transparent 1.7rem), linear-gradient(to top, rgba(20, 16, 12, 0.72), transparent 70%), var(--cover); }
+
+/* Gaps in the page block. */
+.book--torn::after {
+  height: 0.5rem;
+  background: repeating-linear-gradient(90deg, var(--paper) 0 0.5rem, transparent 0.5rem 1.1rem);
+}
+
+/* ---------- Salvage ---------- */
+
+.salvage-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0 1.25rem 0.75rem;
+  background: var(--wall);
+}
+
+.salvage-scene .topbar { flex: 0 0 3.75rem; }
+.salvage-scene .slot { width: 7.5rem; height: 10rem; }
+.salvage-scene .book { padding: 0.3rem 0.3rem 0.6rem 0.8rem; }
+.salvage-scene .book__label { padding: 0.25rem 0.3rem; }
+.salvage-scene .book__title { font-size: 1rem; line-height: 1.12; }
+.salvage-scene .tray { flex: none; padding-block: 0.5rem; background: var(--wood); }
+.salvage-scene .tray__slots { grid-template-columns: repeat(9, 7.5rem); gap: 0.45rem; }
+
+.crates {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.crate {
+  padding: 0.35rem 0.5rem 0.55rem;
+  border: 0.3rem solid var(--wood);
+  border-radius: 0.2rem;
+  background: repeating-linear-gradient(0deg, #b48a5e 0 1.4rem, #a57c52 1.4rem 1.48rem);
+  box-shadow: 0.2rem 0.25rem 0 var(--cast);
+}
+
+.crate.is-target { border-color: var(--interact); }
+
+.crate__label {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border: 0;
+  border-radius: 0.15rem;
+  background: var(--paper);
+  text-align: left;
+}
+
+.crate__label:disabled { color: inherit; cursor: default; }
+.crate.is-target .crate__label { background: var(--interact-tint); color: var(--interact); }
+
+.crate__name { display: block; font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
+.crate__description { display: block; font-size: 0.9375rem; line-height: 1.2; }
+
+.crate__slots {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scene-foot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 0;
+}
+
+.scene-foot .status { font-size: 1.25rem; }
+.scene-foot .btn--primary { flex: none; width: 18rem; }
+
+/* ---------- Repair board additions ---------- */
+
+.not-this-week__label {
+  width: 100%;
+  border: 0;
+  border-radius: 0.15rem;
+  background: transparent;
+}
+
+.not-this-week__label:disabled { cursor: default; }
+.not-this-week__label:hover:not(:disabled) { background: rgba(246, 238, 219, 0.2); }
+
+.feedback__note { margin: 0; }
+
+.sheet__body ul { margin: 0; padding-left: 1.25rem; }
+.sheet__body li + li { margin-top: 0.4rem; }
+
+/* ---------- Reopening shelf ---------- */
+
+.shelf-scene { grid-template-rows: 3.75rem 19.5rem 20rem; }
+.shelf-scene .book__selected-tag,
+.salvage-scene .book__selected-tag { top: auto; bottom: 0.75rem; right: 0.35rem; }
+.shelf-scene .tray { grid-column: 1; padding-block: 0.5rem; background: var(--wood); }
+.shelf-scene .tray__slots { grid-template-columns: repeat(6, 8.25rem); }
+.shelf-scene .side { grid-column: 2; grid-row: 2 / 4; }
+
+.shelf {
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem 0.7rem 1.25rem 2.95rem;
+  border: 0.6rem solid var(--wood);
+  border-bottom-width: 1.1rem;
+  border-radius: 0.2rem;
+  background: var(--case-back);
+  box-shadow: 0.2rem 0.3rem 0 var(--cast);
+}
+
+.shelf__slots {
+  display: grid;
+  grid-template-columns: repeat(6, 8.25rem);
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.shelf-scene .slot {
+  display: flex;
+  align-items: flex-end;
+  width: 8.25rem;
+  height: 15.5rem;
+}
+
+.shelf .slot__empty { border-color: rgba(246, 238, 219, 0.45); color: var(--paper); }
+.shelf-scene .book__title { font-size: 1rem; line-height: 1.15; }
+
+/* Height ranks 1 to 6, so "small to tall" can be seen rather than told. */
+.shelf-scene .book--h1 { height: 7.25rem; }
+.shelf-scene .book--h2 { height: 8.75rem; }
+.shelf-scene .book--h3 { height: 10.25rem; }
+.shelf-scene .book--h4 { height: 11.75rem; }
+.shelf-scene .book--h5 { height: 13.25rem; }
+.shelf-scene .book--h6 { height: 15rem; }
+
+.plaque {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.plaque:hover { background: var(--interact-tint); }
+.plaque__line { margin: 0 0 0.3rem; font-size: 1.0625rem; line-height: 1.25; }
+
+.celebration {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
 }
 
 @media (prefers-reduced-motion: reduce) {
