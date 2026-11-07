@@ -77,6 +77,14 @@ arrive era model =
     enterRoom (goTo (startChapter era) model)
 
 
+{-| The end of the way back, whether it finished or was skipped: the existing
+"Back to the present" narration.
+-}
+backInThePresent : Model -> Model
+backInThePresent model =
+    goTo (Transition ReturningToPresent) model
+
+
 {-| Entering a diary or coming back to the present: a new room, so the player
 starts again at the door end, facing right.
 -}
@@ -121,6 +129,17 @@ update msg model =
 
                     else
                         { model | phase = Transition (TimeTravel era next) }
+
+                Transition (TearToPresent era elapsed) ->
+                    let
+                        next =
+                            Rules.Travel.step delta elapsed
+                    in
+                    if Rules.Travel.hasReturned next then
+                        backInThePresent model
+
+                    else
+                        { model | phase = Transition (TearToPresent era next) }
 
                 _ ->
                     walk delta model
@@ -262,6 +281,9 @@ play msg model =
             case model.phase of
                 Transition (TimeTravel era _) ->
                     arrive era model
+
+                Transition (TearToPresent _ _) ->
+                    backInThePresent model
 
                 _ ->
                     model
@@ -594,7 +616,8 @@ advance model =
                         goTo (Transition (Slideshow era (index + 1))) model
 
                     else
-                        goTo (Transition ReturningToPresent) model
+                        -- The last slide: tear back through the page to the present.
+                        goTo (Transition (TearToPresent era 0)) model
 
         Transition ReturningToPresent ->
             if Timeline.fate model.history == Nothing then

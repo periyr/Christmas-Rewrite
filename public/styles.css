@@ -2085,3 +2085,74 @@ svg-art { display: contents; }
 
   .travel__year--destination { display: block; }
 }
+
+/* ---------- The tear home (Views.Tear) ----------
+
+   After a chapter's last slide, the finished era's room stays put, a paper
+   tint settles on it, and a golden tear opens down the middle and widens to
+   show the present-day shop. Both rooms are their own .stage layers, so each
+   keeps its own era, premises and slide state. Elm sets the tear's shape
+   (clip-path) and every opacity from the elapsed time; nothing here animates
+   on its own. The overlay covers the stage and takes every click. */
+
+.tear {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  background: var(--wall);
+}
+
+.tear__layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* The finished room as old paper: a warm tint, faint fibres and a few flecks. */
+.tear__paper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: rgba(214, 186, 136, 0.42);
+  background-image:
+    radial-gradient(circle at 18% 27%, rgba(120, 86, 48, 0.18) 0 0.12rem, transparent 0.14rem),
+    radial-gradient(circle at 63% 71%, rgba(120, 86, 48, 0.16) 0 0.1rem, transparent 0.12rem),
+    radial-gradient(circle at 82% 19%, rgba(120, 86, 48, 0.14) 0 0.14rem, transparent 0.16rem),
+    repeating-linear-gradient(97deg, rgba(255, 248, 230, 0.12) 0 0.08rem, transparent 0.08rem 0.7rem),
+    repeating-linear-gradient(8deg, rgba(110, 80, 45, 0.07) 0 0.06rem, transparent 0.06rem 1.1rem),
+    radial-gradient(ellipse at center, transparent 55%, rgba(90, 60, 30, 0.35) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* The torn paper edge, just wider than the opening, glowing warm gold. */
+.tear__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 0.5rem rgba(255, 208, 120, 0.95)) drop-shadow(0 0 1.6rem rgba(255, 170, 70, 0.75));
+}
+
+.tear__rim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #ffe9b8, #f6dfae 40%, #ffd98a 60%, #ffe9b8);
+}
+
+.tear__fade {
+  position: absolute;
+  inset: 0;
+}
+
+/* With motion, the tear itself reveals the present; the fade is only for
+   reduced motion below. */
+@media (prefers-reduced-motion: no-preference) {
+  .tear__fade { opacity: 1 !important; }
+}
+
+/* Reduced motion: a plain crossfade from the finished room to the present. */
+@media (prefers-reduced-motion: reduce) {
+  .tear__paper,
+  .tear__glow { display: none; }
+
+  .tear__layer--present { clip-path: none !important; }
+}
