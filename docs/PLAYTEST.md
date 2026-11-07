@@ -11,9 +11,10 @@ Checked on 7 November against `main` at `634de04` (after #21 walking and #23 she
 | Area | Result |
 |---|---|
 | Intro → present-day shop → 1950 diary → salvage → planning board | Works (browser). |
-| 1950 success week → slides → shelving pause → shelf → Saturday → back to the shop | Works (model). Not yet replayed in the browser: the browser pane was hidden, and walking needs animation frames. |
-| 1950 two wrong weeks → feedback → retry → consequence slide → back to the shop | Works (model). |
-| 1973 and 1998 | **Blocked:** both are placeholders ("isn't built yet"). Endings and rewind can't be reached in the browser. |
+| 1950 success week → slides → shelving pause → shelf → Saturday → back to the shop | Works (browser, and model). |
+| 1950 two wrong weeks → feedback → retry → consequence slide → back to the shop | Works (browser, and model). |
+| 1973 room | Henry walks the 1973 room; the box, script and sketch clues open and read correctly for both script versions (browser). The stage itself is a placeholder. |
+| 1973 stage, 1998 and the endings | **Blocked:** placeholders ("isn't built yet"). The endings and rewind can't be reached in the browser. |
 | 1973 and 1998 content | Checked against A's rules (model and render): solvable on every route, captions match, no answer hints in labels. |
 | Player sprites | Consistent (browser pixel scan). No regeneration needed. |
 
@@ -32,6 +33,27 @@ Ordered by priority. Owner: **A** logic, **B** presentation, **C** content and a
 | 7 | Low | Docs | Read WALKTHROUGH or SUBMISSION, then reach an ending | The docs said "Reopen a diary"; the buttons say "Reopen 1950", "Reopen 1973", "Reopen 1998" and "Start again" | Docs match the buttons | C | **Fixed** in this PR |
 | 8 | Low | Docs | Read CONTRACT.md or the brief | They still describe three shelf orders and "live misplaced marks" on salvage | Four orders (tall to small added); salvage shows a live count | A (CONTRACT), team (brief) | Open |
 | 9 | Low | Styles | n/a | `.plaque__swatches` styles are unused since the plaque change; salvage captions may reserve two lines for one | Remove or tighten | B | Open |
+
+## Browser playthrough of 1950 (both routes)
+
+The browser pane had to be visible: with it hidden, the page gets 0 animation frames and nobody can walk.
+
+- **Correct week** (Roof, Rubble, Shelves, Books, Glaze; Sign and Boarding left out):
+  - the allowance shows "Wood planks 4 spent · 0 left"
+  - the slides follow the week, and Wednesday has the rain with the roof holding
+  - Thursday pauses on "Shelve the books", and Walter walks to the shelf
+  - the shelf shows the new plaque and no swatches; the books start as Letters, Pocket, Gardens, Winter Tales, Atlas, Birdsong
+  - tall to small is celebrated
+  - Friday and Saturday (with Ruth) follow, then the return to the shop
+  - in the shop, the roof text has changed; Henry's diary says the script is safe; in 1973 Henry appears and the original script and its bridge/door/home sketch read correctly
+- **Two wrong weeks** (Sign Monday, Roof Wednesday):
+  - the first submit uses one attempt ("2 of 2" → "1 of 2") and shows "The week didn't hold. Here's what went wrong:" with three numbered lines, matching the numbered badges on the roof card, the goals and the plank allowance
+  - "You have one more try. Your cards stay where they are."
+  - "Try again", then the unchanged week, gives one "The week goes wrong" slide (rain on Wednesday), then the shop
+  - the roof text and Henry's diary show the failure versions
+  - the 1973 room has the neighbours' retelling and its gate/inside/home sketch
+- **Feet:** zoomed in, Henry and Walter stand on the floorboards with B's shadow under them. They don't look sunk or floating at this size.
+- **Not reproduced:** once, right after a reload, clicking "Open the box" walked Edwin to the box without opening it. A second try, after the page had settled, opened it with one click, and every other label (diary, crates, board, shelf, clues) worked first time. Not logged as a bug.
 
 ## Verified wording
 
@@ -95,7 +117,6 @@ Scene panels: please label them "Scene 1", "Scene 2", "Scene 3" (issue 5). Perfo
 
 ## Still to do (C)
 
-- Replay 1950 in the browser with the pane visible: slides, shelf, Saturday, back to the shop.
 - When B's 1973 and 1998 panels land, play the whole game in the browser on both 1950 routes:
   - both endings (all three succeed / any fails)
   - the three "Reopen" buttons and "Start again"

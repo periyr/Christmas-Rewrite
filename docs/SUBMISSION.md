@@ -76,10 +76,10 @@ Remove this section from the public copy. It keeps the claims above honest.
 | Feature | Status (7 November, `main` at `634de04`; details in `docs/PLAYTEST.md`) |
 |---|---|
 | Rules for all three chapters (repair board, salvage, shelf, shadow story, forgotten book) | Built and tested: `npm test` passes 271 tests, including all 2,520 repair weeks, all 36 shadow stagings and the four accepted shelf orders out of 720. The release build (`npm run build -- --optimize`) works. |
-| 1950 screens (salvage, repair board, shelf, slideshow) | Intro, shop, salvage and the planning board played in the browser. The full week (slides, shelf, Saturday, return) was checked through the real game logic only, not yet replayed in the browser. |
+| 1950 screens (salvage, repair board, shelf, slideshow) | Played through in the browser on both routes: a correct week (slides, shelf, Saturday, back to the shop) and two wrong weeks (feedback, retry, consequence slide). |
 | 1973 and 1998 puzzle screens | **Not built yet:** the game shows a placeholder for both chapters, though the rules behind them are done |
 | Walking (keys, click to walk, hotspots, room labels) | Built and playable. Checked in the browser on 7 November: walking both ways, stopping at the wall, the E prompts and the click-to-walk labels. |
-| Walking characters (4 people × 3 poses) | Wired in. Checked in the browser: present-day Edwin in the intro and hub, Walter in 1950. Each is 192 × 320 room px with the feet on the floor line (y 650), flips when walking left, and cycles walk-1 and walk-2. Henry (1973) and young Edwin (1998) are mapped in the code but can't be seen until those screens exist. |
+| Walking characters (4 people × 3 poses) | Wired in. Checked in the browser: present-day Edwin in the intro and hub, Walter in 1950, Henry in the 1973 room. Each is 192 × 320 room px with the feet on the floor line (y 650), flips when walking left, and cycles walk-1 and walk-2. Young Edwin (1998) is mapped in the code but can't be seen until the 1973 stage lets the story continue. |
 | Room props (14 files) | Drawn; **not placed in the rooms yet** (B's own inline crates, rubble and planks are shown) |
 | All game text (`src/Content`) | Built; compiles; word counts checked; covers every 1973 and 1998 result |
 | Help button on every screen | Only the 1950 screens so far |
