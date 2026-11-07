@@ -1243,6 +1243,64 @@ svg-art { display: contents; }
 
 .actor__frame.is-current { visibility: visible; }
 
+/* Name tag: hovering the head or body (sprite units x 30–66, y 14–118) shows who
+   the player is. Only this box catches the pointer; the rest of the figure
+   stays click-through, so nearby labels still work. */
+.actor__hit {
+  position: absolute;
+  left: 3.75rem;
+  top: 1.75rem;
+  width: 4.5rem;
+  height: 13rem;
+  pointer-events: auto;
+}
+
+.actor__tag {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.5rem);
+  width: max-content;
+  max-width: 14rem;
+  padding: 0.3rem 0.6rem;
+  border: 0.1rem solid var(--wood-dark);
+  border-radius: 0.25rem;
+  background: var(--paper);
+  box-shadow: 0.12rem 0.16rem 0 var(--cast);
+  line-height: 1.25;
+  text-align: center;
+  transform: translateX(-50%);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+/* The figure is mirrored when facing left; mirror the tag back so it reads. */
+.actor.is-facing-left .actor__tag { transform: translateX(-50%) scaleX(-1); }
+
+.actor__hit:hover .actor__tag {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* While hovered, lift the figure (and its tag) above the room labels and the
+   narration, which normally sit in front of it. */
+.actor:has(.actor__hit:hover) { z-index: 6; }
+
+.actor__name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.actor__relation {
+  margin: 0.1rem 0 0;
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actor__tag { transition: none; }
+}
+
 /* Contact shadow: centred 2 px under the soles (y 304 of 320 in the image) and
    wider than the widest stride, so it shows on both sides of the shoes. */
 .actor__shadow {
