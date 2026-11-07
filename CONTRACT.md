@@ -11,6 +11,7 @@ The only requirement is Node.js 18 or newer. Nothing needs to be installed globa
 | Install (once, and after pulling a `package.json` change) | `npm install` |
 | Live preview at http://localhost:8000 (reload the page to rebuild) | `npm start` |
 | Build into `build/` (git-ignored) | `npm run build` |
+| Release build for submission into `release/one-more-christmas/` (git-ignored) | `npm run release` |
 | Run the tests | `npm test` |
 
 Compile errors appear in the browser while `npm start` is running. The page `build/index.html` can also be opened directly once it has been built. To use another port, run `PORT=9000 npm start` on Mac, or `$env:PORT=9000; npm start` in PowerShell.
@@ -46,7 +47,7 @@ view : Model -> Html Msg          -- in src/View.elm
 | `Introduction step` (`PackingUp`, `DiariesFound`, `ClockStopped`) | shop, notice, photo, box, diaries | `Inspect ClosureNotice`, `Inspect FamilyPhotograph`, `Advance`. After `ClockStopped`, `Advance` goes to `PresentHub`. |
 | `PresentHub` | the shop, built from `deriveWorld` (`premises`, `tradition`, `onlineService` are each `NotRevisited`, `Established` or `Missing`); the diary in `nextDiary` glows | `Inspect (HubProp p)`, `OpenNextDiary` |
 | `Transition (OpeningDiary era)` | page-turn into that diary | `Advance` |
-| `Salvage placement` | 9 books, 3 crates of 3 spaces, live misplaced marks | `SalvageMove …`, then `Advance` to continue (stays put with `NotSolvedYet` until solved) |
+| `Salvage placement` | 9 books, 3 crates of 3 spaces, a live count of misplaced books (not which ones, since #19) | `SalvageMove …`, then `Advance` to continue (stays put with `NotSolvedYet` until solved) |
 | `RepairBoard puzzle` | tray, Mon–Fri, two "Not this week" spaces, spent/remaining | `BoardMove …`, `Inspect` the four clues, `Submit` ("Finish week"), `Retry` |
 | `Transition (Slideshow era i)` | slide `i` of `Timeline.slides era model.history` | `Advance` |
 | `ReopeningShelf placement` | 6 positions, plaque, matched order when complete | `ShelfMove …`, `Inspect ShelfPlaque`, then `Advance` to continue (stays put with `NotSolvedYet` until ordered) |
@@ -197,7 +198,7 @@ Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUse
 
 | Function | Meaning |
 |---|---|
-| `Rules.Salvage.misplaced placement : List BookId` | Books sitting in the wrong crate, in `Rules.Books.allBooks` order. Books in the tray are not listed. Use this for the immediate per-book feedback. |
+| `Rules.Salvage.misplaced placement : List BookId` | Books sitting in the wrong crate, in `Rules.Books.allBooks` order. Books in the tray are not listed. Its length gives the live count of misplaced books (the view no longer marks which ones, since #19). It was first meant for the immediate per-book feedback. |
 | `Rules.Salvage.isSolved placement : Bool` | All nine books placed, each exactly once, all in the right crates. Move order and the space used within a crate don't matter. |
 | `Rules.Placement.inTray Rules.Books.allBooks placement` | Books still to sort. |
 | `Rules.Salvage.crateSlots crate` | A crate's three spaces. Send `SalvageMove (PlaceSelectedInGroup (crateSlots crate))` when a crate is clicked. |
@@ -400,7 +401,19 @@ Both main puzzles are now playable through `Update`, with the same two-attempt f
 
 ## Release build
 
-There are no `Debug.todo` stubs left. `npm run build -- --optimize` builds the release, and the tests check every rule.
+There are no `Debug.todo` stubs left, so the optimized build works. For the submission, run:
+
+```
+npm test
+npm run release
+```
+
+`npm run release` compiles with `--optimize` and puts the whole game in `release/one-more-christmas/`: `index.html`, `elm.js`, `styles.css` and `assets/`. It then checks that every asset the page, the styles and the compiled Elm refer to is in the folder, and that every path is relative. It stops with a message if anything is missing.
+
+- **Upload:** zip the *contents* of `release/one-more-christmas/`, so `index.html` is at the top of the zip (game hosts such as itch.io require this). Nothing else is needed: no server code, no network access while playing.
+- **Play locally:** open `release/one-more-christmas/index.html` in a browser, or serve the folder with any static file server.
+- **Why a separate folder:** `npm start` rebuilds `build/` as a debug build on every page load, so an optimized build left in `build/` can be silently replaced. `release/` is only written by `npm run release`.
+- **Not yet checked:** opening `index.html` straight from disk was not tested in a desktop browser (the checks so far served the folder over HTTP). Check that once in Chrome, Firefox or Safari and on Windows before submitting.
 
 ## Open coordination items
 
