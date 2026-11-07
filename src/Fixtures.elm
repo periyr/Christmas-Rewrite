@@ -1,9 +1,12 @@
 module Fixtures exposing
     ( initialModel
     , repairBoardInProgress
+    , repairBoard
+    , repairBoardReady
     , repairFirstAttemptFailed
     , validWeek
     , wrongWeek
+    , boardFor
     , repairsSucceeded
     , repairsFailed
     , hubAfterRepairs
@@ -17,6 +20,7 @@ To preview one, temporarily start Main from it instead of Update.init.
 -}
 
 import Domain exposing (..)
+import Rules.Repair
 import Update
 
 
@@ -77,16 +81,50 @@ validWeek =
     }
 
 
-{-| Hand-written violations for wrongWeek, following the brief: the roof is
-too late, timber is overspent (1 + 2 + 2 = 5 of 4), and the window is
-never sealed. (The real validator's exact list is the next Person A task.)
+{-| What the validator reports for wrongWeek, in its order: the roof is too
+late, the window is never sealed, and timber is overspent (1 + 2 + 2 = 5 of 4).
+Computed, not hand-written, so it always matches Rules.Repair.validate.
 -}
 wrongWeekViolations : List Violation
 wrongWeekViolations =
-    [ RoofAfterRain Wednesday
-    , TimberOverspent 5
-    , GoalMissing SealedWindow
-    ]
+    Rules.Repair.validate wrongWeek
+
+
+{-| The board arrangement for a complete week: days in order, the two
+deferred cards in NotThisWeek 1 and 2.
+-}
+boardFor : WeekPlan -> Placement TaskId RepairSlot
+boardFor week =
+    { placed =
+        List.map (\day -> ( Rules.Repair.taskOn day week, OnDay day )) Rules.Repair.days
+            ++ List.map2 (\task n -> ( task, NotThisWeek n )) week.notThisWeek [ 1, 2 ]
+    , selected = Nothing
+    }
+
+
+{-| The 1950 repair board with any arrangement and attempt state
+(all four clues already inspected, no history).
+-}
+repairBoard : Placement TaskId RepairSlot -> Attempts -> Model
+repairBoard arrangement attempts =
+    { history = []
+    , phase =
+        RepairBoard
+            { arrangement = arrangement
+            , inspected = [ WalterDiaryPage, GlassDeliverySlip, RubbleAndShelvesNote, BudgetAllocation ]
+            , attempts = attempts
+            }
+    , inspecting = Nothing
+    , notice = Nothing
+    }
+
+
+{-| A complete, valid week (validWeek) that has not been submitted yet.
+Submit leads to success and the week slideshow.
+-}
+repairBoardReady : Model
+repairBoardReady =
+    repairBoard (boardFor validWeek) NoAttemptUsed
 
 
 {-| The board just after the first wrong "Finish week": feedback is open,
@@ -94,27 +132,7 @@ the arrangement is kept, Submit is ignored until Retry.
 -}
 repairFirstAttemptFailed : Model
 repairFirstAttemptFailed =
-    { history = []
-    , phase =
-        RepairBoard
-            { arrangement =
-                { placed =
-                    [ ( PaintSign, OnDay Monday )
-                    , ( ClearRubble, OnDay Tuesday )
-                    , ( PatchRoof, OnDay Wednesday )
-                    , ( BuildShelves, OnDay Thursday )
-                    , ( ShelveBooks, OnDay Friday )
-                    , ( ReglazeWindow, NotThisWeek 1 )
-                    , ( BoardUpWindow, NotThisWeek 2 )
-                    ]
-                , selected = Nothing
-                }
-            , inspected = [ WalterDiaryPage, GlassDeliverySlip, RubbleAndShelvesNote, BudgetAllocation ]
-            , attempts = ReviewingFirstMistake wrongWeekViolations
-            }
-    , inspecting = Nothing
-    , notice = Nothing
-    }
+    repairBoard (boardFor wrongWeek) (ReviewingFirstMistake wrongWeekViolations)
 
 
 {-| 1950 resolved successfully on the first attempt with valid week 1. -}
