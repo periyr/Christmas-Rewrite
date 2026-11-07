@@ -168,6 +168,6 @@ A failed chapter stays failed for that run. Succeeding later doesn't undo it.
 **Closed endings:** submit a wrong answer twice in any chapter you want to fail.
 
 **Replaying:**
-- After either ending, **Reopen a diary** replays that chapter and every later one, each with two fresh attempts. Earlier chapters keep their results. Reopening 1950 starts again from the book sorting.
+- After either ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** replays that chapter and every later one, each with two fresh attempts. Earlier chapters keep their results. Reopening 1950 starts again from the book sorting.
 - **Start again** begins a new run.
 - Reopening 1950 can switch the 1973 script version. Reopening 1973 can switch where the 1998 inscription clue comes from.
