@@ -1,6 +1,6 @@
 # Playtest log and handoff notes (Person C)
 
-Checked on 7 November against `main` at `634de04` (after #21 walking and #23 shelf). Every check is labelled by **how** it was done:
+Checked on 7 November. The last full pass was against `main` at `c9ad11f`, after B's #26 (floor strip) and #27 (1973 stage and 1998 book table) and A's #25 (journey tests). Every check is labelled by **how** it was done:
 
 - **Browser:** played or measured in the running game (`npm start`).
 - **Model:** driven through the real `Update` with real messages in a scratch elm-test, printing the text the player would read. Not a visual check.
@@ -13,8 +13,9 @@ Checked on 7 November against `main` at `634de04` (after #21 walking and #23 she
 | Intro → present-day shop → 1950 diary → salvage → planning board | Works (browser). |
 | 1950 success week → slides → shelving pause → shelf → Saturday → back to the shop | Works (browser, and model). |
 | 1950 two wrong weeks → feedback → retry → consequence slide → back to the shop | Works (browser, and model). |
-| 1973 room | Henry walks the 1973 room; the box, script and sketch clues open and read correctly for both script versions (browser). The stage itself is a placeholder. |
-| 1973 stage, 1998 and the endings | **Blocked:** placeholders ("isn't built yet"). The endings and rewind can't be reached in the browser. |
+| 1973 room and stage, both script versions | Works (browser): wrong first try, retry, performance with matching puppets and captions; the failure slide on the retelling. |
+| 1998 room and book table, both inscription sources | Works (browser): picture, text and dedication tabs; wrong book, then retry; the "Lucy's book" slide. |
+| Saved ending, closed endings, Reopen 1950/1973/1998, Start again | Works (browser). See "Whole game in the browser" below. |
 | 1973 and 1998 content | Checked against A's rules (model and render): solvable on every route, captions match, no answer hints in labels. |
 | Player sprites | Consistent (browser pixel scan). No regeneration needed. |
 
@@ -24,15 +25,56 @@ Ordered by priority. Owner: **A** logic, **B** presentation, **C** content and a
 
 | # | Priority | Screen | Steps | What happened | What should happen | Owner | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | Blocker | 1973 and 1998 | Finish 1950, open Henry's diary, press "Step into 1973" | A sheet says "1973 isn't built yet … Reload the page". 1998, the endings and "Reopen …" can't be reached. | The shadow stage and the book comparison panels | B | Open (B is building them) |
-| 2 | High | All rooms | Look at any 1950/1973/1998 room | None of C's 14 `room-*.svg` props are placed. 1950 shows B's own crates, rubble and planks. | Torch, story sheet and cut-out box in 1973; computer, book stacks and parcels in 1998; roof and window states in 1950 | B | Open: file list and placement notes below |
-| 3 | Medium | 1973 and 1998 panels | Open any panel except the 1950 ones | The Help button exists only on salvage, the board and the shelf | Help on the shadow stage and the book comparison | B | Open |
-| 4 | Medium | Walking room, feet | Stand still and look at the feet against the floor line | With the sprite's soles on y 650, the ink outline hangs 3 room px below the floor and the cream border 7 px. This is probably the "floor issue". | Team decision: keep the agreed anchor (the soles on the line, the border overlapping the floor like a card standing on it), or agree a new one (below) | B (decision with the team) | Finding sent, see "For B" |
-| 5 | Low | 1973 panels | Open the stage (once built) | If each panel shows `Content.Shadow.scene`'s `setting` ("The bridge", "The door", "Home"), the stage sketch clue becomes redundant: it gives the scene order away without reading the sketch | Label panels "Scene 1/2/3" and keep `setting` for the performance slide titles (where `Content.Slides` already uses it) | B | Note sent |
+| 1 | Blocker | 1973 and 1998 | Finish 1950, open Henry's diary, press "Step into 1973" | A sheet says "1973 isn't built yet … Reload the page". 1998, the endings and "Reopen …" can't be reached. | The shadow stage and the book comparison panels | B | **Fixed** by B in #27 (browser) |
+| 2 | High | All rooms | Look at any 1950/1973/1998 room | None of C's 14 `room-*.svg` props are placed. 1950 shows B's own crates, rubble and planks. | Torch, story sheet and cut-out box in 1973; computer, book stacks and parcels in 1998; roof and window states in 1950 | B | **Fixed** for 1973 and 1998 in #27: the sheet, torch, beam, cut-out box, puppets, computer, book stacks and parcels are all placed (browser). 1950 keeps B's own inline crates, rubble and planks, so C's 1950 roof, window, timber and bucket files stay spare. That's B's call; closed. |
+| 3 | Medium | 1973 and 1998 panels | Open any panel except the 1950 ones | The Help button exists only on salvage, the board and the shelf | Help on the shadow stage and the book comparison | B | **Fixed** in #27 (browser) |
+| 4 | Medium | Walking room, feet | Stand still and look at the feet against the floor line | With the sprite's soles on y 650, the ink outline hangs 3 room px below the floor and the cream border 7 px. This is probably the "floor issue". | Team decision: keep the agreed anchor (the soles on the line, the border overlapping the floor like a card standing on it), or agree a new one (below) | B (decision with the team) | **Fixed** by B in #26: the player now stands on a floor strip in front of the furniture, and the feet look grounded (browser, all four eras) |
+| 5 | Low | 1973 panels | Open the stage (once built) | If each panel shows `Content.Shadow.scene`'s `setting` ("The bridge", "The door", "Home"), the stage sketch clue becomes redundant: it gives the scene order away without reading the sketch | Label panels "Scene 1/2/3" and keep `setting` for the performance slide titles (where `Content.Slides` already uses it) | B | Open (low). B kept the setting labels on the panels. The puzzle is still solvable; the sketch is just optional. Team call. |
 | 6 | Low | 1998 covers | Compare the four `candidate-*.svg` covers | A has a gold-framed moon panel, slightly more decorative than B (library label), C (river) and D (plain) | Covers equally eye-catching | C | Left as is: judgement call, artwork reused as asked. Redraw only if playtesters fixate on A. |
 | 7 | Low | Docs | Read WALKTHROUGH or SUBMISSION, then reach an ending | The docs said "Reopen a diary"; the buttons say "Reopen 1950", "Reopen 1973", "Reopen 1998" and "Start again" | Docs match the buttons | C | **Fixed** in this PR |
-| 8 | Low | Docs | Read CONTRACT.md or the brief | They still describe three shelf orders and "live misplaced marks" on salvage | Four orders (tall to small added); salvage shows a live count | A (CONTRACT), team (brief) | Open |
+| 8 | Low | Docs | Read CONTRACT.md or the brief | They still describe three shelf orders and "live misplaced marks" on salvage | Four orders (tall to small added); salvage shows a live count | A (CONTRACT), team (brief) | Partly fixed: A's #25 added the fourth shelf order. CONTRACT.md still says "live misplaced marks" for salvage. |
 | 9 | Low | Styles | n/a | `.plaque__swatches` styles are unused since the plaque change; salvage captions may reserve two lines for one | Remove or tighten | B | Open |
+
+## Whole game in the browser (after #26 and #27)
+
+**Run A: all three succeed.**
+- **1950:** the correct week and the tall-to-small shelf.
+- **1973** (original script):
+  - The stage panels read "Scene 1 The bridge / Scene 2 The door / Scene 3 Home".
+  - A first try with the retelling's answer uses one attempt and shows "The story didn't hold together. Here's what went wrong:" with "Scene 1/2/3 doesn't match what the story says happens there.", then "You have one more try. Your cut-outs stay where they are."
+  - After "Try again", Fox + Lantern, Owl + Key, Child + Book performs three slides, each showing the matching puppet images (`shadow-fox` + `prop-lantern`, and so on) with matching captions, ending with Lucy and Henry's promise.
+- **Back in the shop:** the community wall shows decades of posters, and Edwin's journal says "Dad still puts on the shadow story every Christmas".
+- **1998:**
+  - Young Edwin appears, with the computer and book stacks in the room.
+  - Ruth's email mentions the 1973 shadow story, and the inscription comes "From the shop archive".
+  - The book table shows four equal cards. Picture tabs: A shows `illustration-fox-bridge`, D shows `illustration-fox-wood`. C's text is the river passage; B's dedication is "For Peter, love Dad".
+  - Sending B shows "That isn't Lucy's book. Here's what doesn't match:" with the inscription line. "Try again", then A, gives the "Lucy's book" slide.
+- **Saved ending:** "One more Christmas", with the clock at midnight, Ruth and family, and the buttons Reopen 1950, Reopen 1973, Reopen 1998 and Start again.
+
+**Rewind 1998 from the saved ending.**
+- Edwin's original 1998 journal opens, and the book table has 2 of 2 attempts.
+- The inscription still comes from the family archive, because 1973 is kept.
+- D (wrong picture), then C (wrong line): the "The wrong copy" slide, then the closed ending "The shop closes", explaining only 1998.
+
+**Start again → Run B: 1950 and 1973 fail, 1998 succeeds.**
+- **New game:** Start again goes back to the opening Christmas Eve scene.
+- **1950:** two wrong weeks.
+- **1973** (neighbours' retelling):
+  - The panels read "The gate / Inside / Home".
+  - The original's answer is wrong in all three scenes, twice.
+  - "The lights stay out" plays. In the shop, the community wall has one faded 1973 poster.
+- **1998** (follow-up email):
+  - The journal says "There has been no Christmas reading here since the lights went out in 1973".
+  - Ruth's email doesn't mention the shadow story, and the inscription comes from "Ruth's second email".
+  - A succeeds on the first try.
+- **Closed ending:** it explains the repair week (1950) and the shadow story (1973), each in its own words.
+
+**Rewind 1973 from the closed ending.**
+- Henry's diary still says the script was spoiled (1950 is kept).
+- The stage shows the retelling's settings with 2 of 2 attempts.
+- Help is on the stage.
+
+**Rooms:** in the 1973 room, Henry stands on B's floor strip, with the sheet across the window, the torch on the counter and the cut-out box by the door. The styles match.
 
 ## Browser playthrough of 1950 (both routes)
 
@@ -117,7 +159,8 @@ Scene panels: please label them "Scene 1", "Scene 2", "Scene 3" (issue 5). Perfo
 
 ## Still to do (C)
 
-- When B's 1973 and 1998 panels land, play the whole game in the browser on both 1950 routes:
-  - both endings (all three succeed / any fails)
-  - the three "Reopen" buttons and "Start again"
-- Then remove the "not yet" notes from WALKTHROUGH and SUBMISSION.
+- Nothing blocking. The whole game was played in the browser (above) and the docs describe what works.
+- Before submitting:
+  - take the screenshots listed in SUBMISSION.md
+  - make the repository public (or give the judges access)
+  - test the release build (`npm run build -- --optimize`, then open `build/index.html`) on a second machine and in the submission's browser frame
