@@ -20,6 +20,7 @@ import Rules.Room
 import Rules.Salvage
 import Rules.Shadow
 import Rules.Shelf
+import Rules.Travel
 import Timeline
 
 
@@ -68,6 +69,14 @@ goTo phase model =
     }
 
 
+{-| The end of the trip back, whether it finished or was skipped: the chapter
+starts fresh (startChapter) in a new room. This is the only way into a chapter.
+-}
+arrive : Era -> Model -> Model
+arrive era model =
+    enterRoom (goTo (startChapter era) model)
+
+
 {-| Entering a diary or coming back to the present: a new room, so the player
 starts again at the door end, facing right.
 -}
@@ -101,23 +110,20 @@ update msg model =
             approach hotspot model
 
         AnimationFrame delta ->
-            if Rules.Room.isMoving model then
-                let
-                    ( player, arrived ) =
-                        Rules.Room.step delta model.room.player
+            case model.phase of
+                Transition (TimeTravel era elapsed) ->
+                    let
+                        next =
+                            Rules.Travel.step delta elapsed
+                    in
+                    if Rules.Travel.isComplete next then
+                        arrive era model
 
-                    moved =
-                        withPlayer (\_ -> player) model
-                in
-                case arrived of
-                    Just hotspot ->
-                        useHotspot hotspot moved
+                    else
+                        { model | phase = Transition (TimeTravel era next) }
 
-                    Nothing ->
-                        moved
-
-            else
-                model
+                _ ->
+                    walk delta model
 
         ClosePanel ->
             if model.room.panelOpen && not (phaseIsReviewing model.phase) then
@@ -146,7 +152,12 @@ play : Msg -> Model -> Model
 play msg model =
     case msg of
         Inspect clue ->
-            { model | inspecting = Just clue, phase = noteInspected clue model.phase }
+            if Rules.Travel.isTravelling model.phase then
+                -- Nothing can be opened over the trip back.
+                model
+
+            else
+                { model | inspecting = Just clue, phase = noteInspected clue model.phase }
 
         CloseInspection ->
             { model | inspecting = Nothing }
@@ -247,6 +258,14 @@ play msg model =
                 _ ->
                     model
 
+        SkipTravel ->
+            case model.phase of
+                Transition (TimeTravel era _) ->
+                    arrive era model
+
+                _ ->
+                    model
+
         -- The room messages are handled in `update`.
         WalkKeyDown _ ->
             model
@@ -269,6 +288,28 @@ play msg model =
         PageVisibilityChanged _ ->
             model
 
+
+
+{-| One animation frame of walking (frames only arrive while moving). -}
+walk : Float -> Model -> Model
+walk delta model =
+    if Rules.Room.isMoving model then
+        let
+            ( player, arrived ) =
+                Rules.Room.step delta model.room.player
+
+            moved =
+                withPlayer (\_ -> player) model
+        in
+        case arrived of
+            Just hotspot ->
+                useHotspot hotspot moved
+
+            Nothing ->
+                moved
+
+    else
+        model
 
 
 -- ROOM
@@ -519,7 +560,8 @@ advance model =
             goTo PresentHub model
 
         Transition (OpeningDiary era) ->
-            enterRoom (goTo (startChapter era) model)
+            -- "Step into": the trip back starts; the chapter begins when it ends.
+            goTo (Transition (TimeTravel era 0)) model
 
         Salvage placement ->
             if Rules.Salvage.isSolved placement then

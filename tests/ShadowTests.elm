@@ -106,11 +106,11 @@ placementOf staging =
 
 
 {-| The 1973 puzzle after the given 1950 record, reached by playing on from
-the present: open the next diary, turn the page.
+the present: open the next diary, step in, skip the trip.
 -}
 shadowAfter : ChapterRecord -> Model
 shadowAfter record =
-    send [ OpenNextDiary, Advance ] { hub | history = [ record ] }
+    send [ OpenNextDiary, Advance, SkipTravel ] { hub | history = [ record ] }
 
 
 hub : Model

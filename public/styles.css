@@ -1837,3 +1837,251 @@ svg-art { display: contents; }
 @keyframes clock-second {
   to { transform: rotate(360deg); }
 }
+
+/* ---------- Time travel into a diary (Views.TimeTravel) ----------
+
+   Everything that moves is set inline by Elm from the trip's elapsed time, so
+   nothing here animates on its own. These rules give the shapes their look:
+   a darkened shop, a faint clock, warm light, and a paper diary whose cover
+   and pages turn with perspective. The overlay covers the whole stage and
+   takes every click, so nothing behind it can be used during the trip. */
+
+.travel {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+}
+
+.travel__dark {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, #2c1f15 0%, #110b07 78%);
+}
+
+/* The clock: a paper rim, twelve marks and two hands, faint behind the book. */
+.travel__clock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44rem;
+  height: 44rem;
+  margin: -22rem 0 0 -22rem;
+  border: 0.4rem solid var(--paper);
+  border-radius: 50%;
+}
+
+.travel__clock::before {
+  content: "";
+  position: absolute;
+  inset: 1rem;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -0.8deg, var(--paper) 0deg 1.6deg, transparent 1.6deg 30deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 84%, #000 85%);
+  mask: radial-gradient(circle, transparent 0 84%, #000 85%);
+}
+
+/* Long enough to reach past the open book, so the backwards spin shows. */
+.travel__clock-hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 0.9rem;
+  margin-left: -0.45rem;
+  border-radius: 0.35rem;
+  background: var(--paper);
+  transform-origin: 50% 100%;
+}
+
+.travel__clock-hand--hour { height: 15.5rem; }
+.travel__clock-hand--minute { height: 20.5rem; width: 0.55rem; margin-left: -0.275rem; }
+
+.travel__clock-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: -0.8rem 0 0 -0.8rem;
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+/* Warm light that grows out of the open book, behind it. At its brightest it
+   hides the room while the room changes to the destination era. */
+.travel__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60rem;
+  height: 60rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff0cc 0%, rgba(255, 214, 140, 0.95) 30%, rgba(236, 168, 88, 0.6) 50%, rgba(200, 128, 60, 0) 72%);
+  pointer-events: none;
+}
+
+/* The open diary: two pages of 16.25 x 26rem (the cover picture's 5:8 book),
+   on leather boards. Left, top and transform come from Elm. */
+.travel__book {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 32.5rem;
+  height: 26rem;
+}
+
+.travel__board {
+  position: absolute;
+  top: -0.6rem;
+  bottom: -0.6rem;
+  width: calc(50% + 0.6rem);
+  border: 0.14rem solid var(--ink);
+  background: #4a2c22;
+  box-shadow: 0.35rem 0.45rem 0 rgba(0, 0, 0, 0.35);
+}
+
+.travel__board--right { left: 50%; border-left: 0; border-radius: 0 0.45rem 0.45rem 0; }
+.travel__board--left { right: 50%; border-right: 0; border-radius: 0.45rem 0 0 0.45rem; opacity: 0; }
+
+.travel__page {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  border: 0.1rem solid var(--paper-edge);
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 1.55rem, rgba(92, 76, 61, 0.16) 1.55rem 1.62rem);
+}
+
+.travel__page--left {
+  left: 0;
+  opacity: 0;
+  border-radius: 0.25rem 0 0 0.25rem;
+  box-shadow: inset -2.5rem 0 2rem -2rem rgba(43, 33, 25, 0.35);
+}
+
+.travel__page--right {
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0.25rem 0.25rem 0;
+  box-shadow: inset 2.5rem 0 2rem -2rem rgba(43, 33, 25, 0.35);
+}
+
+.travel__board--left.is-shown,
+.travel__page--left.is-shown { opacity: 1; }
+
+/* The light between the pages: a beam along the spine, spilling past the book. */
+.travel__light {
+  position: absolute;
+  left: 50%;
+  top: -5rem;
+  bottom: -5rem;
+  width: 10rem;
+  margin-left: -5rem;
+  background: radial-gradient(ellipse 50% 50% at center, rgba(255, 228, 165, 0.95) 0%, rgba(255, 196, 110, 0.4) 45%, rgba(255, 180, 90, 0) 75%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* A page turning back, hinged on the spine. */
+.travel__leaf {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  border: 0.1rem solid var(--paper-edge);
+  border-radius: 0 0.25rem 0.25rem 0;
+  background: linear-gradient(to right, #e4d7bb, var(--paper) 22%, #f1e7d0);
+  box-shadow: 0 0.25rem 0.8rem rgba(0, 0, 0, 0.25);
+  transform-origin: left center;
+}
+
+/* The cover: the diary's own picture in front, its leather inside behind. */
+.travel__cover {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+}
+
+.travel__cover-front,
+.travel__cover-back {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* The picture's book (x 50-250, y 36-356 of 300 x 400) lies exactly on the page. */
+.travel__cover .diary__cover {
+  position: absolute;
+  left: -4.0625rem;
+  top: -2.925rem;
+  width: 24.375rem;
+  max-width: none;
+  margin: 0;
+}
+
+.travel__cover-back {
+  transform: rotateY(180deg);
+  border: 0.14rem solid var(--ink);
+  border-radius: 0.45rem 0 0 0.45rem;
+  background: #4a2c22;
+}
+
+/* The year on the right page. */
+.travel__years { text-align: center; }
+
+.travel__year {
+  display: block;
+  font-family: var(--font-book);
+  font-size: 4.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.travel__year.is-present {
+  font-size: 2.1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.travel__year.is-destination,
+.travel__year--destination {
+  font-size: 5.75rem;
+  color: #5a3428;
+}
+
+.travel__year--destination { display: none; }
+
+.travel__skip {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+}
+
+/* Reduced motion: no turning, spinning or growing. The shop darkens, the open
+   diary shows the destination year, and everything fades to the era's room. */
+@media (prefers-reduced-motion: reduce) {
+  .travel__clock,
+  .travel__cover,
+  .travel__leaf,
+  .travel__light,
+  .travel__year--moving { display: none; }
+
+  .travel__book,
+  .travel__glow { transform: translate(-50%, -50%) !important; }
+
+  .travel__board--left,
+  .travel__page--left { opacity: 1; }
+
+  .travel__year--destination { display: block; }
+}

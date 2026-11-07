@@ -1,4 +1,4 @@
-# Shared contract v1.4: Person A handoff
+# Shared contract v1.5: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -46,7 +46,8 @@ view : Model -> Html Msg          -- in src/View.elm
 |---|---|---|
 | `Introduction step` (`PackingUp`, `DiariesFound`, `ClockStopped`) | shop, notice, photo, box, diaries | `Inspect ClosureNotice`, `Inspect FamilyPhotograph`, `Advance`. After `ClockStopped`, `Advance` goes to `PresentHub`. |
 | `PresentHub` | the shop, built from `deriveWorld` (`premises`, `tradition`, `onlineService` are each `NotRevisited`, `Established` or `Missing`); the diary in `nextDiary` glows | `Inspect (HubProp p)`, `OpenNextDiary` |
-| `Transition (OpeningDiary era)` | page-turn into that diary | `Advance` |
+| `Transition (OpeningDiary era)` | the diary's passage, over the present-day shop | `Advance` ("Step into …") starts the trip back (v1.5) |
+| `Transition (TimeTravel era elapsed)` | the trip back into that era (`Views.TimeTravel`, v1.5) | `SkipTravel`; everything else is ignored |
 | `Salvage placement` | 9 books, 3 crates of 3 spaces, a live count of misplaced books (not which ones, since #19) | `SalvageMove …`, then `Advance` to continue (stays put with `NotSolvedYet` until solved) |
 | `RepairBoard puzzle` | tray, Mon–Fri, two "Not this week" spaces, spent/remaining | `BoardMove …`, `Inspect` the four clues, `Submit` ("Finish week"), `Retry` |
 | `Transition (Slideshow era i)` | slide `i` of `Timeline.slides era model.history` | `Advance` |
@@ -184,7 +185,7 @@ The whole 1950 chapter now runs through `Update`, from a new game to the present
 ### Flow
 
 ```
-Introduction ×3 --Advance--> PresentHub --OpenNextDiary--> OpeningDiary Repairs1950 --Advance-->
+Introduction ×3 --Advance--> PresentHub --OpenNextDiary--> OpeningDiary Repairs1950 --Advance--> TimeTravel (2.5 s, or SkipTravel) -->
 Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUsed) --Submit-->
   success: Slideshow 0..  shelving-day slide --Advance--> ReopeningShelf --Advance (when ordered)-->
            Slideshow (day after shelving) .. ReopeningSaturday --Advance--> ReturningToPresent --Advance--> PresentHub
@@ -398,6 +399,45 @@ Both main puzzles are now playable through `Update`, with the same two-attempt f
 
 - Every 1973 and 1998 violation can now reach `Content.Feedback.violation` and `Content.Slides.slide` (`ConsequenceSlide Shadows1973 (SceneConflictsWithScript scene)` for any scene, and `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)` for any detail).
 - `docs/test-examples-for-A.md` says there are 216 complete stagings. Please change it to 36: the scenes are fixed slots, so only the characters' order (3!) and the props' order (3!) vary. All the other examples matched the implementation exactly and are now tests.
+
+## Time travel into a diary (added in v1.5)
+
+"Step into [year]" on a diary's passage now plays a 2.5-second trip back in time before the chapter starts. The passage itself still waits for the player.
+
+### State and messages
+
+```elm
+type Transition = OpeningDiary Era | TimeTravel Era Float | Slideshow Era Int | ReturningToPresent   -- TimeTravel is new
+type Msg = ... | SkipTravel                                                                          -- new
+```
+
+- `TimeTravel era elapsed` is the trip into `era`, `elapsed` milliseconds in. It lives in the phase like every other screen, so it can't outlive the trip, and every trip starts at 0, including reopening the same era again.
+- `Advance` on `OpeningDiary era` starts `TimeTravel era 0`. Nothing else starts a trip.
+- `AnimationFrame dt` moves it on by `dt` clamped to 0–50 ms (a hidden tab coming back can't jump ahead). At 2500 ms the chapter starts by itself.
+- `SkipTravel` starts the chapter at once. Skipping and finishing both go through `Update.arrive`, which is the old chapter entry (`startChapter era` in a fresh room), so they give exactly the same state.
+- During the trip everything else is ignored: `Advance` (so a double click on "Step into" can't skip), walking, `E`, hotspots, `Inspect`, puzzle moves, `Submit`, `Retry`, diary actions. A second `SkipTravel`, and frames after arrival, do nothing to the chapter that started. History is never touched; reopening keeps the usual rewind (`ReopenDiary` rewinds, then the same passage and trip).
+- `Main` asks for animation frames while walking or travelling (`Rules.Travel.wantsFrames`). It also ignores the browser's key auto-repeat now, so a key held through the trip (or a panel) doesn't start walking in the new room until it is pressed again.
+
+### `Rules.Travel`
+
+| Helper | Meaning |
+|---|---|
+| `duration`, `bookOpen`, `arrival` | 2500, 500 and 1800 ms: the book opens by 500, the destination is reached at 1800, the chapter starts at 2500. |
+| `yearAt era elapsed` | The year on the open book: `Nothing` (the present) until the pages turn, then each year back in turn, then `Just era` from arrival. To 1950: Present, 1998, 1973, 1950. To 1973: Present, 1998, 1973. To 1998: Present, 1998. |
+| `yearsBack era` | That whole list. |
+| `hasArrived elapsed` | From 1800 ms: the room behind the book is the destination's starting room. |
+| `isTravelling phase`, `wantsFrames model` | For views and `Main`. |
+
+### The view (`Views.TimeTravel`, `public/styles.css`)
+
+Made by A for this feature, in B's files, at the team's request; B is free to restyle it.
+
+- One component for all three eras, drawn entirely from `elapsed`: no timers, CSS animations or view state. The shop darkens, and the diary (its existing cover picture) grows in the centre and opens. Paper pages (layered HTML shapes with perspective) turn back while a large faint clock spins backwards behind the book and warm light grows. The year counts back on the right-hand page, then stays while the book and light fade to reveal the room.
+- **Rooms:** the passage is read in the present-day shop, and the trip shows it until 1800 ms. Then, under the brightest light, `View` swaps in exactly the room the chapter starts in (`startChapter era` with a fresh room), so the end of the trip runs straight into the chapter.
+- A **Skip** button is visible the whole time. The overlay covers the stage and takes every click.
+- **Reduced motion** (`prefers-reduced-motion: reduce`): no turning, spinning or growing. The shop darkens, the open diary shows the destination year, and it fades to the room.
+
+`tests/TravelTests.elm` covers the timing, the clamp, Skip matching finishing, repeated clicks, ignored input, held keys, reopening and the year order.
 
 ## Release build
 

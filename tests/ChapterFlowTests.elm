@@ -31,8 +31,8 @@ send msgs model =
 
 toSalvage : List Msg
 toSalvage =
-    -- Three intro screens, open the glowing 1950 diary, page turn.
-    [ Advance, Advance, Advance, OpenNextDiary, Advance ]
+    -- Three intro screens, open the glowing 1950 diary, step into it, skip the trip.
+    [ Advance, Advance, Advance, OpenNextDiary, Advance, SkipTravel ]
 
 
 briefCrates : List ( BookId, Condition )
@@ -173,6 +173,7 @@ reachingTheBoard =
                         , Introduction ClockStopped
                         , PresentHub
                         , Transition (OpeningDiary Repairs1950)
+                        , Transition (TimeTravel Repairs1950 0)
                         , Salvage Placement.empty
                         ]
         , test "sorting the books and continuing reaches a fresh repair board" <|
