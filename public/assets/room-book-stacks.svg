@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 48" width="80" height="48">
+  <!-- room-book-stacks (1998): four plain second-hand books set out to compare. Rests on y = 44, centred on x = 40. Layout from Gemini's design, redrawn so each book reads at game size. No titles: none of the four stands out. -->
+  <!-- Cut-out border -->
+  <g fill="#f2e4c9" stroke="#f2e4c9" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="9" y="34.5" width="28" height="8" rx="1.5" />
+    <rect x="11" y="26.5" width="25" height="8" rx="1.5" />
+    <rect x="50" y="34.5" width="26" height="8" rx="1.5" />
+    <path d="M 37.5,42.5 L 45.5,42.5 L 40.5,19 L 32.5,19 Z" />
+  </g>
+  <g stroke="#291e1a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Bottom of the stack: pages facing out -->
+    <rect x="9" y="34.5" width="28" height="8" rx="1.5" fill="#31542f" />
+    <rect x="11.5" y="36.7" width="24" height="3.6" fill="#f2e4c9" stroke="none" />
+    <!-- Top of the stack -->
+    <rect x="11" y="26.5" width="25" height="8" rx="1.5" fill="#7687ab" />
+    <rect x="13.5" y="28.7" width="21" height="3.6" fill="#f2e4c9" stroke="none" />
+    <!-- On its own, to the right -->
+    <rect x="50" y="34.5" width="26" height="8" rx="1.5" fill="#893f43" />
+    <rect x="52.5" y="36.7" width="22" height="3.6" fill="#f2e4c9" stroke="none" />
+    <!-- Leaning against the stack, spine facing out -->
+    <path d="M 37.5,42.5 L 45.5,42.5 L 40.5,19 L 32.5,19 Z" fill="#496669" />
+    <path d="M 36.5,37.8 L 44.5,37.8 M 33.5,23.7 L 41.5,23.7" fill="none" stroke="#f2e4c9" stroke-width="1.4" />
+  </g>
+</svg>
