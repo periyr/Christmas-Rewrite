@@ -78,7 +78,7 @@ trail msgs model =
 
 salvageRoom : Model
 salvageRoom =
-    send [ Advance ] { initModel | phase = Transition (OpeningDiary Repairs1950) }
+    send [ Advance, SkipTravel ] { initModel | phase = Transition (OpeningDiary Repairs1950) }
 
 
 initModel : Model
@@ -508,7 +508,7 @@ clearing =
                     |> Expect.equal ( ( False, 400 ), True )
         , test "entering a diary puts the player back at the start, facing right" <|
             \_ ->
-                send [ OpenNextDiary, Advance ] ({ initModel | phase = PresentHub } |> standingAt 900)
+                send [ OpenNextDiary, Advance, SkipTravel ] ({ initModel | phase = PresentHub } |> standingAt 900)
                     |> playerOf
                     |> Expect.equal Room.initialPlayer
         , test "returning to the present puts the player back at the start" <|
@@ -670,8 +670,9 @@ walkableChapter : Test
 walkableChapter =
     let
         toSalvage =
-            -- Walk to the box, two narration screens, then the diary on the counter.
-            walkTo BoxSpot ++ [ Advance, Advance ] ++ walkTo DiarySpot ++ [ Advance ]
+            -- Walk to the box, two narration screens, the diary on the counter, then
+            -- step in and let the trip back play out on its own frames.
+            walkTo BoxSpot ++ [ Advance, Advance ] ++ walkTo DiarySpot ++ [ Advance ] ++ frames 200 16
 
         toBoard =
             toSalvage ++ walkTo CratesSpot ++ sortBooks ++ [ Advance ]

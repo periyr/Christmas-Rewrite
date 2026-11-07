@@ -44,11 +44,11 @@ record era outcome =
 
 
 {-| The 1998 puzzle after 1950 and 1973, reached by playing on from the
-present: open the next diary, turn the page.
+present: open the next diary, step in, skip the trip.
 -}
 mysteryAfter : Outcome -> Outcome -> Model
 mysteryAfter outcome1950 outcome1973 =
-    send [ OpenNextDiary, Advance ]
+    send [ OpenNextDiary, Advance, SkipTravel ]
         { history = [ record Repairs1950 outcome1950, record Shadows1973 outcome1973 ]
         , phase = PresentHub
         , inspecting = Nothing

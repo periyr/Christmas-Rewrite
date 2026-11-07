@@ -124,6 +124,7 @@ suite =
                         endingAfterAll
                             |> Update.update (ReopenDiary Shadows1973)
                             |> Update.update Advance
+                            |> Update.update SkipTravel
                 in
                 Expect.all
                     [ \m -> m.history |> Expect.equal [ Fixtures.repairsSucceeded ]
@@ -132,7 +133,7 @@ suite =
                     reopened
         , test "replaying 1950 starts at salvage, not the introduction" <|
             \_ ->
-                (endingAfterAll |> Update.update (ReopenDiary Repairs1950) |> Update.update Advance)
+                (endingAfterAll |> Update.update (ReopenDiary Repairs1950) |> Update.update Advance |> Update.update SkipTravel)
                     |> Expect.equal { endingAfterAll | history = [], phase = Update.startChapter Repairs1950 }
         , test "reopening a diary is only possible from the ending" <|
             \_ ->

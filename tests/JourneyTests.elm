@@ -36,7 +36,7 @@ newGame =
     send [ Advance, Advance, Advance ] Update.init
 
 
-{-| From the present: open the glowing diary, resolve it with the given
+{-| From the present: open the glowing diary, step in (skipping the trip), resolve it with the given
 outcome (a wrong answer twice for a failure), then play the slides through
 to the present or the ending.
 -}
@@ -44,7 +44,7 @@ playChapter : Outcome -> Model -> Model
 playChapter outcome model =
     let
         opened =
-            send [ OpenNextDiary, Advance ] model
+            send [ OpenNextDiary, Advance, SkipTravel ] model
 
         world =
             Timeline.deriveWorld opened.history
@@ -242,7 +242,7 @@ suite =
                             playGame ( Succeeded, Failed, Succeeded )
 
                         reopened =
-                            send [ ReopenDiary Shadows1973, Advance ] closed
+                            send [ ReopenDiary Shadows1973, Advance, SkipTravel ] closed
 
                         -- One wrong performance, then the right one: only possible with two attempts.
                         replayed =
@@ -264,7 +264,7 @@ suite =
                 \_ ->
                     let
                         reopened =
-                            send [ ReopenDiary Repairs1950, Advance ] (playGame ( Succeeded, Succeeded, Succeeded ))
+                            send [ ReopenDiary Repairs1950, Advance, SkipTravel ] (playGame ( Succeeded, Succeeded, Succeeded ))
 
                         afterFailing =
                             replay1950 Failed reopened
@@ -282,7 +282,7 @@ suite =
                         ended =
                             playGame ( Failed, Succeeded, Failed )
                     in
-                    send [ ReopenDiary Search1998, Advance ] ended
+                    send [ ReopenDiary Search1998, Advance, SkipTravel ] ended
                         |> (\m -> ( m.history, m.phase ))
                         |> Expect.equal ( List.take 2 ended.history, Update.startChapter Search1998 )
             , test "Start again from an ending is a brand-new game" <|

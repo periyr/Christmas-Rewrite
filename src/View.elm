@@ -10,7 +10,10 @@ import Content.Clues
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (attribute, class)
+import Rules.Room
+import Rules.Travel
 import Timeline
+import Update
 import Views.Common as Common
 import Views.BookTable
 import Views.Labels exposing (eraYear)
@@ -21,6 +24,7 @@ import Views.ShadowStage
 import Views.Shelf
 import Views.Shop
 import Views.Slideshow
+import Views.TimeTravel
 
 
 view : Model -> Html Msg
@@ -31,7 +35,7 @@ view model =
     in
     div [ class "app" ]
         [ div (class "stage" :: stageAttributes world model)
-            (wallClock model.phase :: screen world model ++ inspection world model)
+            (wallClock (shownPhase model.phase) :: screen world model ++ inspection world model)
         ]
 
 
@@ -59,9 +63,6 @@ in1973 : Phase -> Bool
 in1973 phase =
     case phase of
         ShadowPuzzle _ ->
-            True
-
-        Transition (OpeningDiary Shadows1973) ->
             True
 
         Transition (Slideshow Shadows1973 _) ->
@@ -108,6 +109,17 @@ screen world model =
         Transition (OpeningDiary era) ->
             Views.Shop.openingDiary world era
 
+        Transition (TimeTravel era elapsed) ->
+            -- The darkened shop until the destination is reached, then the
+            -- chapter's own starting room, revealed as the book fades.
+            (if Rules.Travel.hasArrived elapsed then
+                screen world (arriving era model)
+
+             else
+                [ Art.room ]
+            )
+                ++ Views.TimeTravel.view era elapsed
+
         Transition (Slideshow era index) ->
             Views.Slideshow.view world model.history era index
 
@@ -116,6 +128,31 @@ screen world model =
 
         Ending ->
             Views.Shop.ending world
+
+
+{-| What the destination looks like when the trip ends: exactly the state
+Update.arrive starts the chapter in. Only drawn, never stored.
+-}
+arriving : Era -> Model -> Model
+arriving era model =
+    { model | phase = Update.startChapter era, room = Rules.Room.initialRoom, inspecting = Nothing, notice = Nothing }
+
+
+{-| The phase the room and wall clock show. A trip shows the present until it
+arrives, then the chapter it arrives in.
+-}
+shownPhase : Phase -> Phase
+shownPhase phase =
+    case phase of
+        Transition (TimeTravel era elapsed) ->
+            if Rules.Travel.hasArrived elapsed then
+                Update.startChapter era
+
+            else
+                PresentHub
+
+        _ ->
+            phase
 
 
 stageAttributes : World -> Model -> List (Attribute msg)
@@ -142,8 +179,12 @@ stageAttributes world model =
         BookMystery _ ->
             [ eraAttribute "1998" ]
 
-        Transition (OpeningDiary era) ->
-            [ eraAttribute (eraYear era) ]
+        Transition (OpeningDiary _) ->
+            -- The passage is read in the present: the past only appears after the trip.
+            eraAttribute "present" :: premisesAttribute world
+
+        Transition (TimeTravel era elapsed) ->
+            attribute "data-travel" (eraYear era) :: stageAttributes world { model | phase = shownPhase (Transition (TimeTravel era elapsed)) }
 
         Transition (Slideshow era index) ->
             eraAttribute (eraYear era) :: Views.Slideshow.stageAttributes model.history era index ++ Views.Slideshow.lights model.history era index
