@@ -53,9 +53,9 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 
 | Role | Name |
 |---|---|
-| Core logic, rules and integration (Person A) | [name] |
-| Presentation and interaction (Person B) | [name] |
-| Content, assets and player clarity (Person C) | Peri Yarci [confirm] |
+| Core logic, rules and integration (Person A) | Avissa Rasoulinia |
+| Presentation and interaction (Person B) | Defne Göçken |
+| Content, assets and player clarity (Person C) | Peri Yarci |
 
 - **Writing:** the team. Text drafted with help from Claude (Anthropic), then edited by the team.
 - **Art:** all made for this project and free to use in this game. See `public/assets/ASSETS.md` for the full list.
@@ -66,7 +66,7 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 - **Sound:** none.
 - **Software:** Elm 0.19.1 and the packages elm/core, elm/browser, elm/html (BSD-3-Clause); elm-test for testing; Node.js for the build scripts.
 
-**Source:** [repository link, if required]
+**Source:** https://github.com/periyr/Christmas-Rewrite [This repository is private. Make it public, or give the judges access, before linking it in the submission.]
 
 ## What is verified so far (update before submitting)
 
