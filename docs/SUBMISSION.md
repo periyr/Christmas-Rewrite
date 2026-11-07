@@ -32,7 +32,7 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10�
 - **To move something:** click to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click the same object again to put it down.
 - **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses one of two attempts.
 - **Help:** the Help button explains the controls. [Check that every puzzle screen has one before submitting.]
-- **Replaying:** after an ending, **Reopen a diary** to replay a chapter, or **Start again**.
+- **Replaying:** after an ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** to replay from that chapter, or **Start again**.
 
 ## How it's built
 
@@ -48,6 +48,7 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 
   So the same history always produces the same world.
 - **Rewinding clears later chapters.** Reopening a diary removes that chapter and every later one from the history. The world is then rebuilt from what remains. Earlier results stay, and the replayed chapter gets two fresh attempts.
+- **Browser events stay at the boundary.** The browser only supplies inputs: key presses, clicks, animation frames and the page being hidden. `Main` turns each one into an ordinary message for the pure update. Walking position, the walking target and every rule live in the model, so the game has no JavaScript rules, timers or second copy of the state.
 
 ## Credits
 
@@ -72,13 +73,13 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 
 Remove this section from the public copy. It keeps the claims above honest.
 
-| Feature | Status (7 November, `main` at contract v1.3) |
+| Feature | Status (7 November, `main` at `634de04`; details in `docs/PLAYTEST.md`) |
 |---|---|
-| Rules for all three chapters (repair board, salvage, shelf, shadow story, forgotten book) | Built and tested: `npm test` passes 270 tests, including all 2,520 repair weeks and all 36 shadow stagings. The release build (`npm run build -- --optimize`) works. |
-| 1950 screens (salvage, repair board, shelf, slideshow) | Playable in the browser |
+| Rules for all three chapters (repair board, salvage, shelf, shadow story, forgotten book) | Built and tested: `npm test` passes 271 tests, including all 2,520 repair weeks, all 36 shadow stagings and the four accepted shelf orders out of 720. The release build (`npm run build -- --optimize`) works. |
+| 1950 screens (salvage, repair board, shelf, slideshow) | Played through in the browser on both routes: a correct week (slides, shelf, Saturday, back to the shop) and two wrong weeks (feedback, retry, consequence slide). |
 | 1973 and 1998 puzzle screens | **Not built yet:** the game shows a placeholder for both chapters, though the rules behind them are done |
 | Walking (keys, click to walk, hotspots, room labels) | Built and playable. Checked in the browser on 7 November: walking both ways, stopping at the wall, the E prompts and the click-to-walk labels. |
-| Walking characters (4 people × 3 poses) | Wired in. Checked in the browser: present-day Edwin in the intro and hub, Walter in 1950. Each is 192 × 320 room px with the feet on the floor line (y 650), flips when walking left, and cycles walk-1 and walk-2. Henry (1973) and young Edwin (1998) are mapped in the code but can't be seen until those screens exist. |
+| Walking characters (4 people × 3 poses) | Wired in. Checked in the browser: present-day Edwin in the intro and hub, Walter in 1950, Henry in the 1973 room. Each is 192 × 320 room px with the feet on the floor line (y 650), flips when walking left, and cycles walk-1 and walk-2. Young Edwin (1998) is mapped in the code but can't be seen until the 1973 stage lets the story continue. |
 | Room props (14 files) | Drawn; **not placed in the rooms yet** (B's own inline crates, rubble and planks are shown) |
 | All game text (`src/Content`) | Built; compiles; word counts checked; covers every 1973 and 1998 result |
 | Help button on every screen | Only the 1950 screens so far |
