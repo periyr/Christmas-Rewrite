@@ -95,6 +95,22 @@
     <g class="r-bucket" stroke="#291e1a" stroke-width="2" stroke-linejoin="round">
       <path fill="#7c8486" d="M618 608h44l-6 38h-32Z"/><path fill="none" d="M620 610c2-16 38-16 40 0"/>
     </g>
+    <!-- The walking strip. The painted floor has the armchair, side table, door and
+         boxes standing nearer than the player's feet (y 650), so a strip of boards
+         runs along the front of the room from y 640 and the player walks on it, in
+         front of all the furniture. Colour per era in styles.css (--apron). -->
+    <g class="r-apron">
+      <defs>
+        <linearGradient id="r-apron-shade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1b130f" stop-opacity="0"/><stop offset="1" stop-color="#1b130f" stop-opacity="0.35"/></linearGradient>
+        <linearGradient id="r-apron-cast" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1b130f" stop-opacity="0"/><stop offset="1" stop-color="#1b130f" stop-opacity="0.3"/></linearGradient>
+      </defs>
+      <rect y="628" width="1280" height="12" fill="url(#r-apron-cast)"/>
+      <rect class="r-apron-board" y="640" width="1280" height="80"/>
+      <rect y="640" width="1280" height="80" fill="url(#r-apron-shade)"/>
+      <path fill="none" stroke="#291e1a" stroke-opacity="0.55" stroke-width="1.5" d="M0 667H1280M0 694H1280M152 641V667M468 641V667M818 641V667M1126 641V667M306 667V694M640 667V694M984 667V694M88 694V720M418 694V720M760 694V720M1092 694V720"/>
+      <path class="r-apron-lip" fill="none" stroke-width="2" d="M0 643.5H1280"/>
+      <path fill="none" stroke="#291e1a" stroke-width="3" d="M0 640H1280"/>
+    </g>
     <g class="r-hands" fill="none" stroke="#291e1a" stroke-linecap="round">
       <path class="r-hand-hour" stroke-width="5" d="M1145 140V108"/>
       <path class="r-hand-minute" stroke-width="3.5" d="M1145 140V94"/>

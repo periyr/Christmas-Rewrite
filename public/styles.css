@@ -1134,6 +1134,14 @@ button:disabled { cursor: not-allowed; }
 .r-timber { opacity: var(--show-timber, 0); }
 .r-bucket { opacity: var(--show-bucket, 0); }
 
+/* The walking strip's boards, sampled from each room picture's floor. */
+.r-apron-board { fill: var(--apron, #45372d); }
+.r-apron-lip { stroke: var(--apron-lip, #6b5544); }
+.stage[data-era="1950"],
+.stage[data-era="1998"] { --apron: #4b3a2f; --apron-lip: #705847; }
+.stage[data-era="1973"] { --apron: #443326; --apron-lip: #6c5039; }
+.stage[data-era="saved"] { --apron: #3a2518; --apron-lip: #5e3f2b; }
+
 .stage[data-era="1950"] {
   --show-bare: 1;
   --show-broken: 1;
@@ -1254,14 +1262,16 @@ svg-art { display: contents; }
 
 .actor__frame.is-current { visibility: visible; }
 
+/* Contact shadow: centred 2 px under the soles (y 304 of 320 in the image) and
+   wider than the widest stride, so it shows on both sides of the shoes. */
 .actor__shadow {
   position: absolute;
-  left: 2.75rem;
-  right: 2.75rem;
-  bottom: 0.75rem;
-  height: 0.7rem;
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 0.3125rem;
+  height: 1.125rem;
   border-radius: 50%;
-  background: rgba(41, 30, 26, 0.28);
+  background: radial-gradient(closest-side, rgba(27, 19, 15, 0.55), rgba(27, 19, 15, 0.35) 60%, rgba(27, 19, 15, 0));
 }
 
 /* ---------- Walking room ---------- */
