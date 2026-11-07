@@ -1088,26 +1088,50 @@ button:disabled { cursor: not-allowed; }
 .stage[data-era="1998"] { --hour: 70deg; --minute: 120deg; }
 
 /* The saved room's clock is slightly up and to the right of the others. */
-.stage[data-era="saved"] { --hour: 0deg; --minute: 0deg; --clock-x: 22px; --clock-y: -25px; }
+.stage[data-era="saved"] { --hour: 0deg; --minute: 0deg; --clock-x: 18px; --clock-y: -29px; }
 
 .r-hands { transform: translate(var(--clock-x, 0px), var(--clock-y, 0px)); }
-.r-hand-hour { transform-origin: 1141px 136px; transform: rotate(var(--hour)); }
-.r-hand-minute { transform-origin: 1141px 136px; transform: rotate(var(--minute)); }
+.r-hand-hour { transform-origin: 1145px 140px; transform: rotate(var(--hour)); }
+.r-hand-minute { transform-origin: 1145px 140px; transform: rotate(var(--minute)); }
 
 /* ---------- Shop scenes ---------- */
 
-.stage[data-premises="missing"] { --show-stain: 1; }
-.stage[data-roof="patched"] { --show-stain: 0; }
-.stage[data-rubble="cleared"] { --show-rubble: 0; }
+/* What the room shows comes from the model through data attributes on the stage.
+   Each repair appears only once its slide has been reached. */
+.r-bare { opacity: var(--show-bare, 0); }
+.r-empty { opacity: var(--show-empty, 0); }
+.r-fill { opacity: var(--show-fill, 0); }
+.r-fill-1950 { opacity: var(--show-fill-1950, 0); }
+.r-broken { opacity: var(--show-broken, 0); }
+.r-rain { opacity: var(--show-rain, 0); }
+.r-hole { opacity: var(--show-hole, 0); }
+.r-patch { opacity: var(--show-patch, 0); }
+.r-board { opacity: var(--show-board, 0); }
+.r-crates { opacity: var(--show-crates, 0); }
+.r-timber { opacity: var(--show-timber, 0); }
+.r-bucket { opacity: var(--show-bucket, 0); }
 
-/* Wednesday's rain over the room. */
-.stage[data-weather="rain"]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(105deg, transparent 0 0.9rem, rgba(190, 210, 225, 0.4) 0.9rem 1rem);
-  pointer-events: none;
+.stage[data-era="1950"] {
+  --show-bare: 1;
+  --show-broken: 1;
+  --show-hole: 1;
+  --show-board: 1;
+  --show-crates: 1;
+  --show-timber: 1;
 }
+
+.stage[data-roof="patched"] { --show-stain: 0; --show-hole: 0; --show-patch: 1; }
+.stage[data-rubble="cleared"] { --show-rubble: 0; }
+.stage[data-shelves="built"] { --show-bare: 0; --show-empty: 1; }
+.stage[data-roof="patched"][data-shelves="built"] { --show-timber: 0; }
+.stage[data-window="glazed"] { --show-broken: 0; }
+.stage[data-books="shelved"] { --show-empty: 0; --show-crates: 0; --show-fill: 1; --show-fill-1950: 1; }
+.stage[data-weather="rain"] { --show-rain: 1; }
+
+/* The present follows the recorded 1950 outcome. */
+.stage[data-premises="original"] { --show-stain: 1; }
+.stage[data-premises="missing"] { --show-stain: 1; --show-bucket: 1; }
+.stage[data-premises="established"] { --show-patch: 1; --show-fill: 1; }
 
 svg-art { display: contents; }
 
@@ -1182,6 +1206,56 @@ svg-art { display: contents; }
     drop-shadow(0 0 1rem #ffdf8c)
     drop-shadow(0 0 2.2rem #ffdf8c);
 }
+
+/* ---------- Human figure ---------- */
+
+/* Logical room units are 1/16 rem, so the figure scales with the stage. Its feet
+   sit on the walking line at y 650. Position and facing come from the caller. */
+.actor {
+  position: absolute;
+  top: 18.35rem;
+  width: 11.25rem;
+  height: 22.5rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+  --actor-coat: #55604a;
+  --actor-coat-back: #434c3b;
+  --actor-legs: #4b3a2d;
+  --actor-legs-back: #3a2d23;
+  --actor-scarf: #893f43;
+  --actor-hair: #4a3120;
+  --actor-cap: 0;
+}
+
+[data-era="1950"] .actor {
+  --actor-coat: #6b5236;
+  --actor-coat-back: #54402a;
+  --actor-legs: #3f3a33;
+  --actor-legs-back: #302c27;
+  --actor-scarf: #4a5f55;
+  --actor-cap: 1;
+}
+
+.actor__art { display: block; width: 100%; height: 100%; }
+.actor.is-facing-left .actor__art { transform: scaleX(-1); }
+
+.a-ink { fill: none; stroke: #291e1a; stroke-linecap: round; }
+.a-coat { fill: none; stroke: var(--actor-coat); stroke-linecap: round; }
+.a-coat-back { fill: none; stroke: var(--actor-coat-back); stroke-linecap: round; }
+.a-legs { fill: none; stroke: var(--actor-legs); stroke-linecap: round; }
+.a-legs-back { fill: none; stroke: var(--actor-legs-back); stroke-linecap: round; }
+.a-solid { stroke: #291e1a; stroke-width: 3.5; stroke-linejoin: round; }
+.a-coat.a-solid { fill: var(--actor-coat); }
+.a-skin { fill: #e3b58f; }
+.a-hair { fill: var(--actor-hair); }
+.a-cap { fill: #5a4a3a; }
+.a-scarf { fill: var(--actor-scarf); }
+.a-shoe { fill: #291e1a; }
+.a-eye { fill: #291e1a; }
+.a-line { fill: none; stroke: #291e1a; stroke-width: 2.5; stroke-linecap: round; }
+.a-trim { fill: none; stroke: #291e1a; stroke-width: 2.5; }
+.a-button { fill: #291e1a; }
+.r-cap { opacity: var(--actor-cap, 0); }
 
 /* ---------- Book art (Person C's covers) ---------- */
 

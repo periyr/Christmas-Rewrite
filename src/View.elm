@@ -71,7 +71,7 @@ stageAttributes : World -> Model -> List (Attribute msg)
 stageAttributes world model =
     case model.phase of
         Introduction _ ->
-            [ eraAttribute "present" ]
+            eraAttribute "present" :: premisesAttribute world
 
         PresentHub ->
             eraAttribute "present" :: premisesAttribute world
@@ -130,7 +130,7 @@ premisesAttribute world =
             [ attribute "data-premises" "established" ]
 
         NotRevisited ->
-            []
+            [ attribute "data-premises" "original" ]
 
 
 inspection : World -> Model -> List (Html Msg)

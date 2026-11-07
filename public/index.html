@@ -14,21 +14,148 @@
      CSS tokens under [data-era]. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="room-overlays" viewBox="0 0 1280 720">
+    <!-- Before the shelves are built: bare wall where the right-hand bookcase will stand. Cut round the clock and chair. -->
+    <g class="r-bare">
+      <defs><linearGradient id="r-wall-shade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#d0c1a6"/><stop offset="1" stop-color="#c3b499"/></linearGradient></defs>
+      <path fill="#b7a88d" d="M748 36H1156V52H748Z"/>
+      <path fill="url(#r-wall-shade)" d="M748 50H1156V72H1148C1118 74 1090 96 1082 126 1076 156 1092 192 1122 202 1132 206 1142 206 1152 206V432L1125 428C1090 428 1045 430 1024 436 1018 440 1016 444 1016 446H748Z"/>
+      <path fill="#9d8d72" d="M748 444H1016V459H748Z"/>
+      <path fill="#736048" d="M748 459H1015C1014 490 1016 520 1020 538L945 545 932 556 930 604 748 604Z"/>
+      <path fill="#493b2b" d="M748 604H930V618H748Z"/>
+      <path fill="none" stroke="#291e1a" stroke-width="2" d="M748 51H1156M748 444H1016M748 459H1015M748 604H930"/>
+    </g>
+    <!-- Shelves built but still empty: only the spaces between the shelves are painted over. -->
+    <g class="r-empty" fill="#2e231d">
+      <rect x="777" y="104" width="205" height="69"/><rect x="777" y="184" width="205" height="75"/><rect x="777" y="271" width="205" height="76"/><rect x="777" y="359" width="205" height="74"/><rect x="777" y="446" width="205" height="73"/>
+      <path d="M777 532H982V538L945 545 932 556 930 603H777Z"/>
+      <path d="M1000 104H1090L1080 140 1088 173H1000Z"/>
+      <path d="M1000 184H1096L1115 198 1131 204V259H1000Z"/>
+      <rect x="1000" y="271" width="131" height="76"/>
+      <path d="M1000 359H1131V429L1060 432 1025 436 1000 436Z"/>
+      <rect x="1000" y="446" width="15" height="73"/>
+    </g>
+    <!-- Recovered stock on the shelves. -->
+    <g class="r-fill"><rect class="r-book-a" x="832" y="114" width="15" height="58"/><rect class="r-book-b" x="848" y="106" width="11" height="66"/><rect class="r-book-c" x="860" y="120" width="18" height="52"/><rect class="r-book-a" x="879" y="110" width="13" height="62"/><rect class="r-book-c" x="893" y="104" width="20" height="68"/><rect class="r-book-b" x="914" y="117" width="12" height="55"/><rect class="r-book-b" x="927" y="112" width="16" height="60"/><rect class="r-book-a" x="944" y="108" width="10" height="64"/><rect class="r-book-a" x="955" y="114" width="17" height="58"/><rect class="r-book-b" x="800" y="192" width="14" height="66"/><rect class="r-book-c" x="815" y="206" width="15" height="52"/><rect class="r-book-a" x="831" y="196" width="11" height="62"/><rect class="r-book-c" x="843" y="190" width="18" height="68"/><rect class="r-book-b" x="862" y="203" width="13" height="55"/><rect class="r-book-b" x="876" y="198" width="20" height="60"/><rect class="r-book-a" x="897" y="194" width="12" height="64"/><rect class="r-book-a" x="816" y="288" width="16" height="58"/><rect class="r-book-b" x="833" y="280" width="10" height="66"/><rect class="r-book-c" x="844" y="294" width="17" height="52"/><rect class="r-book-a" x="862" y="284" width="14" height="62"/><rect class="r-book-c" x="877" y="278" width="15" height="68"/><rect class="r-book-b" x="893" y="291" width="11" height="55"/><rect class="r-book-b" x="832" y="372" width="18" height="60"/><rect class="r-book-a" x="851" y="368" width="13" height="64"/><rect class="r-book-a" x="865" y="374" width="20" height="58"/><rect class="r-book-b" x="886" y="366" width="12" height="66"/><rect class="r-book-c" x="899" y="380" width="16" height="52"/><rect class="r-book-a" x="916" y="370" width="10" height="62"/></g>
+    <g class="r-fill-1950"><rect class="r-book-c" x="945" y="364" width="17" height="68"/><rect class="r-book-b" x="963" y="377" width="14" height="55"/><rect class="r-book-b" x="820" y="458" width="15" height="60"/><rect class="r-book-a" x="836" y="454" width="11" height="64"/><rect class="r-book-a" x="848" y="460" width="18" height="58"/><rect class="r-book-b" x="867" y="452" width="13" height="66"/><rect class="r-book-c" x="1000" y="294" width="20" height="52"/><rect class="r-book-a" x="1021" y="284" width="12" height="62"/><rect class="r-book-c" x="1034" y="278" width="16" height="68"/><rect class="r-book-b" x="1046" y="203" width="10" height="55"/><rect class="r-book-b" x="1057" y="198" width="17" height="60"/><rect class="r-book-a" x="1075" y="194" width="14" height="64"/><rect class="r-book-a" x="1062" y="374" width="15" height="58"/><rect class="r-book-b" x="1078" y="366" width="11" height="66"/></g>
+    <!-- Broken window, until it is glazed. -->
+    <g class="r-broken" stroke="#291e1a" stroke-linejoin="round">
+      <path fill="#4f5a63" stroke-width="2" d="M550 305H601V352L586 338 574 366 562 344 550 372Z"/>
+      <path fill="#4f5a63" stroke-width="2" d="M678 482V432L694 446 706 420 718 442 731 428V482Z"/>
+      <path fill="#4f5a63" stroke-width="2" d="M614 211H666V236L650 226 640 252 628 232 614 246Z"/>
+      <path fill="none" stroke-width="1.6" d="M640 306L622 340 630 362 616 392M640 306L662 346 652 372M575 408L588 442 570 480M575 408L556 436M705 212L690 240 700 262 684 292M705 212L724 252"/>
+    </g>
+    <!-- Rain seen through the window. -->
+    <g class="r-rain" fill="none" stroke="#e7eef2" stroke-width="2" stroke-linecap="round">
+      <path d="M560 216l-8 30M582 262l-8 30M594 220l-8 30M566 318l-8 30M590 352l-8 30M572 416l-8 30M596 438l-8 30M630 222l-8 30M656 256l-8 30M640 318l-8 30M664 352l-8 30M626 374l-8 30M634 420l-8 30M660 440l-8 30M694 222l-8 30M722 260l-8 30M702 322l-8 30M726 352l-8 30M696 418l-8 30M724 436l-8 30M592 150l-8 26M640 130l-8 26M690 146l-8 26"/>
+    </g>
+    <!-- Ceiling: stain, hole, then the visible patch. -->
     <g class="r-stain" stroke="#291e1a" stroke-width="1.5">
       <path fill="#8c7c56" d="M528 49c-6-14 14-20 34-18 12-14 44-18 62-9 22-11 62-9 76 3 18-3 42 3 42 14 0 6-2 9-4 10-40 2-170 3-210 0Z"/>
       <path fill="#6f6143" stroke="none" d="M580 46c-4-8 12-13 26-10 14-9 44-9 56-2 14-3 34 1 34 7 0 2-1 4-2 5-34 2-92 2-114 0Z"/>
     </g>
+    <path class="r-hole" fill="#39424a" stroke="#291e1a" stroke-width="2" stroke-linejoin="round" d="M592 26l14-11 10 6 16-9 12 7 18-6 10 8 14-3 8 10-10 9-14-3-10 8-16-4-12 6-14-5-12 5Z"/>
+    <g class="r-patch" stroke="#291e1a" stroke-width="2">
+      <path fill="#a4784a" d="M578 13l126-5 2 12-126 5Z"/>
+      <path fill="#94693f" d="M582 24l126-3 1 12-126 3Z"/>
+      <path fill="#a4784a" d="M580 35l122-2 1 11-122 2Z"/>
+      <path fill="#291e1a" stroke="none" d="M590 17h4v4h-4ZM692 12h4v4h-4ZM594 29h4v4h-4ZM698 25h4v4h-4ZM592 39h4v4h-4ZM692 37h4v4h-4Z"/>
+    </g>
+    <!-- Repair board: the planning station. -->
+    <g class="r-board" stroke="#291e1a" stroke-linejoin="round">
+      <path fill="#654832" stroke-width="2" d="M566 590l-16 54h10l16-54ZM714 590l16 54h-10l-16-54ZM636 590h8v48h-8Z"/>
+      <rect x="554" y="404" width="172" height="190" rx="3" fill="#7a5233" stroke-width="2.5"/>
+      <rect x="564" y="414" width="152" height="170" fill="#bd9160" stroke-width="1.5"/>
+      <g fill="#f6eedb" stroke-width="1"><rect x="574" y="426" width="24" height="44"/><rect x="602" y="426" width="24" height="44"/><rect x="630" y="426" width="24" height="44"/><rect x="658" y="426" width="24" height="44"/><rect x="686" y="426" width="24" height="44"/></g>
+      <g fill="#efe0b8" stroke-width="1"><rect x="582" y="490" width="50" height="34" transform="rotate(-3 607 507)"/><rect x="646" y="498" width="56" height="38" transform="rotate(2 674 517)"/></g>
+      <g fill="#291e1a" stroke="none"><circle cx="586" cy="426" r="2.5"/><circle cx="614" cy="426" r="2.5"/><circle cx="642" cy="426" r="2.5"/><circle cx="670" cy="426" r="2.5"/><circle cx="698" cy="426" r="2.5"/></g>
+    </g>
+    <!-- Rubble on the floor where the new shelves will go. -->
     <g class="r-rubble" stroke="#291e1a" stroke-width="2" stroke-linejoin="round">
-      <path fill="#6f6252" d="M744 618l26-46 30 20 24-32 38 34 30-22 40 46Z"/>
-      <path fill="#8a7c68" d="M806 618l16-27 25 14 20-18 29 31Z"/>
-      <path fill="#7a5233" d="M766 590l86-16 2 10-86 16Z"/>
-      <path fill="#a4946b" d="M866 600l18-5 5 14-18 5Z"/>
+      <path fill="#6f6252" d="M744 628l26-56 30 26 24-38 38 40 30-28 40 56Z"/>
+      <path fill="#8a7c68" d="M806 628l16-33 25 18 20-24 29 39Z"/>
+      <path fill="#7a5233" d="M766 596l86-16 2 10-86 16Z"/>
+      <path fill="#a4946b" d="M866 610l18-5 5 14-18 5Z"/>
+    </g>
+    <!-- Book crates: the salvage station. -->
+    <g class="r-crates" stroke="#291e1a" stroke-width="2" stroke-linejoin="round">
+      <g id="r-crate-books">
+        <path fill="#893f43" d="M311 584l14-2 3 26h-14Z"/><path fill="#496669" d="M330 578h13v30h-13Z"/><path fill="#d9a443" d="M346 586h12v22h-12Z"/>
+        <path fill="#31542f" d="M382 580h14v28h-14Z"/><path fill="#7687ab" d="M398 586l13-3 4 25h-14Z"/><path fill="#c95937" d="M418 582h12v26h-12Z"/>
+        <path fill="#748b2c" d="M452 588h13v20h-13Z"/><path fill="#5a3428" d="M468 580h14v28h-14Z"/><path fill="#a6652b" d="M485 584l13 2-2 22h-13Z"/>
+      </g>
+      <g fill="#a57c52"><rect x="304" y="602" width="62" height="42"/><rect x="374" y="602" width="62" height="42"/><rect x="444" y="602" width="62" height="42"/></g>
+      <path fill="none" stroke-width="1.5" d="M304 616H366M304 630H366M374 616H436M374 630H436M444 616H506M444 630H506"/>
+    </g>
+    <!-- The licensed timber, stacked ready. -->
+    <g class="r-timber" stroke="#291e1a" stroke-width="2" stroke-linejoin="round">
+      <path fill="#c49a68" d="M150 632l130-6 2 12-130 6Z"/><path fill="#b48a5e" d="M152 620l128-7 2 13-130 6Z"/>
+      <path fill="#c49a68" d="M156 608l122-8 2 13-122 7Z"/><path fill="#b48a5e" d="M160 596l116-8 2 12-116 8Z"/>
+    </g>
+    <!-- A bucket under the drip, in a present where the 1950 repairs failed. -->
+    <g class="r-bucket" stroke="#291e1a" stroke-width="2" stroke-linejoin="round">
+      <path fill="#7c8486" d="M618 608h44l-6 38h-32Z"/><path fill="none" d="M620 610c2-16 38-16 40 0"/>
     </g>
     <g class="r-hands" fill="none" stroke="#291e1a" stroke-linecap="round">
-      <path class="r-hand-hour" stroke-width="5" d="M1141 136V104"/>
-      <path class="r-hand-minute" stroke-width="3.5" d="M1141 136V90"/>
+      <path class="r-hand-hour" stroke-width="5" d="M1145 140V108"/>
+      <path class="r-hand-minute" stroke-width="3.5" d="M1145 140V94"/>
     </g>
   </symbol>
+
+  <!-- Temporary human figure until Person C's player art lands. Facing right; feet on the baseline at y 396. -->
+  <symbol id="actor-idle" viewBox="0 0 200 400">
+      <path class="a-ink" stroke-width="31" d="M84 128C80 170 80 200 84 232"/><path class="a-coat-back" stroke-width="24" d="M84 128C80 170 80 200 84 232"/>
+      <path class="a-ink" stroke-width="37" d="M92 245V368"/><path class="a-legs-back" stroke-width="30" d="M92 245V368"/>
+      <path class="a-shoe" transform="rotate(0 90 385)" d="M75 372h20c10 2 20 6 22 13v5h-42Z"/>
+      <path class="a-ink" stroke-width="37" d="M116 245V368"/><path class="a-legs" stroke-width="30" d="M116 245V368"/>
+      <path class="a-shoe" transform="rotate(0 116 385)" d="M101 372h20c10 2 20 6 22 13v5h-42Z"/>
+      <path class="a-coat a-solid" d="M72 112c10-14 56-14 66 0l10 136c-26 8-62 8-86 0Z"/>
+      <path class="a-trim" d="M106 110v142"/><circle class="a-button" cx="114" cy="150" r="3"/><circle class="a-button" cx="114" cy="182" r="3"/><circle class="a-button" cx="114" cy="214" r="3"/>
+      <path class="a-scarf a-solid" d="M76 102c16 12 42 12 58-1l4 13c-20 14-48 14-66 0Z"/>
+      <path class="a-ink" stroke-width="31" d="M120 128C126 170 126 200 122 232"/><path class="a-coat" stroke-width="24" d="M120 128C126 170 126 200 122 232"/>
+      <circle class="a-skin a-solid" cx="122" cy="244" r="12"/>
+      <circle class="a-skin a-solid" cx="104" cy="62" r="32"/>
+      <path class="a-skin a-solid" d="M132 60l11 12-12 4Z"/>
+      <circle class="a-eye" cx="119" cy="56" r="3.4"/>
+      <path class="a-line" d="M117 80c-5 3-10 3-14 1"/>
+      <path class="a-hair a-solid" d="M73 62c-4-30 22-46 46-36 7 3 12 8 15 15-16-5-30-3-40 4-3 8-6 14-11 26-3-1-7-5-10-9Z"/>
+      <g class="r-cap"><path class="a-cap a-solid" d="M70 46c4-24 58-30 68-4 1 6-1 9-5 10-20-6-44-6-63-6Z"/><path class="a-cap a-solid" d="M124 40c10-1 24 3 30 11-11 3-23 2-32-2Z"/></g>
+    </symbol>
+  <symbol id="actor-walk-a" viewBox="0 0 200 400">
+      <path class="a-ink" stroke-width="31" d="M88 128C100 170 122 196 146 212"/><path class="a-coat-back" stroke-width="24" d="M88 128C100 170 122 196 146 212"/>
+      <path class="a-ink" stroke-width="37" d="M94 245C84 290 74 318 52 356"/><path class="a-legs-back" stroke-width="30" d="M94 245C84 290 74 318 52 356"/>
+      <path class="a-shoe" transform="rotate(24 44 374)" d="M29 361h20c10 2 20 6 22 13v5h-42Z"/>
+      <path class="a-ink" stroke-width="37" d="M114 245C128 290 140 330 146 368"/><path class="a-legs" stroke-width="30" d="M114 245C128 290 140 330 146 368"/>
+      <path class="a-shoe" transform="rotate(0 150 385)" d="M135 372h20c10 2 20 6 22 13v5h-42Z"/>
+      <path class="a-coat a-solid" d="M72 112c10-14 56-14 66 0l10 136c-26 8-62 8-86 0Z"/>
+      <path class="a-trim" d="M106 110v142"/><circle class="a-button" cx="114" cy="150" r="3"/><circle class="a-button" cx="114" cy="182" r="3"/><circle class="a-button" cx="114" cy="214" r="3"/>
+      <path class="a-scarf a-solid" d="M76 102c16 12 42 12 58-1l4 13c-20 14-48 14-66 0Z"/>
+      <path class="a-ink" stroke-width="31" d="M116 128C100 170 84 198 62 218"/><path class="a-coat" stroke-width="24" d="M116 128C100 170 84 198 62 218"/>
+      <circle class="a-skin a-solid" cx="54" cy="226" r="12"/>
+      <circle class="a-skin a-solid" cx="104" cy="62" r="32"/>
+      <path class="a-skin a-solid" d="M132 60l11 12-12 4Z"/>
+      <circle class="a-eye" cx="119" cy="56" r="3.4"/>
+      <path class="a-line" d="M117 80c-5 3-10 3-14 1"/>
+      <path class="a-hair a-solid" d="M73 62c-4-30 22-46 46-36 7 3 12 8 15 15-16-5-30-3-40 4-3 8-6 14-11 26-3-1-7-5-10-9Z"/>
+      <g class="r-cap"><path class="a-cap a-solid" d="M70 46c4-24 58-30 68-4 1 6-1 9-5 10-20-6-44-6-63-6Z"/><path class="a-cap a-solid" d="M124 40c10-1 24 3 30 11-11 3-23 2-32-2Z"/></g>
+    </symbol>
+  <symbol id="actor-walk-b" viewBox="0 0 200 400">
+      <path class="a-ink" stroke-width="31" d="M88 128C78 170 66 198 50 216"/><path class="a-coat-back" stroke-width="24" d="M88 128C78 170 66 198 50 216"/>
+      <path class="a-ink" stroke-width="37" d="M94 245C102 290 116 330 124 368"/><path class="a-legs-back" stroke-width="30" d="M94 245C102 290 116 330 124 368"/>
+      <path class="a-shoe" transform="rotate(0 128 385)" d="M113 372h20c10 2 20 6 22 13v5h-42Z"/>
+      <path class="a-ink" stroke-width="37" d="M114 245C106 290 92 322 70 356"/><path class="a-legs" stroke-width="30" d="M114 245C106 290 92 322 70 356"/>
+      <path class="a-shoe" transform="rotate(24 62 374)" d="M47 361h20c10 2 20 6 22 13v5h-42Z"/>
+      <path class="a-coat a-solid" d="M72 112c10-14 56-14 66 0l10 136c-26 8-62 8-86 0Z"/>
+      <path class="a-trim" d="M106 110v142"/><circle class="a-button" cx="114" cy="150" r="3"/><circle class="a-button" cx="114" cy="182" r="3"/><circle class="a-button" cx="114" cy="214" r="3"/>
+      <path class="a-scarf a-solid" d="M76 102c16 12 42 12 58-1l4 13c-20 14-48 14-66 0Z"/>
+      <path class="a-ink" stroke-width="31" d="M116 128C124 170 142 196 160 208"/><path class="a-coat" stroke-width="24" d="M116 128C124 170 142 196 160 208"/>
+      <circle class="a-skin a-solid" cx="168" cy="216" r="12"/>
+      <circle class="a-skin a-solid" cx="104" cy="62" r="32"/>
+      <path class="a-skin a-solid" d="M132 60l11 12-12 4Z"/>
+      <circle class="a-eye" cx="119" cy="56" r="3.4"/>
+      <path class="a-line" d="M117 80c-5 3-10 3-14 1"/>
+      <path class="a-hair a-solid" d="M73 62c-4-30 22-46 46-36 7 3 12 8 15 15-16-5-30-3-40 4-3 8-6 14-11 26-3-1-7-5-10-9Z"/>
+      <g class="r-cap"><path class="a-cap a-solid" d="M70 46c4-24 58-30 68-4 1 6-1 9-5 10-20-6-44-6-63-6Z"/><path class="a-cap a-solid" d="M124 40c10-1 24 3 30 11-11 3-23 2-32-2Z"/></g>
+    </symbol>
 
   <symbol id="i-roof" viewBox="0 0 24 24"><path d="M3 12 12 4l9 8M6 10v10h12V10M10 20v-5h4v5"/></symbol>
   <symbol id="i-rubble" viewBox="0 0 24 24"><path d="M3 20l4-8 4 3 3-5 7 10ZM8 7l2-3M15 6l2 1"/></symbol>
