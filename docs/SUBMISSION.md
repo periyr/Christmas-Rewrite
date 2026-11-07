@@ -26,8 +26,8 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10�
 
 ## Controls
 
-- **Walk** around the shop as Walter, Henry or Edwin: hold **A**/**D** or the **← →** arrow keys. [Not on screen yet: confirm once B wires walking in.]
-- **Use** what's nearby with **E** when its prompt appears. Or **click** an object: your character walks there and uses it.
+- **Walk** around the shop as Walter, Henry or Edwin: hold **A**/**D** or the **← →** arrow keys.
+- **Use** what's nearby with **E** when its prompt appears. Or **click** an object's label: your character walks there and uses it.
 - **Inspect** documents and objects to read them; this never costs anything.
 - **To move something:** click to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click the same object again to put it down.
 - **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses one of two attempts.
@@ -77,9 +77,9 @@ Remove this section from the public copy. It keeps the claims above honest.
 | Rules for all three chapters (repair board, salvage, shelf, shadow story, forgotten book) | Built and tested: `npm test` passes 270 tests, including all 2,520 repair weeks and all 36 shadow stagings. The release build (`npm run build -- --optimize`) works. |
 | 1950 screens (salvage, repair board, shelf, slideshow) | Playable in the browser |
 | 1973 and 1998 puzzle screens | **Not built yet:** the game shows a placeholder for both chapters, though the rules behind them are done |
-| Walking (keys, click to walk, hotspots, room labels) | Logic built and tested in `Update`; room labels in `Content.Room`. **Not on screen yet**: B still has to draw the player and hotspots. |
-| Walking characters (4 people × 3 poses) | Drawn and checked: palette, bounds, anchor, no jumping between frames. **Not wired in yet.** |
-| Room props (14 files) | Drawn; **not placed in the rooms yet** |
+| Walking (keys, click to walk, hotspots, room labels) | Built and playable. Checked in the browser on 7 November: walking both ways, stopping at the wall, the E prompts and the click-to-walk labels. |
+| Walking characters (4 people × 3 poses) | Wired in. Checked in the browser: present-day Edwin in the intro and hub, Walter in 1950. Each is 192 × 320 room px with the feet on the floor line (y 650), flips when walking left, and cycles walk-1 and walk-2. Henry (1973) and young Edwin (1998) are mapped in the code but can't be seen until those screens exist. |
+| Room props (14 files) | Drawn; **not placed in the rooms yet** (B's own inline crates, rubble and planks are shown) |
 | All game text (`src/Content`) | Built; compiles; word counts checked; covers every 1973 and 1998 result |
 | Help button on every screen | Only the 1950 screens so far |
 
