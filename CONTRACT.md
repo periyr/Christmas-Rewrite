@@ -1,4 +1,4 @@
-# Shared contract v1.3: Person A handoff
+# Shared contract v1.4: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -232,7 +232,7 @@ type alias Model = { history, phase, inspecting, notice, room : Room }   -- one 
 type alias Room = { player : Player, panelOpen : Bool }
 
 type alias Player =
-    { x : Float              -- centre of the feet, logical px, 72..1208; the feet are always at y = 650
+    { x : Float              -- centre of the feet, logical px, 72..1208; the feet are always at y = 708 (650 before v1.4)
     , facing : Facing        -- FacingLeft | FacingRight
     , walking : Bool         -- True while moving: draw the walk cycle; False: idle pose
     , held : List WalkKey    -- WalkLeft | WalkRight, most recent first (Main fills this in)
@@ -261,7 +261,7 @@ ApproachHotspot Hotspot | ClosePanel
 | Helper | Meaning |
 |---|---|
 | `width`, `height` | The logical room: 1280 × 720. The stage is 80rem × 45rem, so **1rem = 16 logical px**. Place anything at `left: x/16 rem; top: y/16 rem`. |
-| `floorY` | 650, the y of the player's feet. |
+| `floorY` | 708, the y of the player's feet: the front edge of the painted floor, in front of all the furniture (v1.4; it was 650). |
 | `minX`, `maxX` | 72 and 1208, the bounds of the player's x. |
 | `startX` | 160. The player starts here, facing right, on a new game, on entering a diary and on returning to the present. |
 | `interactionDistance` | 64. A hotspot is in reach when the player's x is within 64 of the hotspot's x. |
@@ -332,7 +332,7 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 ### For C
 
 - **Prompt labels:** proposed `Content.Room.label : Hotspot -> String`, a short verb phrase for the prompt and the hotspot's accessible name, such as "Sort the salvaged books" for `CratesSpot`. Clue hotspots can reuse their clue titles, so only the seven other hotspots need words.
-- **Character art:** one base paper-cutout human, two to four walk poses plus an idle pose, facing right (views mirror it), with era variants for present-day Edwin, Walter, Henry and young Edwin. Put the feet at the bottom centre of each image so it can stand on (`x`, 650). The counter is about 165 px tall in the room, so a grown-up is roughly 290 px tall. Agree file names with B.
+- **Character art:** one base paper-cutout human, two to four walk poses plus an idle pose, facing right (views mirror it), with era variants for present-day Edwin, Walter, Henry and young Edwin. Put the feet at the bottom centre of each image so it can stand on (`x`, `floorY`). The counter is about 165 px tall in the room, so a grown-up is roughly 290 px tall. Agree file names with B.
 - **Room props** at the coordinates above: crates, timber and the planning board in 1950; torch, sheet and cut-out box in 1973; computer, book stacks and parcels in 1998.
 
 ## Fixtures (`src/Fixtures.elm`)
@@ -421,4 +421,4 @@ npm run release
 2. **Audio.** There are no ports yet. If B wants sound, agree a port name (suggested: `port playSound : String -> Cmd msg`), and A will add it to `Main.elm`.
 3. **The `svg-art` element in `public/index.html`** sets `innerHTML` from Art.elm strings. That goes beyond the brief's "startup and audio" JavaScript. The team should agree to keep it, or A can add `elm/svg` to `elm.json` instead.
 4. **Keys and window focus.** Elm can see the page being hidden but not the window losing focus. If a key is held while switching to another window, the player keeps walking until the wall (where they stop) or until the key is pressed and released again. Hiding the tab clears it.
-5. **Floor alignment.** B owns the visible fix. The shared values stay as they are while B aligns the view: `Rules.Room.floorY` is 650, and the sprites use anchor (48, 152) at scale 2. If B shows that the shared geometry has to change, A makes one coordinated change here and in `Rules.Room`.
+5. **Floor alignment (resolved in v1.4).** With the feet at 650, the painted armchair, lamp table, door and boxes (which stand at y 660–715) were nearer than the player, so #26 painted an opaque strip of boards over the bottom of every room from y 640. That hid the bottom of the furniture. Agreed fix, one coordinated change: `Rules.Room.floorY` is now 708, the front edge of the painted floor, so the player walks in front of everything and the strip is gone (`public/index.html`, `public/styles.css`). The sprite anchor is unchanged: (48, 152) at scale 2, drawn from `floorY` by `Components.Actor`. The walking hint (`room-bar`) moved from the floor to the ceiling at the top left, and the intro's top narration starts below it. The bottom narration box (intro narration screens, slides, return) still sits over the lower room; B may want to revisit that.

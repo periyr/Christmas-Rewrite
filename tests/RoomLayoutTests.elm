@@ -65,10 +65,10 @@ suite : Test
 suite =
     describe "Room layout"
         [ describe "coordinates"
-            [ test "the room is 1280 × 720 with the floor at 650 and bounds 72..1208" <|
+            [ test "the room is 1280 × 720 with the floor at 708 and bounds 72..1208" <|
                 \_ ->
                     ( ( Room.width, Room.height, Room.floorY ), ( Room.minX, Room.maxX ) )
-                        |> Expect.equal ( ( 1280, 720, 650 ), ( 72, 1208 ) )
+                        |> Expect.equal ( ( 1280, 720, 708 ), ( 72, 1208 ) )
             , test "the player starts at x = 160, facing right, standing still" <|
                 \_ ->
                     Fixtures.initialModel.room
