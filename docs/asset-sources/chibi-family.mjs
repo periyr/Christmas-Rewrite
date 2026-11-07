@@ -77,6 +77,14 @@ function flare([tl, bl, br, tr], fill) {
   return p(`M ${f(l)} L ${f([bl[0] - 3, bl[1] + 1])} L ${f([br[0] + 3, br[1] + 1])} L ${f(r)} Z`, fill);
 }
 
+// A turned-up cuff at the bottom of a jeans leg, slightly wider than the leg.
+function jeanCuff([tl, bl, br, tr], fill) {
+  const at = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const l = at(tl, bl, 0.84), r = at(tr, br, 0.84);
+  const f = (q) => `${Math.round(q[0] * 10) / 10},${Math.round(q[1] * 10) / 10}`;
+  return p(`M ${f([l[0] - 1.2, l[1]])} L ${f([bl[0] - 1.2, bl[1]])} L ${f([br[0] + 1.2, br[1]])} L ${f([r[0] + 1.2, r[1]])} Z`, fill);
+}
+
 // ── the people ─────────────────────────────────────────────────────────────
 const PEOPLE = {
   walter: {
@@ -123,6 +131,34 @@ const PEOPLE = {
   },
 };
 
+// Young Edwin, 1998: late-90s look from Gemini's design (curtains haircut, open
+// plaid flannel over a plain T-shirt, rolled sleeves, baggy jeans, work boots),
+// redrawn on the shared body.
+PEOPLE["edwin-young"] = {
+  sleeve: CLOTH.green, forearm: SKIN, rolledCuff: CLOTH.green,
+  trousers: CLOTH.periwinkle, jeanCuffs: true, shoes: INK, soleStripe: CLOTH.mustard,
+  torso: [
+    p(TORSO_PATH, CLOTH.green),
+    // Flannel checks on the two open shirt fronts, kept inside the shirt.
+    ...["M 37,84 L 37,112", "M 34.5,93 L 42,93", "M 34.5,104 L 42,104", "M 59.5,84 L 59.5,108", "M 55,93 L 62,93", "M 55,104 L 62.5,104"].map((d) =>
+      p(d, "none", { stroke: CLOTH.wine, "stroke-width": 1.6 }),
+    ),
+    // Plain T-shirt showing between the open fronts.
+    p("M 42,77 C 46,79 50,79 54,77 L 55,115 C 51,116.5 46,116.5 42,115 Z", CLOTH.mustard),
+  ],
+  torsoLabel: "Torso (open flannel shirt over a T-shirt)",
+  behindHead: [],
+  face: [
+    ...eyes(CLOTH.green),
+    // Small unsure mouth.
+    p("M 55,61 Q 56.6,60 58.2,61 Q 59.8,62 61.4,61", "none", { "stroke-width": 2 }),
+  ],
+  topLabel: "Curtains haircut (middle parting)",
+  top: [
+    p("M 17,52 C 13,26 30,12 50,12 C 71,12 83,25 81,46 L 80,58 C 79,61 75.5,61 74.5,58 C 74,46 68,35 55,29 C 47,34 38,40 33,48 L 31,62 C 27,65 21,64 19,60 Z", HAIR.brown),
+  ],
+};
+
 // ── rendering ──────────────────────────────────────────────────────────────
 const attrs = (o, overrides = {}) =>
   Object.entries({ ...o, ...overrides })
@@ -137,12 +173,21 @@ function frame(who, name) {
   const { arms, legs } = FRAMES[name];
   const arm = (key) => {
     const [upper, lower, [hx, hy]] = ARMS[key];
-    return [p(upper, person.sleeve), p(lower, person.forearm), c(hx, hy, 4, SKIN)];
+    // A rolled sleeve: a cuff where the forearm starts.
+    const [ex, ey] = lower.match(/M ([\d.]+),([\d.]+)/).slice(1).map(Number);
+    const cuff = person.rolledCuff ? [{ tag: "ellipse", cx: ex + 1, cy: ey + 1, rx: 5, ry: 3.6, fill: person.rolledCuff }] : [];
+    return [p(upper, person.sleeve), p(lower, person.forearm), ...cuff, c(hx, hy, 4, SKIN)];
   };
   const leg = (key) => {
     const [quad, shoe] = LEGS[key];
     const trouser = p(`M ${quad.map((q) => q.join(",")).join(" L ")} Z`, person.trousers);
-    return [trouser, ...(person.flares ? [flare(quad, person.trousers)] : []), p(shoe, person.shoes)];
+    const extra = person.flares ? [flare(quad, person.trousers)] : person.jeanCuffs ? [jeanCuff(quad, person.trousers)] : [];
+    // A contrasting sole line across the boot, inside its outline.
+    const soleXs = [...shoe.matchAll(/([\d.]+),152/g)].map((m) => Number(m[1]));
+    const sole = person.soleStripe
+      ? [p(`M ${Math.min(...soleXs) + 2},149.4 L ${Math.max(...soleXs) - 2},149.4`, "none", { stroke: person.soleStripe, "stroke-width": 2 })]
+      : [];
+    return [trouser, ...extra, p(shoe, person.shoes), ...sole];
   };
   const layers = [
     ["Far arm", arm(arms[0])],
