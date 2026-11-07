@@ -5,6 +5,7 @@ document over it. All game state stays in the model.
 -}
 
 import Components.Art as Art
+import Components.Clock as Clock
 import Content.Clues
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
@@ -30,8 +31,44 @@ view model =
     in
     div [ class "app" ]
         [ div (class "stage" :: stageAttributes world model)
-            (screen world model ++ inspection world model)
+            (wallClock model.phase :: screen world model ++ inspection world model)
         ]
+
+
+{-| The clock on the wall, first in the stage so it stays the same element (and
+keeps ticking smoothly) from screen to screen. CSS shows it only in rooms whose
+picture has no painted clock. Person A's model should supply the real time
+later; until then it follows the story: it runs at 11:59 while Edwin packs up,
+then stays stopped there, and the 1973 room shows that evening's 7:05.
+-}
+wallClock : Phase -> Html msg
+wallClock phase =
+    if in1973 phase then
+        Clock.view { hour = 19, minute = 5, ticking = True }
+
+    else
+        Clock.view { hour = 23, minute = 59, ticking = beforeClockStops phase }
+
+
+beforeClockStops : Phase -> Bool
+beforeClockStops phase =
+    phase == Introduction PackingUp || phase == Introduction DiariesFound
+
+
+in1973 : Phase -> Bool
+in1973 phase =
+    case phase of
+        ShadowPuzzle _ ->
+            True
+
+        Transition (OpeningDiary Shadows1973) ->
+            True
+
+        Transition (Slideshow Shadows1973 _) ->
+            True
+
+        _ ->
+            False
 
 
 screen : World -> Model -> List (Html Msg)

@@ -46,9 +46,9 @@ Generated with Google Gemini from the team's prompt. Only cropped to 16:9 and re
 
 | File | Use |
 |---|---|
-| `room-present.jpg` | Present day: introduction, hub, return from a diary. Dimmed by CSS for the closed ending until it has its own picture. |
+| `room-present.jpg` | Present day: introduction, hub, return from a diary. Dimmed by CSS for the closed ending until it has its own picture. No painted clock: `src/Components/Clock.elm` draws one on the right-hand wall. |
 | `room-1950.jpg` | 1950, and a stand-in for 1998 until that has its own picture. |
-| `room-1973.jpg` | 1973 |
+| `room-1973.jpg` | 1973. No painted clock: `src/Components/Clock.elm` draws one on the right-hand wall. |
 | `room-saved.jpg` | The saved ending. Cut from the original reference picture, inside its dark border. |
 
 The ceiling stain, rubble and clock hands are small SVG overlays in `public/index.html`, so one picture can show a room before and after the work.

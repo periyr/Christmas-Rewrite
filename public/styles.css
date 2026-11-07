@@ -1755,3 +1755,73 @@ svg-art { display: contents; }
 /* House lights down for the performance; the lit sheet and puppets stay bright. */
 .stage[data-lights="down"] .room-art { filter: brightness(0.4) saturate(0.75); }
 .stage[data-lights="down"] .prop:not(.prop--sheet, .prop--puppet, .prop--beam, .prop--torch) { filter: brightness(0.45); }
+
+/* ---------- Wall clock (Components.Clock) ---------- */
+
+/* Hangs on the right-hand side wall above the family photograph, in % of the
+   room so it scales with it (centre at 1210, 185 of 1280 x 720). That wall is
+   angled, so the clock is narrowed and sheared to lie flat on it, measured from
+   the photograph frame below: its top edge rises about 8 degrees to the right
+   and its right side is about 13% taller. The swing turns .clock__body inside
+   this, so the clock swings flat against the wall.
+
+   The 1950 picture (also used for 1998) and the saved ending have a painted
+   clock, so this one shows only where the picture has none: the present-day
+   and 1973 rooms, where the painted clock's hands overlay is switched off. */
+.clock {
+  position: absolute;
+  z-index: 1;
+  left: 91.1%;
+  top: 19.6%;
+  width: 6.9%;
+  aspect-ratio: 1;
+  transform: scaleX(0.87) skewY(-9deg);
+  /* Shadows in the room fall down and to the right. */
+  filter: drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33));
+  pointer-events: none;
+}
+
+.stage:is([data-era="1950"], [data-era="1998"], [data-era="saved"]) .clock { display: none; }
+
+/* The hands overlay sits inside an SVG <use>, so it is switched by a variable. */
+.r-hands { opacity: var(--show-hands, 1); }
+.stage:is([data-era="present"], [data-era="closed"], [data-era="1973"]) { --show-hands: 0; }
+
+/* Recoloured exactly like the room picture behind it. */
+.stage[data-era="closed"] .clock { filter: brightness(0.5) saturate(0.6) drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33)); }
+.stage[data-lights="down"] .clock { filter: brightness(0.4) saturate(0.75); }
+
+.clock__body {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0; /* swings from its nail */
+}
+
+/* Every layer fills the clock; the hands turn about its centre. */
+.clock__hand { position: absolute; inset: 0; }
+
+.clock__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The second hand ticks once a second and the clock sways a little; both stop
+   when the clock has stopped, and both are off for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .clock__body { animation: clock-swing 3s ease-in-out infinite alternate; }
+  .clock__hand--second { animation: clock-second 60s steps(60) infinite; }
+  .clock.is-stopped .clock__body,
+  .clock.is-stopped .clock__hand--second { animation-play-state: paused; }
+}
+
+@keyframes clock-swing {
+  from { transform: rotate(-1.5deg); }
+  to { transform: rotate(1.5deg); }
+}
+
+@keyframes clock-second {
+  to { transform: rotate(360deg); }
+}
