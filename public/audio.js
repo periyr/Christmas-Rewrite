@@ -10,7 +10,7 @@
 (() => {
   const MUTE_KEY = "one-more-christmas-muted";
   const SFX_VOLUME = 0.55;
-  const MUSIC_VOLUME = 0.07;
+  const MUSIC_VOLUME = 0.03; // well under the effects, so they stay clear
 
   let ctx = null, master, sfxBus, musicBus, room;
   let muted = false;
@@ -215,39 +215,70 @@
   const creak = (bus, at) => { tone(140, { bus, at, dur: 0.55, gain: 0.06, type: "sawtooth", glide: 210 }); hiss({ bus, at, dur: 0.5, gain: 0.04, freq: 900, q: 3 }); };
   const crackle = (bus, from, to) => { for (let t = from; t < to; t += 0.12 + Math.random() * 0.2) hiss({ bus, at: t, dur: 0.025, gain: 0.05 + Math.random() * 0.04, type: "highpass", freq: 2500 }); };
 
+  // The puppets' voices, small and soft. The cast is whoever the player staged.
+  const voices = {
+    // two little yips, up then down
+    fox: (bus, at) => {
+      [0, 0.17].forEach((d, i) => {
+        tone(wobble(i ? 820 : 760, 0.02), { bus, at: at + d, dur: 0.11, gain: 0.07, type: "triangle", glide: i ? 1150 : 1080, attack: 0.01 });
+        tone(wobble(1600, 0.02), { bus, at: at + d + 0.02, dur: 0.06, gain: 0.02, glide: 1250 });
+      });
+    },
+    // "hoo, hoo-hoo": low and round, each hoot dipping slightly
+    owl: (bus, at) => {
+      [[0, 0.42], [0.55, 0.2], [0.8, 0.38]].forEach(([d, len]) => {
+        tone(wobble(392, 0.01), { bus, at: at + d, dur: len, gain: 0.09, glide: 349, attack: 0.06 });
+        tone(wobble(196, 0.01), { bus, at: at + d, dur: len, gain: 0.03, type: "triangle", glide: 175, attack: 0.06 });
+      });
+    },
+    // a tiny giggle: quick bouncing notes that tumble down
+    child: (bus, at) => {
+      [988, 880, 932, 784, 830, 698].forEach((f, i) => {
+        tone(wobble(f, 0.015), { bus, at: at + i * 0.085, dur: 0.07, gain: 0.05, type: "triangle", glide: f * 0.92, attack: 0.008 });
+        tone(wobble(f * 2, 0.015), { bus, at: at + i * 0.085, dur: 0.05, gain: 0.015 });
+      });
+    },
+  };
+
   const scenes = {
     // Original script
-    "bridge": (b) => {                    // crosses the bridge, bobbing, lantern swinging
+    "bridge": (b, voice) => {
+      voice(b, cue(4)); voice(b, cue(93));                    // crosses the bridge, bobbing, lantern swinging
       [10, 30, 50, 70].forEach((p) => pat(b, cue(p)));
       [10, 34, 58].forEach((p) => jingle(b, cue(p)));
       bell(note("G6"), { bus: b, at: cue(92), dur: 1, gain: 0.04 });
     },
-    "door": (b) => {                      // three hops, reaches up, turns the key, the door swings open
+    "door": (b, voice) => {
+      voice(b, cue(82));                      // three hops, reaches up, turns the key, the door swings open
       [0, 23, 45].forEach((p, i) => hop(b, cue(p) + (i ? 0 : 0.05)));
       [23, 45, 61].forEach((p) => land(b, cue(p)));
       keyTurn(b, cue(72));
       creak(b, cue(76));
       glow(b, cue(86));
     },
-    "reading-home": (b) => {              // lifts the book, opens it, the room warms
+    "reading-home": (b, voice) => {
+      voice(b, cue(8)); voice(b, cue(84));              // lifts the book, opens it, the room warms
       hiss({ bus: b, at: cue(30), dur: 0.4, gain: 0.05, freq: 900, q: 0.8, attack: 0.15 });
       pageFlip(b, cue(52)); pageFlip(b, cue(68));
       glow(b, cue(56));
     },
     // The neighbours' retelling
-    "gate": (b) => {                      // walks to the gate, leans down, finds and lifts the key
+    "gate": (b, voice) => {
+      voice(b, cue(70));                      // walks to the gate, leans down, finds and lifts the key
       [5, 17, 29, 41].forEach((p) => pat(b, cue(p)));
       hiss({ bus: b, at: cue(48), dur: 0.35, gain: 0.06, freq: 1500, q: 0.8, attack: 0.1 });
       jingle(b, cue(64)); jingle(b, cue(80));
       bell(note("E6"), { bus: b, at: cue(90), dur: 1, gain: 0.04 });
     },
-    "fireplace": (b) => {                 // flutters up to perch by the fire, opens the book
+    "fireplace": (b, voice) => {
+      voice(b, cue(47)); voice(b, cue(86));                 // flutters up to perch by the fire, opens the book
       crackle(b, 0, SCENE);
       flutter(b, cue(2)); flutter(b, cue(25));
       land(b, cue(45));
       pageFlip(b, cue(55)); pageFlip(b, cue(72));
     },
-    "lantern-home": (b) => {              // crosses home with the lantern; the house lights up
+    "lantern-home": (b, voice) => {
+      voice(b, cue(4)); voice(b, cue(70));              // crosses home with the lantern; the house lights up
       [10, 30, 50, 70].forEach((p) => pat(b, cue(p)));
       [10, 34].forEach((p) => jingle(b, cue(p)));
       glow(b, cue(54));
@@ -308,8 +339,10 @@
     if (name === "scene-stop") { stopScene(); return; }
     if (muted) return;
     if (name.startsWith("scene-")) {
-      const scene = scenes[name.slice("scene-".length)];
-      if (scene) startScene(scene);
+      // "scene-<setting>-<fox|owl|child>"
+      const rest = name.slice("scene-".length), cut = rest.lastIndexOf("-");
+      const scene = scenes[rest.slice(0, cut)], voice = voices[rest.slice(cut + 1)] || (() => {});
+      if (scene) startScene((bus) => scene(bus, voice));
       return;
     }
     const sound = sounds[name];

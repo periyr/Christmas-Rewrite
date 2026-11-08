@@ -372,15 +372,16 @@ showSounds before after =
 
 
 {-| The scene on screen, named like its animation (Components.Props, the
-data-shadow-scene attribute), if a performance slide is showing.
+data-shadow-scene attribute) plus whose voice it has, if a performance slide
+is showing: "door-owl", say.
 -}
 performance : Model -> Maybe String
 performance model =
     case model.phase of
         Transition (Slideshow era index) ->
             case List.drop index (Timeline.slides era model.history) |> List.head of
-                Just (PerformanceSlide scene _) ->
-                    Just (setting (Timeline.deriveWorld model.history).scriptVariant scene)
+                Just (PerformanceSlide scene cast) ->
+                    Just (setting (Timeline.deriveWorld model.history).scriptVariant scene ++ "-" ++ voice cast.character)
 
                 _ ->
                     Nothing
@@ -409,3 +410,16 @@ setting variant scene =
 
         ( NeighboursRetelling, Scene3 ) ->
             "lantern-home"
+
+
+voice : Character -> String
+voice character =
+    case character of
+        Fox ->
+            "fox"
+
+        Owl ->
+            "owl"
+
+        Child ->
+            "child"
