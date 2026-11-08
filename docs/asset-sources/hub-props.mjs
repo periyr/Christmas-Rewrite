@@ -2,6 +2,8 @@
 // tradition (Content.Clues hubProp CommunityWall, from world.tradition):
 //
 //   clue-wall-<state>.svg
+//   clue-ruth-lucy-photo.svg     the board's photo of Ruth and Lucy on its own, for the
+//                                1998 inscription clue from the shop archive
 //
 // where <state> is original (NotRevisited), missing (Missing) or established
 // (Established). Each picture shows exactly what its text says. The roof and
@@ -196,6 +198,9 @@ const files = {
   "clue-wall-original.svg": ["the 1973 story not revisited: just the bare board with its old pin holes", communityWall("bare"), [39, 25, 332, 202]],
   "clue-wall-missing.svg": ["the 1973 story failed: one faded poster, Christmas Reading 1973, on the board", communityWall("one"), [39, 25, 332, 202]],
   "clue-wall-established.svg": ["the 1973 story became a tradition: the whole board of posters, children's fox-and-lantern drawings and Ruth and Lucy's photo", tradition()],
+  // The same photo as on the board, on its own and three times the size, for the
+  // 1998 inscription clue from the shop archive.
+  "clue-ruth-lucy-photo.svg": ["the 1973 photo of Ruth and Lucy in the front row, exactly as on the tradition board", `<g transform="scale(3)">${photo(0, 0, 0)}</g>`, [-30, -24, 528, 408]],
 };
 for (const [name, [note, body, view]] of Object.entries(files)) {
   writeFileSync(join(OUT, name), svg(name.replace(".svg", ""), note, body, view));

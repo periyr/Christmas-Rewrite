@@ -436,6 +436,14 @@ cluePicture world clue =
         CutoutBox ->
             Just "assets/clue-cutout-box.svg"
 
+        -- From the shop archive, the photo itself (the one on the community wall).
+        InscriptionClue ->
+            if world.inscriptionSource == FamilyArchive then
+                Just "assets/clue-ruth-lucy-photo.svg"
+
+            else
+                Nothing
+
         ShadowScript ->
             Just ("assets/clue-script-" ++ scriptFile world.scriptVariant ++ ".svg")
 
@@ -509,6 +517,9 @@ sheetVariant clue =
 
         CutoutBox ->
             "sheet--scene"
+
+        InscriptionClue ->
+            "sheet--scene sheet--photo-print"
 
         StageSketch ->
             "sheet--scene"
