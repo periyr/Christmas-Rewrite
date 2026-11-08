@@ -1673,6 +1673,20 @@ svg-art { display: contents; }
 .sheet__body h3 { margin: 0.6rem 0 0.2rem; font-size: 1.3125rem; }
 .sheet__body h3:first-child { margin-top: 0; }
 .sheet__foot--ending { flex-wrap: wrap; justify-content: flex-end; }
+
+/* The saved ending: the visitors in the doorway beside the words. */
+.sheet--saved { width: 60rem; }
+.ending { display: flex; gap: 1.6rem; align-items: center; }
+.ending__picture {
+  flex: none;
+  width: 19rem;
+  height: auto;
+  border: 0.15rem solid var(--ink);
+  border-radius: 0.2rem;
+}
+.ending__text { flex: 1; }
+.ending__text p { margin: 0 0 0.75rem; }
+.ending__text p:last-child { margin-bottom: 0; }
 .sheet__foot--ending .btn { margin-left: 0; }
 
 .celebration {
