@@ -64,7 +64,7 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
   - The four walking characters share one body drawn with Google Gemini from the team's prompt. Each person's look follows Gemini's designs, rebuilt with help from Claude so all four match (`docs/asset-sources/chibi-family.mjs`).
   - The room props are flat SVG made for the team with help from Claude.
   - The family photograph and the handwritten closure notice are SVG made with help from Claude. The photograph reuses the walking characters (`docs/asset-sources/family-photo.mjs`).
-- **Fonts:** none bundled. The game uses fonts already installed on the player's system (Palatino or Georgia, and Courier). The handwriting on the closure notice, Walter's diary page and the glass delivery slip is the Caveat font (SIL Open Font License 1.1, The Caveat Project Authors), turned into drawn outlines (`docs/asset-sources/closure-note.mjs`, `docs/asset-sources/handwritten-clues.mjs`).
+- **Fonts:** none bundled. The game uses fonts already installed on the player's system (Palatino or Georgia, and Courier). The handwriting on the closure notice, Walter's diary page, the glass delivery slip, the 1973 shadow-story scripts and stage sketches is the Caveat font (SIL Open Font License 1.1, The Caveat Project Authors), turned into drawn outlines (`docs/asset-sources/closure-note.mjs`, `docs/asset-sources/handwritten-clues.mjs`, `docs/asset-sources/shadow-clues.mjs`).
 - **Sound:** none.
 - **Software:** Elm 0.19.1 and the packages elm/core, elm/browser, elm/html (BSD-3-Clause); elm-test for testing; Node.js for the build scripts.
 

@@ -415,6 +415,15 @@ cluePicture world clue =
         RubbleAndShelvesNote ->
             Just "assets/clue-repair-notes.svg"
 
+        CutoutBox ->
+            Just "assets/clue-cutout-box.svg"
+
+        ShadowScript ->
+            Just ("assets/clue-script-" ++ scriptFile world.scriptVariant ++ ".svg")
+
+        StageSketch ->
+            Just ("assets/clue-sketch-" ++ scriptFile world.scriptVariant ++ ".svg")
+
         WalterDiaryPage ->
             Just "assets/clue-walter-diary.svg"
 
@@ -429,6 +438,17 @@ cluePicture world clue =
 
         _ ->
             Nothing
+
+
+{-| The 1973 script and stage sketch follow the script variant. -}
+scriptFile : ScriptVariant -> String
+scriptFile variant =
+    case variant of
+        OriginalScript ->
+            "original"
+
+        NeighboursRetelling ->
+            "retelling"
 
 
 {-| The community wall has a picture per state of the 1973 tradition. The
@@ -468,6 +488,16 @@ sheetVariant clue =
 
         RubbleAndShelvesNote ->
             "sheet--scene"
+
+        CutoutBox ->
+            "sheet--scene"
+
+        StageSketch ->
+            "sheet--scene"
+
+        -- The handwritten parts are the picture; the first line stays as words.
+        ShadowScript ->
+            "sheet--script"
 
         BudgetAllocation ->
             "sheet--scene"
