@@ -99,8 +99,6 @@ clockEra phase =
 
         Transition (Slideshow era _) ->
             Just era
-        Transition (Slideshow Shadows1973 _) ->
-            True
 
         _ ->
             Nothing
