@@ -20,3 +20,9 @@ npm run release  # optimized, checked build for submission into release/christma
 ## Release
 
 Run `npm test`, then `npm run release`. Upload the *contents* of `release/christmas-rewrite/` (zip them so `index.html` is at the top level). To play the release locally, open `release/christmas-rewrite/index.html` in a browser or serve that folder with any static file server. Details are in [CONTRACT.md](CONTRACT.md#release-build).
+
+## Continuous integration and GitHub Pages
+
+`.github/workflows/ci.yml` runs `npm test` and `npm run release` on every push to `main` and on every pull request. A push to `main` also publishes `release/christmas-rewrite/` to GitHub Pages.
+
+One-time setup: in the repository on GitHub, open **Settings → Pages** and set **Source** to **GitHub Actions**. The game is then at `https://periyr.github.io/Christmas-Rewrite/`.
