@@ -2,7 +2,7 @@
 
 A full record of where AI was and wasn't used in **Christmas Rewrite**, for the judges and for ourselves.
 
-**Team:** Avissa Rasoulinia (core logic, Person A), Defne Göçken (presentation, Person B), Peri Yarci (content and assets, Person C).
+**Team:** Avissa Rasoulinia (core logic, Person A), Defne Göçken (presentation, Person B), Peri Yarci (content and assets, Person C), Ata Karasoy (debugging and small implementation details).
 
 **Tools:** Claude (Anthropic), mostly through Claude Code, and Google Gemini (image generation).
 

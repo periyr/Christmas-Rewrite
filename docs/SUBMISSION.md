@@ -57,6 +57,7 @@ Christmas Rewrite is written in [Elm](https://elm-lang.org), with HTML, CSS and 
 | Core logic, rules and integration (Person A) | Avissa Rasoulinia |
 | Presentation and interaction (Person B) | Defne Göçken |
 | Content, assets and player clarity (Person C) | Peri Yarci |
+| Debugging and small implementation details | Ata Karasoy |
 
 - **Writing:** the team. Text drafted with help from Claude (Anthropic), then edited by the team.
 - **Art:** all made for this project and free to use in this game. See `public/assets/ASSETS.md` for the full list.
