@@ -21,8 +21,11 @@ type alias Puzzle =
     MainPuzzle (Placement TaskId RepairSlot)
 
 
-view : World -> Puzzle -> Maybe Notice -> List (Html Msg)
-view world puzzle notice =
+{-| `order` is this game's tray order for the task cards
+(Rules.BookTrays.tasks, from the run seed).
+-}
+view : World -> List TaskId -> Puzzle -> Maybe Notice -> List (Html Msg)
+view world order puzzle notice =
     let
         placement =
             puzzle.arrangement
@@ -34,7 +37,7 @@ view world puzzle notice =
             Common.numbered reviewing
 
         config =
-            placementConfig puzzle numbered
+            placementConfig order puzzle numbered
 
         isReviewing =
             not (List.isEmpty reviewing)
@@ -74,8 +77,8 @@ view world puzzle notice =
     ]
 
 
-placementConfig : Puzzle -> List ( String, Violation ) -> PlacementUI.Config TaskId RepairSlot Msg
-placementConfig puzzle numbered =
+placementConfig : List TaskId -> Puzzle -> List ( String, Violation ) -> PlacementUI.Config TaskId RepairSlot Msg
+placementConfig order puzzle numbered =
     { toMsg = BoardMove
     , enabled =
         case puzzle.attempts of
@@ -85,7 +88,7 @@ placementConfig puzzle numbered =
             _ ->
                 True
     , placement = puzzle.arrangement
-    , items = Rules.Repair.allTasks
+    , items = order
     , name = \task -> (Content.Repair.taskCard task).title
     , cardClass = cover
     , cardBody = cardBody

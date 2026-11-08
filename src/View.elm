@@ -134,7 +134,7 @@ screen world model =
             station (Views.Salvage.view (BookTrays.salvage model.runSeed) placement model.notice)
 
         RepairBoard puzzle ->
-            station (Views.RepairBoard.view world puzzle model.notice)
+            station (Views.RepairBoard.view world (BookTrays.tasks model.runSeed) puzzle model.notice)
 
         ReopeningShelf placement ->
             station (Views.Shelf.view world (BookTrays.shelf model.runSeed) placement model.notice)
