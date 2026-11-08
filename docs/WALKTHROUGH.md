@@ -129,6 +129,14 @@ Press **Perform the story**.
 - **On failure,** the families drift home and the tradition never starts.
 - After a first wrong attempt, the feedback names the scenes that don't match the script. A wrong staging always breaks at least two scenes.
 
+### After the show: the broken frame
+
+Whatever the outcome, Henry bumps the wall in the dark after the show. The family photograph falls and its glass breaks into nine pieces. Walk to the glass by the armchair and press **E**.
+
+- Click a piece, then click the gap it fits. Each piece has its own shape and fits only one gap. A wrong gap just says it's the wrong shape and keeps the piece in hand. Nothing costs an attempt.
+- When all nine pieces are in, **Hang it back up** goes home to the present.
+- From then on, the frame on the right wall has tape on its glass: in 1998, in the present-day shop and at the end. The family photograph can also be looked at in the present-day shop, and it mentions the tape.
+
 ## 1998: the forgotten book (Edwin)
 
 Ruth asks for the copy of a book her daughter Lucy loved. Three facts identify it:

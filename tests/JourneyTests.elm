@@ -109,11 +109,20 @@ playOn fuel model =
             ReopeningShelf _ ->
                 playOn (fuel - 1) (send (shelveSmallToTall ++ [ Advance ]) model)
 
+            MendingFrame _ ->
+                playOn (fuel - 1) (send (mendFrame ++ [ Advance ]) model)
+
             Transition (TearToPresent _ _) ->
                 playOn (fuel - 1) (send [ SkipTravel ] model)
 
             _ ->
                 playOn (fuel - 1) (send [ Advance ] model)
+
+
+{-| Every piece of glass into its own gap (1973, contract v1.7). -}
+mendFrame : List Msg
+mendFrame =
+    List.concatMap (\n -> [ FrameMove (SelectItem (Shard n)), FrameMove (PlaceSelected (FrameGap n)) ]) (List.range 1 9)
 
 
 playGame : ( Outcome, Outcome, Outcome ) -> Model

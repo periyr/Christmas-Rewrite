@@ -171,6 +171,10 @@ position hotspot =
         ClueSpot InscriptionClue ->
             { x = 440, y = 465 }
 
+        -- 1973, after the performance: the glass on the floor below the photograph's nail.
+        BrokenGlassSpot ->
+            { x = 1150, y = 640 }
+
         BookTableSpot ->
             { x = 820, y = 590 }
 
@@ -198,7 +202,7 @@ hotspots phase =
             []
 
         PresentHub ->
-            [ ClueSpot (HubProp OrderDesk), DiarySpot, ClueSpot (HubProp CommunityWall), ClueSpot (HubProp RoofAndShelves) ]
+            [ ClueSpot (HubProp OrderDesk), DiarySpot, ClueSpot (HubProp CommunityWall), ClueSpot (HubProp RoofAndShelves), ClueSpot FamilyPhotograph ]
 
         Salvage _ ->
             [ CratesSpot ]
@@ -211,6 +215,9 @@ hotspots phase =
 
         ShadowPuzzle _ ->
             [ ClueSpot CutoutBox, ClueSpot ShadowScript, StageSpot, ClueSpot StageSketch ]
+
+        MendingFrame _ ->
+            [ BrokenGlassSpot ]
 
         BookMystery _ ->
             [ ClueSpot RuthsEmail, ClueSpot InscriptionClue, BookTableSpot, ClueSpot RememberedSentence ]
@@ -236,6 +243,9 @@ hasPanel phase =
             True
 
         ShadowPuzzle _ ->
+            True
+
+        MendingFrame _ ->
             True
 
         BookMystery _ ->

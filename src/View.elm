@@ -8,6 +8,7 @@ import Components.Art as Art
 import Components.Clock as Clock
 import Components.Props as Props
 import Content.Clues
+import Content.Frame
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (attribute, class)
@@ -17,6 +18,7 @@ import Timeline
 import Update
 import Views.Common as Common
 import Views.BookTable
+import Views.Frame
 import Views.Labels exposing (eraYear)
 import Views.RepairBoard
 import Views.Room
@@ -91,6 +93,9 @@ clockEra phase =
         ShadowPuzzle _ ->
             Just Shadows1973
 
+        MendingFrame _ ->
+            Just Shadows1973
+
         BookMystery _ ->
             Just Search1998
 
@@ -134,6 +139,9 @@ screen world model =
 
         ShadowPuzzle puzzle ->
             station (Views.ShadowStage.view world puzzle model.notice)
+
+        MendingFrame placement ->
+            room { emptyScene | line = Just Content.Frame.arrival, panel = Views.Frame.view placement model.notice }
 
         BookMystery puzzle ->
             station (Views.BookTable.view world puzzle model.notice)
@@ -242,6 +250,56 @@ shownPhase phase =
 
 stageAttributes : World -> Model -> List (Attribute msg)
 stageAttributes world model =
+    frameAttribute world model.phase ++ eraStageAttributes world model
+
+
+{-| The family photograph on the right wall: on the floor while it is mended
+after the 1973 show (in the dark), and taped up in the rooms after that.
+-}
+frameAttribute : World -> Phase -> List (Attribute msg)
+frameAttribute world phase =
+    let
+        mended =
+            world.tradition /= NotRevisited
+
+        taped =
+            if mended then
+                [ attribute "data-frame" "taped" ]
+
+            else
+                []
+    in
+    case phase of
+        MendingFrame _ ->
+            [ attribute "data-frame" "fallen", attribute "data-lights" "down" ]
+
+        Introduction _ ->
+            taped
+
+        PresentHub ->
+            taped
+
+        BookMystery _ ->
+            taped
+
+        Transition (Slideshow Search1998 _) ->
+            taped
+
+        Transition (OpeningDiary _) ->
+            taped
+
+        Transition ReturningToPresent ->
+            taped
+
+        Ending ->
+            taped
+
+        _ ->
+            []
+
+
+eraStageAttributes : World -> Model -> List (Attribute msg)
+eraStageAttributes world model =
     case model.phase of
         Introduction _ ->
             eraAttribute "present" :: premisesAttribute world
@@ -261,6 +319,9 @@ stageAttributes world model =
         ShadowPuzzle _ ->
             [ eraAttribute "1973" ]
 
+        MendingFrame _ ->
+            [ eraAttribute "1973" ]
+
         BookMystery _ ->
             [ eraAttribute "1998" ]
 
@@ -269,7 +330,7 @@ stageAttributes world model =
             eraAttribute "present" :: premisesAttribute world
 
         Transition (TimeTravel era elapsed) ->
-            attribute "data-travel" (eraYear era) :: stageAttributes world { model | phase = shownPhase (Transition (TimeTravel era elapsed)) }
+            attribute "data-travel" (eraYear era) :: eraStageAttributes world { model | phase = shownPhase (Transition (TimeTravel era elapsed)) }
 
         Transition (Slideshow era index) ->
             eraAttribute (eraYear era) :: Views.Slideshow.stageAttributes model.history era index ++ Views.Slideshow.lights model.history era index
@@ -321,7 +382,7 @@ inspection world model =
             [ Common.documentSheet
                 { variant = sheetVariant clue
                 , document = Content.Clues.clue world clue
-                , picture = cluePicture clue
+                , picture = cluePicture world clue
                 , buttonLabel = "Put it back"
                 , onPress = CloseInspection
                 }
@@ -335,14 +396,18 @@ inspection world model =
 The family photographs and the handwritten closure notice are shown as pictures
 only; their words stay in the page for screen readers.
 -}
-cluePicture : ClueId -> Maybe String
-cluePicture clue =
+cluePicture : World -> ClueId -> Maybe String
+cluePicture world clue =
     case clue of
         CandidatePage candidate CoverTab ->
             Just (Art.candidateIllustration candidate)
 
         FamilyPhotograph ->
-            Just "assets/clue-family-photographs.svg"
+            if world.tradition /= NotRevisited then
+                Just "assets/clue-family-photographs-taped.svg"
+
+            else
+                Just "assets/clue-family-photographs.svg"
 
         ClosureNotice ->
             Just "assets/clue-closure-notice.svg"
