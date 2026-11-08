@@ -1,7 +1,13 @@
-module Main exposing (main)
+port module Main exposing (main)
 
-{-| Entry point. Pure core: Update.update does all the work; there are no
-commands yet (audio ports, if any, get added here later by agreement).
+{-| Entry point. Pure core: Update.update does all the work.
+
+The start/load menu wraps the game here, so Domain and Update stay unchanged:
+the page opens on the title screen (Views.TitleScreen) with "New game" and,
+when a save exists, "Continue". The saved History arrives as the flag and is
+written back through the `saveGame` port whenever the player reaches a
+checkpoint, the present-day shop or the ending (see Save). "New game" and
+"Start again" at the ending clear it (the port is sent null).
 
 Subscriptions (contract v1.3) only turn browser events into room messages:
 the walk keys and E, animation frames while the player is moving or a diary
@@ -12,21 +18,134 @@ trip is playing, and the page being hidden.
 import Browser
 import Browser.Events exposing (Visibility(..))
 import Domain exposing (..)
+import Html exposing (Html)
 import Json.Decode as Decode exposing (Decoder)
+import Json.Encode as Encode
 import Rules.Room
 import Rules.Travel
+import Save exposing (Saved)
 import Update
 import View
+import Views.TitleScreen as TitleScreen
 
 
-main : Program () Model Msg
+{-| Writes the save to localStorage (public/index.html). null clears it. -}
+port saveGame : Encode.Value -> Cmd msg
+
+
+{-| The title screen or the game, plus the save as it is stored right now,
+so the game is only written when its History actually changed.
+-}
+type alias App =
+    { screen : Screen
+    , saved : Maybe Saved
+    }
+
+
+type Screen
+    = Title
+    | Playing Model
+
+
+type AppMsg
+    = NewGame
+    | Continue
+    | Game Msg
+
+
+main : Program Decode.Value App AppMsg
 main =
     Browser.element
-        { init = \_ -> ( Update.init, Cmd.none )
-        , update = \msg model -> ( Update.update msg model, Cmd.none )
-        , view = View.view
-        , subscriptions = subscriptions
+        { init = \flags -> ( { screen = Title, saved = Save.decode flags }, Cmd.none )
+        , update = update
+        , view = view
+        , subscriptions = appSubscriptions
         }
+
+
+update : AppMsg -> App -> ( App, Cmd AppMsg )
+update msg app =
+    case ( msg, app.screen ) of
+        ( NewGame, Title ) ->
+            ( { screen = Playing Update.init, saved = Nothing }, clearSave app )
+
+        ( Continue, Title ) ->
+            case app.saved of
+                Just history ->
+                    ( { app | screen = Playing (Save.resume history) }, Cmd.none )
+
+                Nothing ->
+                    ( app, Cmd.none )
+
+        ( Game StartAgain, Playing model ) ->
+            -- Starting again from the ending is a new game: the old save goes.
+            if model.phase == Ending then
+                ( { screen = Playing (Update.update StartAgain model), saved = Nothing }, clearSave app )
+
+            else
+                ( app, Cmd.none )
+
+        ( Game gameMsg, Playing model ) ->
+            checkpoint { app | screen = Playing (Update.update gameMsg model) }
+
+        _ ->
+            ( app, Cmd.none )
+
+
+{-| Saves when the game stands in the present-day shop or at the ending with
+a History that is not the stored one. Mid-chapter progress is never saved:
+Continue always resumes from the last checkpoint.
+-}
+checkpoint : App -> ( App, Cmd AppMsg )
+checkpoint app =
+    case app.screen of
+        Playing model ->
+            if isCheckpoint model.phase && app.saved /= Just model.history then
+                ( { app | saved = Just model.history }, saveGame (Save.encode model.history) )
+
+            else
+                ( app, Cmd.none )
+
+        Title ->
+            ( app, Cmd.none )
+
+
+isCheckpoint : Phase -> Bool
+isCheckpoint phase =
+    phase == PresentHub || phase == Ending
+
+
+clearSave : App -> Cmd msg
+clearSave app =
+    if app.saved == Nothing then
+        Cmd.none
+
+    else
+        saveGame Encode.null
+
+
+view : App -> Html AppMsg
+view app =
+    case app.screen of
+        Title ->
+            TitleScreen.view
+                { onNewGame = NewGame
+                , onContinue = Maybe.map (\_ -> Continue) app.saved
+                }
+
+        Playing model ->
+            Html.map Game (View.view model)
+
+
+{-| No game keys or frames on the title screen. -}
+appSubscriptions : App -> Sub AppMsg
+appSubscriptions app =
+    case app.screen of
+        Title ->
+            Sub.none
+
+        Playing model ->
+            Sub.map Game (subscriptions model)
 
 
 subscriptions : Model -> Sub Msg
