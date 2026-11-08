@@ -1778,12 +1778,12 @@ svg-art { display: contents; }
    this, so the clock swings flat against the wall.
 
    Where it hangs is keyed on [data-era], the same attribute that picks the room
-   picture, so the two always agree. The 1950 picture and the saved ending have
-   a painted clock on the back wall. There this clock hangs flat over it, a
-   little larger so the painted one doesn't show. 1998 reuses the 1950 picture
-   but has its bookcase, so there the painted clock is covered by .r-clockpatch
-   (index.html) and this clock hangs on the side wall as in the present. 1973
-   has its own picture (below). The painted hands overlay is always off. */
+   picture, so the two always agree. The 1950 picture (also used for 1998) and
+   the saved ending have a painted clock on the back wall. In 1950 and 1998 it is
+   painted over by .r-clockpatch (index.html), so this clock hangs on the side
+   wall as everywhere else. In the saved ending it hangs flat over the painted
+   one, a little larger so that doesn't show. The painted hands overlay is
+   always off. */
 .clock {
   position: absolute;
   z-index: 1;
@@ -1797,31 +1797,26 @@ svg-art { display: contents; }
   pointer-events: none;
 }
 
-/* Over the painted clock: centre (1145, 140), radius 64 in the 1950 picture. */
-.stage[data-era="1950"] .clock { left: 83.83%; top: 9.44%; width: 11.25%; transform: none; }
-
 /* Over the saved ending's painted clock: centre (1161, 107), radius 75. */
 .stage[data-era="saved"] .clock { left: 84.47%; top: 3.78%; width: 12.47%; transform: none; }
 
-/* 1973's picture is its own, painted darker and warmer, with no filter on it.
-   The clock hangs on the same side wall, centred (1213, 188) above the
-   photograph, clear of the bookcase, the garland and the frame's hook. It is
-   no wider than the book spines beside it are tall (63 of 1280), which also
-   brings its outlines down to the picture's line weight, about 1.5px. The tone
-   fades the whole clock into the picture: each colour lands among the room's
-   own (rim with the frame wood, face with the paper notice, cap with the brass
-   bell). */
-.stage[data-era="1973"] .clock {
-  left: 92.32%;
-  top: 21.76%;
-  width: 4.9%;
-  --clock-tone: sepia(0.3) contrast(0.9) brightness(0.85);
-}
+/* The 1950 and 1973 rooms: centred (1213, 188) above the photograph, clear of
+   the bookcase, the ceiling line, the 1973 garland and the frame's hook. It is
+   no wider than the book spines nearby are tall (63 of 1280), which also brings
+   its outlines down to the pictures' line weight, about 1.5px. */
+.stage:is([data-era="1950"], [data-era="1973"]) .clock { left: 92.32%; top: 21.76%; width: 4.9%; }
+
+/* Both past pictures are painted faded and warmer than the present one, with
+   no filter on them, and 1973's is darker too. The tone fades the whole clock
+   into its picture: each colour lands among the room's own (rim with the frame
+   wood, face with the paper, cap with the brass bell). */
+.stage[data-era="1950"] .clock { --clock-tone: sepia(0.3) contrast(0.9); }
+.stage[data-era="1973"] .clock { --clock-tone: sepia(0.3) contrast(0.9) brightness(0.85); }
 
 /* The hands overlay sits inside an SVG <use>, so it is switched by a variable. */
 .r-hands { opacity: var(--show-hands, 1); }
 .r-clockpatch { opacity: var(--show-clockpatch, 0); }
-.stage[data-era="1998"] { --show-clockpatch: 1; }
+.stage:is([data-era="1950"], [data-era="1998"]) { --show-clockpatch: 1; }
 .stage { --show-hands: 0; }
 
 /* Recoloured exactly like the room picture behind it. */
