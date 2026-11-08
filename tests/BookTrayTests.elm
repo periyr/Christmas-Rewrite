@@ -29,6 +29,16 @@ suite =
                     , \_ -> expectInventory Books.recoverableBooks (Trays.shelf seed)
                     ]
                     ()
+        , fuzz Fuzz.int "the 1998 books: each seed lays out all four, once each, and the same seed gives the same order" <|
+            \seed ->
+                Expect.all
+                    [ \_ -> expectInventory [ CandidateA, CandidateB, CandidateC, CandidateD ] (Trays.candidates seed)
+                    , \_ -> Expect.equal (Trays.candidates seed) (Trays.candidates seed)
+                    ]
+                    ()
+        , test "the 1998 books come in a different order across seeds" <|
+            \_ ->
+                varied (List.map Trays.candidates (List.range 0 20))
         , test "both trays vary across seeds" <|
             \_ ->
                 Expect.all

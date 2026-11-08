@@ -144,16 +144,15 @@ suite =
                     [ Fixtures.mysteryFamilyArchive, Fixtures.mysteryFollowUpEmail ]
                         |> List.map (send [ ChooseCandidate CandidateA, Submit ] >> .history >> Timeline.outcomeOf Search1998)
                         |> Expect.equal [ Just Succeeded, Just Succeeded ]
-            , test "mysteryFirstAttemptFailed shows the inscription mismatch and keeps book B chosen" <|
+            , test "mysteryWrongBookSent: one attempt, so book B loses 1998 with the inscription mismatch" <|
                 \_ ->
-                    Fixtures.mysteryFirstAttemptFailed
-                        |> mysteryPuzzle
-                        |> Maybe.map (\p -> ( p.attempts, p.arrangement ))
-                        |> Expect.equal (Just ( ReviewingFirstMistake (Mystery.validate CandidateB), Just CandidateB ))
-            , test "mysteryFirstAttemptFailed: choosing and sending are ignored until Retry" <|
+                    Fixtures.mysteryWrongBookSent
+                        |> (\m -> ( m.phase, Timeline.recordFor Search1998 m.history |> Maybe.map (\r -> ( r.outcome, r.attemptsUsed, r.finalViolations )) ))
+                        |> Expect.equal ( Transition (Slideshow Search1998 0), Just ( Failed, 1, Mystery.validate CandidateB ) )
+            , test "mysteryWrongBookSent: choosing and sending again are ignored" <|
                 \_ ->
-                    send [ ChooseCandidate CandidateA, Submit ] Fixtures.mysteryFirstAttemptFailed
-                        |> Expect.equal Fixtures.mysteryFirstAttemptFailed
+                    send [ ChooseCandidate CandidateA, Submit, Retry ] Fixtures.mysteryWrongBookSent
+                        |> Expect.equal Fixtures.mysteryWrongBookSent
             , test "closing the panel shows the 1998 room with its three clues and the books" <|
                 \_ ->
                     send [ ClosePanel ] Fixtures.mysteryFollowUpEmail

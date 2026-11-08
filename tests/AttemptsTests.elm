@@ -1,8 +1,9 @@
 module AttemptsTests exposing (suite)
 
-{-| The two-attempt rule, checked with a stand-in puzzle so it does not
-depend on any real validator: an Int arrangement where 0 is incomplete,
-7 is correct and anything else breaks a rule.
+{-| The attempt rule, checked with a stand-in puzzle so it does not depend
+on any real validator: an Int arrangement where 0 is incomplete, 7 is correct
+and anything else breaks a rule. The stand-in is a two-attempt chapter (1973);
+the 1998 book has only one attempt.
 -}
 
 import Domain exposing (..)
@@ -12,7 +13,7 @@ import Test exposing (Test, describe, test)
 
 
 config =
-    { era = Search1998
+    { era = Shadows1973
     , complete =
         \n ->
             if n == 0 then
@@ -65,7 +66,7 @@ suite =
                 Attempts.submit config (puzzle 3 (RetryingAfterMistake wrong))
                     |> Expect.equal
                         (Resolved
-                            { era = Search1998
+                            { era = Shadows1973
                             , outcome = Failed
                             , attemptsUsed = 2
                             , finalSubmission = SentBook CandidateA
@@ -88,6 +89,22 @@ suite =
 
                     other ->
                         Expect.fail ("expected Resolved, got " ++ Debug.toString other)
+        , test "the 1998 book has one attempt: a wrong book fails the chapter at once" <|
+            \_ ->
+                Attempts.submit { config | era = Search1998 } (puzzle 3 NoAttemptUsed)
+                    |> Expect.equal
+                        (Resolved
+                            { era = Search1998
+                            , outcome = Failed
+                            , attemptsUsed = 1
+                            , finalSubmission = SentBook CandidateA
+                            , finalViolations = wrong
+                            }
+                        )
+        , test "attempts per chapter: two in 1950 and 1973, one in 1998" <|
+            \_ ->
+                List.map Attempts.maxAttemptsFor [ Repairs1950, Shadows1973, Search1998 ]
+                    |> Expect.equal [ 2, 2, 1 ]
         , test "retry keeps the arrangement and the earlier violations" <|
             \_ ->
                 Attempts.retry (puzzle 3 (ReviewingFirstMistake wrong))
