@@ -195,7 +195,7 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
 
 | File | Clue | Size | Notes |
 |---|---|---|---|
-| `clue-family-photographs.svg` | `FamilyPhotograph` | 640 × 330 | Four photos in one wooden frame, each outside the shop: the founder in his apron, Walter with a hammer, Henry with an armful of books, young Edwin squinting into the sun. Older photos have a warmer, faded tint. Built from the player sprites by `docs/asset-sources/family-photo.mjs`. |
+| `clue-family-photographs.svg` | `FamilyPhotograph` | 600 × 470 | One photo in a wooden frame, outside the shop: Grandad Walter with his walking stick, Henry, and little Edwin (about five) squinting into the sun, with "Grandad Walter, Dad and me" written underneath. Built from the player sprites by `docs/asset-sources/family-photo.mjs`. |
 | `clue-closure-notice.svg` | `ClosureNotice` | 480 × 440 | Edwin's handwritten notice, taped up, with the words of `Content.Clues ClosureNotice`. Handwriting is the Caveat font (SIL OFL 1.1) as outlines, built by `docs/asset-sources/closure-note.mjs`. |
 
 `View.cluePicture` shows these with the `sheet--picture` style: the picture fills the sheet, and the clue's words stay in the page for screen readers.

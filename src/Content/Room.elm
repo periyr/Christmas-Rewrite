@@ -48,7 +48,7 @@ clueLabel clue =
             "Read the closure notice"
 
         FamilyPhotograph ->
-            "Look at the family photographs"
+            "Look at the family photograph"
 
         HubProp RoofAndShelves ->
             "Look up at the roof and shelves"

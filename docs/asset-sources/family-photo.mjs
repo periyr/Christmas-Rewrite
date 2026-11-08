@@ -1,119 +1,102 @@
-// Builds public/assets/clue-family-photographs.svg: the four photographs in one
-// frame that hang behind the counter (Content.Clues FamilyPhotograph).
+// Builds public/assets/clue-family-photographs.svg: the family photograph that
+// hangs in the shop (Content.Clues FamilyPhotograph).
 //
 //   node docs/asset-sources/family-photo.mjs
 //
-// Each photo is taken outside the shop and uses the same bodies as the player
-// sprites (chibi-family.mjs): the founder in his apron, Walter with a hammer,
-// Henry with an armful of books, and young Edwin squinting into the sun.
-// Older photos get a warmer, faded tint.
+// One photo in one frame, taken outside the shop around 1990: grandad Walter
+// with his walking stick, dad Henry, and little Edwin in front, squinting into
+// the sun. The figures use the same bodies as the player sprites
+// (chibi-family.mjs). Walter and Henry turn in towards Edwin.
 
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { MIRROR, PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, rect, eyes, el, figure } from "./chibi-family.mjs";
+import { MIRROR, PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, el, figure } from "./chibi-family.mjs";
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "public", "assets", "clue-family-photographs.svg");
 
-// ── the founder: Walter's body, shirt sleeves, a long apron, bow tie ──────
-const founder = {
-  sleeve: CREAM, forearm: SKIN, rolledCuff: CREAM, trousers: CLOTH.olive, shoes: INK,
+// Little Edwin, about five: bowl haircut, a mustard jumper with a red stripe,
+// blue trousers, red shoes, eyes screwed up against the sun.
+const littleEdwin = {
+  sleeve: CLOTH.mustard, forearm: CLOTH.mustard, trousers: CLOTH.periwinkle, shoes: CLOTH.vermilion,
   torso: [
-    p("M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z", CREAM),
-    // Apron: bib on the chest, skirt down over the legs.
-    p("M 38,86 L 60,86 L 63,112 L 66,134 C 54,138 42,138 30,134 L 34,112 Z", CLOTH.mustard),
-    p("M 38,86 L 41,78 M 60,86 L 57,78", "none", { stroke: CLOTH.mustard, "stroke-width": 2.4 }),
-    p("M 41,98 L 57,98 L 57,106 L 41,106 Z", "none", { "stroke-width": 1.6 }),
-    // Bow tie.
-    p("M 48,79 L 42,75.5 L 42,82.5 Z M 48,79 L 54,75.5 L 54,82.5 Z", CLOTH.wine, { "stroke-width": 1.8 }),
+    p("M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z", CLOTH.mustard),
+    p("M 32.5,93 C 44,97 56,97 65,93 L 65.6,101 C 56,105 44,105 32.4,101 Z", CLOTH.vermilion, { "stroke-width": 2 }),
   ],
-  torsoLabel: "Torso (shirt, apron and bow tie)",
-  behindHead: [p("M 16,30 C 12,40 16,54 26,56 L 30,46 Z", HAIR.grey), p("M 26,52 C 24,62 28,68 34,68 L 34,52 Z", HAIR.grey)],
-  face: [
-    ...eyes(CLOTH.teal),
-    // Big walrus moustache.
-    p("M 46.6,62 C 47.4,53.6 67.8,53.6 68.6,62 C 66,60.8 63,60.2 60.2,61 C 59,59.8 56.4,59.8 55.2,61 C 52,60.2 49.2,60.8 46.6,62 Z", HAIR.grey, { "stroke-width": 2 }),
-  ],
-  topLabel: "Thinning grey hair",
-  top: [
-    p("M 22,38 C 22,24 34,18 46,18 C 40,22 34,26 30,34 C 28,38 25,40 22,38 Z", HAIR.grey),
-    p("M 56,18.5 C 66,19 74,24 77,32 C 72,28 64,24 56,22 Z", HAIR.grey),
-  ],
-};
-
-// Young Edwin with screwed-up eyes against the sun.
-const squinting = {
-  ...PEOPLE["edwin-young"],
+  torsoLabel: "Torso (striped jumper)",
+  behindHead: [],
   face: [
     c(41, 57, 3.6, CHEEK, { stroke: "none" }),
     c(71, 57, 3.6, CHEEK, { stroke: "none" }),
     p("M 40.6,44.4 L 47,47 L 41,50", "none", { "stroke-width": 2.6 }),
     p("M 70.4,44.4 L 64,47 L 70,50", "none", { "stroke-width": 2.6 }),
     c(57, 53.4, 1.5, INK, { stroke: "none" }),
-    p("M 53.6,60.4 Q 57.6,63.8 61.6,60.4", "none", { "stroke-width": 2 }),
+    p("M 52.6,60 Q 57.6,65.4 62.6,60", "none", { "stroke-width": 2 }),
   ],
+  topLabel: "Bowl haircut",
+  top: [p("M 17,48 C 13,24 30,12 50,12 C 71,12 83,25 81,44 C 72,40 62,37 52,37 C 40,37 28,41 22,46 C 20,48 18,49 17,48 Z", HAIR.brown)],
 };
 
-// Things held, in sprite units, drawn over the figure and mirrored with the arms.
-const hammer = [
-  p("M 49,124 L 53,124 L 63,90 L 59,89 Z", HAIR.brown, { "stroke-width": 2.4 }),
-  p("M 52,84 L 70,89 L 68,95 L 50,90 Z", HAIR.grey, { "stroke-width": 2.4 }),
-  c(52, 115, 4, SKIN),
-];
-const books = [
-  rect(31, 103, 34, 8, 1.5, CLOTH.teal),
-  rect(33, 95, 30, 8, 1.5, CLOTH.wine),
-  rect(30, 87, 33, 8, 1.5, CLOTH.mustard),
-  c(31, 103, 4, SKIN),
-  c(62, 108, 4, SKIN),
-].map((s) => ({ ...s, "stroke-width": s.tag === "rect" ? 2.4 : 3 }));
-const holding = (items) => `  <g transform="${MIRROR}" stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
-${items.map((x) => "    " + el(x)).join("\n")}
+// Walter's walking stick in his front hand, in sprite units, drawn with the
+// mirrored arms so it lines up with the hand.
+const stick = `  <g transform="${MIRROR}" stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+${[
+  p("M 24.5,110 L 21,152 L 25,152 L 28.5,110 Z", HAIR.brown, { "stroke-width": 2.4 }),
+  p("M 28,112 C 28,102 16,100 14,108 L 17.5,109 C 19,104 24.5,105 24.5,112 Z", HAIR.brown, { "stroke-width": 2.4 }),
+  c(25, 111, 4, SKIN),
+].map((x) => "    " + el(x)).join("\n")}
   </g>`;
 
-// ── the photographs ────────────────────────────────────────────────────────
-const W = 640, H = 330, PW = 130, PH = 206, PY = 42, SCALE = 1.05;
-const photos = [
-  { who: founder, extra: "", name: "The founder", tint: 0.42, wall: CLOTH.olive, tilt: -2 },
-  { who: PEOPLE.walter, extra: holding(hammer), name: "Walter", tint: 0.3, wall: CLOTH.wine, tilt: 1.5 },
-  { who: PEOPLE.henry, extra: holding(books), name: "Henry", tint: 0.14, wall: CLOTH.green, tilt: -1 },
-  { who: squinting, extra: "", name: "Edwin", tint: 0, wall: CLOTH.teal, tilt: 2, sun: true },
-];
+const W = 600, H = 470;
+// Photo window inside the frame and mat.
+const PX = 60, PY = 56, PW = 480, PH = 330, GROUND = PY + PH - 26;
 
-function photo({ who, extra, name, tint, wall, tilt, sun }, i) {
-  const x = 30 + i * 150, cx = x + PW / 2, cy = PY + PH / 2;
-  const fx = cx - 48 * SCALE, fy = PY + PH - 14 - 152 * SCALE;
-  const id = `ph${i}`;
-  return `  <!-- ${name} -->
-  <g transform="rotate(${tilt} ${cx} ${cy})">
-    <rect x="${x - 6}" y="${PY - 6}" width="${PW + 12}" height="${PH + 12}" rx="2" fill="${CREAM}" stroke="${INK}" stroke-width="2" />
-    <clipPath id="${id}"><rect x="${x}" y="${PY}" width="${PW}" height="${PH}" /></clipPath>
-    <g clip-path="url(#${id})">
-      <!-- Sky, the shop front, its sign and window, the pavement -->
-      <rect x="${x}" y="${PY}" width="${PW}" height="${PH}" fill="${CLOTH.periwinkle}" />
-      <rect x="${x}" y="${PY + 10}" width="${PW}" height="${PH - 10}" fill="${wall}" />
-      <rect x="${x + 10}" y="${PY + 16}" width="${PW - 20}" height="18" fill="${CREAM}" stroke="${INK}" stroke-width="2" />
-      <text x="${cx}" y="${PY + 30}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="${INK}" letter-spacing="1">HALE’S</text>
-      ${sun ? `<circle cx="${x + PW - 6}" cy="${PY + 6}" r="15" fill="${CLOTH.mustard}" stroke="${INK}" stroke-width="2" />` : ""}
-      <rect x="${x + 14}" y="${PY + 46}" width="${PW - 28}" height="90" fill="${HAIR.grey}" stroke="${CREAM}" stroke-width="4" />
-      <path d="M ${cx} ${PY + 46} L ${cx} ${PY + 136} M ${x + 14} ${PY + 91} L ${x + PW - 14} ${PY + 91}" stroke="${CREAM}" stroke-width="3" />
-      <rect x="${x}" y="${PY + PH - 24}" width="${PW}" height="24" fill="${HAIR.brown}" />
-      <g transform="translate(${fx} ${fy}) scale(${SCALE})">
-${figure(who, "idle")}
+// A figure standing with its soles on the pavement, centred on x.
+const place = (person, x, scale, { flip = false, extra = "" } = {}) => {
+  const tx = flip ? x + 48 * scale : x - 48 * scale;
+  const ty = GROUND - 152 * scale;
+  return `      <g transform="translate(${tx} ${ty}) scale(${flip ? -scale : scale} ${scale})">
+${figure(person, "idle")}
 ${extra}
-      </g>
-      ${tint ? `<rect x="${x}" y="${PY}" width="${PW}" height="${PH}" fill="${CLOTH.mustard}" opacity="${tint}" />` : ""}
-    </g>
-    <rect x="${x}" y="${PY}" width="${PW}" height="${PH}" fill="none" stroke="${INK}" stroke-width="1.5" />
-    <text x="${cx}" y="${PY + PH + 30}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="15" fill="${INK}">${name}</text>
-  </g>`;
-}
+      </g>`;
+};
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
-  <!-- clue-family-photographs: four photos in one frame, built by docs/asset-sources/family-photo.mjs from the player sprites -->
-  <rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="6" fill="${HAIR.brown}" stroke="${INK}" stroke-width="3" />
-  <rect x="16" y="16" width="${W - 32}" height="${H - 32}" rx="2" fill="${CREAM}" stroke="${INK}" stroke-width="2" />
-${photos.map(photo).join("\n")}
+  <!-- clue-family-photographs: Walter, Henry and little Edwin outside the shop, built by docs/asset-sources/family-photo.mjs from the player sprites -->
+  <!-- Wooden frame and cream mat -->
+  <rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="8" fill="${HAIR.brown}" stroke="${INK}" stroke-width="3" />
+  <rect x="22" y="22" width="${W - 44}" height="${H - 44}" rx="2" fill="${CREAM}" stroke="${INK}" stroke-width="2" />
+  <clipPath id="photo"><rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" /></clipPath>
+  <g clip-path="url(#photo)">
+    <!-- Sky and sun -->
+    <rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${CLOTH.periwinkle}" />
+    <circle cx="${PX + PW - 30}" cy="${PY + 26}" r="22" fill="${CLOTH.mustard}" stroke="${INK}" stroke-width="2" />
+    <!-- Shop front: wall, sign, two windows and the door -->
+    <rect x="${PX}" y="${PY + 46}" width="${PW - 70}" height="${PH - 46}" fill="${CLOTH.green}" stroke="${INK}" stroke-width="2" />
+    <rect x="${PX + 30}" y="${PY + 58}" width="${PW - 130}" height="34" fill="${CREAM}" stroke="${INK}" stroke-width="2.5" />
+    <text x="${PX + 30 + (PW - 130) / 2}" y="${PY + 84}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="bold" fill="${INK}" letter-spacing="3">HALE’S BOOKSHOP</text>
+    <g stroke="${CREAM}" stroke-width="5">
+      <rect x="${PX + 22}" y="${PY + 108}" width="120" height="150" fill="${HAIR.grey}" />
+      <rect x="${PX + 268}" y="${PY + 108}" width="120" height="150" fill="${HAIR.grey}" />
+      <path d="M ${PX + 82} ${PY + 108} L ${PX + 82} ${PY + 258} M ${PX + 22} ${PY + 183} L ${PX + 142} ${PY + 183} M ${PX + 328} ${PY + 108} L ${PX + 328} ${PY + 258} M ${PX + 268} ${PY + 183} L ${PX + 388} ${PY + 183}" />
+    </g>
+    <rect x="${PX + 168}" y="${PY + 112}" width="74" height="192" fill="${CLOTH.wine}" stroke="${INK}" stroke-width="2.5" />
+    <rect x="${PX + 180}" y="${PY + 126}" width="50" height="60" fill="${HAIR.grey}" stroke="${INK}" stroke-width="2" />
+    <circle cx="${PX + 230}" cy="${PY + 222}" r="3.5" fill="${CLOTH.mustard}" stroke="${INK}" stroke-width="1.5" />
+    <!-- Pavement -->
+    <rect x="${PX}" y="${GROUND - 4}" width="${PW}" height="${PH}" fill="${HAIR.brown}" />
+    <path d="M ${PX} ${GROUND - 4} L ${PX + PW} ${GROUND - 4}" stroke="${INK}" stroke-width="2" />
+    <!-- Grandad Walter, facing in -->
+${place(PEOPLE.walter, PX + 132, 1.32, { extra: stick })}
+    <!-- Dad Henry, facing in -->
+${place(PEOPLE.henry, PX + 340, 1.36, { flip: true })}
+    <!-- Little Edwin, in front -->
+${place(littleEdwin, PX + 238, 0.86)}
+    <!-- Faded with age -->
+    <rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="${CLOTH.mustard}" opacity="0.18" />
+  </g>
+  <rect x="${PX}" y="${PY}" width="${PW}" height="${PH}" fill="none" stroke="${INK}" stroke-width="2" />
+  <text x="${W / 2}" y="${PY + PH + 40}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="20" fill="${INK}">Grandad Walter, Dad and me</text>
 </svg>
 `;
 writeFileSync(OUT, svg);
