@@ -61,5 +61,5 @@ http
     fs.createReadStream(file).pipe(res);
   })
   .listen(port, () => {
-    console.log(`One More Christmas preview: http://localhost:${port}  (reload to rebuild, Ctrl+C to stop)`);
+    console.log(`Christmas Rewrite preview: http://localhost:${port}  (reload to rebuild, Ctrl+C to stop)`);
   });

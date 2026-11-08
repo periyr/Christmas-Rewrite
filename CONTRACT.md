@@ -11,7 +11,7 @@ The only requirement is Node.js 18 or newer. Nothing needs to be installed globa
 | Install (once, and after pulling a `package.json` change) | `npm install` |
 | Live preview at http://localhost:8000 (reload the page to rebuild) | `npm start` |
 | Build into `build/` (git-ignored) | `npm run build` |
-| Release build for submission into `release/one-more-christmas/` (git-ignored) | `npm run release` |
+| Release build for submission into `release/christmas-rewrite/` (git-ignored) | `npm run release` |
 | Run the tests | `npm test` |
 
 Compile errors appear in the browser while `npm start` is running. The page `build/index.html` can also be opened directly once it has been built. To use another port, run `PORT=9000 npm start` on Mac, or `$env:PORT=9000; npm start` in PowerShell.
@@ -506,10 +506,10 @@ npm test
 npm run release
 ```
 
-`npm run release` compiles with `--optimize` and puts the whole game in `release/one-more-christmas/`: `index.html`, `elm.js`, `styles.css` and `assets/`. It then checks that every asset the page, the styles and the compiled Elm refer to is in the folder, and that every path is relative. It stops with a message if anything is missing.
+`npm run release` compiles with `--optimize` and puts the whole game in `release/christmas-rewrite/`: `index.html`, `elm.js`, `styles.css` and `assets/`. It then checks that every asset the page, the styles and the compiled Elm refer to is in the folder, and that every path is relative. It stops with a message if anything is missing.
 
-- **Upload:** zip the *contents* of `release/one-more-christmas/`, so `index.html` is at the top of the zip (game hosts such as itch.io require this). Nothing else is needed: no server code, no network access while playing.
-- **Play locally:** open `release/one-more-christmas/index.html` in a browser, or serve the folder with any static file server.
+- **Upload:** zip the *contents* of `release/christmas-rewrite/`, so `index.html` is at the top of the zip (game hosts such as itch.io require this). Nothing else is needed: no server code, no network access while playing.
+- **Play locally:** open `release/christmas-rewrite/index.html` in a browser, or serve the folder with any static file server.
 - **Why a separate folder:** `npm start` rebuilds `build/` as a debug build on every page load, so an optimized build left in `build/` can be silently replaced. `release/` is only written by `npm run release`.
 - **Not yet checked:** opening `index.html` straight from disk was not tested in a desktop browser (the checks so far served the folder over HTTP). Check that once in Chrome, Firefox or Safari and on Windows before submitting.
 

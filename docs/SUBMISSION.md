@@ -1,10 +1,10 @@
-# One More Christmas: submission copy and credits
+# Christmas Rewrite: submission copy and credits
 
 Fill in the `[brackets]` before submitting.
 
 ## Title and tagline
 
-**One More Christmas**
+**Christmas Rewrite**
 
 *Every decade has its mistakes. Every diary remembers them.*
 
@@ -36,7 +36,7 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10â
 
 ## How it's built
 
-One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and SVG for presentation. It needs no server, database or network connection while playing.
+Christmas Rewrite is written in [Elm](https://elm-lang.org), with HTML, CSS and SVG for presentation. It needs no server, database or network connection while playing.
 
 - **State never changes in place.** Every action produces a new game state from the old one, through a single pure update function. Clicking during feedback, or double-clicking, can't spend an extra attempt or record a chapter twice.
 - **The puzzle checks are pure functions.** Each puzzle has its own validator, separate from the interface. The validator takes a finished arrangement and returns a list of broken rules. The repair board's validator was tested against all 2,520 possible weeks, and it accepts exactly the six valid ones.

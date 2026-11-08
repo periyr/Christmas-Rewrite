@@ -1,6 +1,6 @@
 // Release build for submission (Mac/Windows/Linux). Only uses Node's standard library.
 //
-//   npm run release   -> release/one-more-christmas/ (optimized, self-contained static site)
+//   npm run release   -> release/christmas-rewrite/ (optimized, self-contained static site)
 //
 // The folder is separate from build/ on purpose: `npm start` rebuilds build/ as a
 // debug build on every page load, so an optimized build there can be replaced
@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 import { build, outDir } from "./build.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const releaseDir = path.join(root, "release", "one-more-christmas");
+const releaseDir = path.join(root, "release", "christmas-rewrite");
 
 function fail(message) {
   console.error("\nRelease check failed: " + message);
@@ -63,6 +63,6 @@ const size = (dir) =>
     0
   );
 
-console.log(`\nRelease ready in release/one-more-christmas/ (${(size(releaseDir) / 1024 / 1024).toFixed(1)} MB).`);
+console.log(`\nRelease ready in release/christmas-rewrite/ (${(size(releaseDir) / 1024 / 1024).toFixed(1)} MB).`);
 console.log(`Checked ${checked} asset references: all present, all relative.`);
-console.log("Open release/one-more-christmas/index.html, or upload the folder's contents with index.html at the top.");
+console.log("Open release/christmas-rewrite/index.html, or upload the folder's contents with index.html at the top.");

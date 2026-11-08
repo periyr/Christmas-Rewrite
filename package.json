@@ -1,7 +1,7 @@
 {
-  "name": "one-more-christmas",
+  "name": "christmas-rewrite",
   "private": true,
-  "description": "One More Christmas — Elm game jam project",
+  "description": "Christmas Rewrite — Elm game jam project",
   "scripts": {
     "build": "node scripts/build.mjs",
     "start": "node scripts/serve.mjs",

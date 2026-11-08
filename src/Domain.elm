@@ -16,7 +16,7 @@ module Domain exposing
     , Document, TaskCardContent, BookContent, CandidateContent, ShadowSceneContent
     )
 
-{-| The shared contract for One More Christmas.
+{-| The shared contract for Christmas Rewrite.
 
 Every module (rules, update, views, content) imports this one. It imports
 nothing from the project, so there can be no import cycles.

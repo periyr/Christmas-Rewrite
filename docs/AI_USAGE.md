@@ -1,6 +1,6 @@
 # How we used AI
 
-A full record of where AI was and wasn't used in **One More Christmas**, for the judges and for ourselves.
+A full record of where AI was and wasn't used in **Christmas Rewrite**, for the judges and for ourselves.
 
 **Team:** Avissa Rasoulinia (core logic, Person A), Defne Göçken (presentation, Person B), Peri Yarci (content and assets, Person C).
 
