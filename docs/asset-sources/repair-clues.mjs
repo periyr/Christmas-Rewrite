@@ -1,13 +1,12 @@
-// Builds the pictures for the four 1950 repair-board clues (Content.Clues),
-// shown above their words:
+// Builds the pictures for two 1950 repair-board clues (Content.Clues), shown
+// above their words:
 //
 //   clue-repair-notes.svg    RubbleAndShelvesNote: Walter's sketch, shelves where the
 //                            rubble is, books waiting in their crates
-//   clue-walter-diary.svg    WalterDiaryPage: the grand new sign, and Wednesday's rain
-//                            coming through the roof onto the saved books
 //   clue-budget.svg          BudgetAllocation: four wood planks and a ten-pound note
-//   clue-glass-slip.svg      GlassDeliverySlip: one pane of glass in its crate, and the
-//                            week with Wednesday morning ringed
+//
+// Walter's diary page and the glass delivery slip are handwritten pages instead
+// (handwritten-clues.mjs).
 //
 // Each shows only what its words already say, never how to plan the week.
 //
@@ -69,36 +68,6 @@ ${crate(70, 196)}
     </g>
 `;
 
-// ── Walter's diary: the sign, and the rain on the books ───────────────────
-const diary = `    <rect x="0" y="0" width="${W}" height="${H}" fill="${CREAM}" />
-    <rect x="0" y="0" width="${W}" height="44" fill="${GREY}" />
-    <rect x="0" y="252" width="${W}" height="48" fill="${BROWN}" />
-    <!-- The hole in the roof, and the rain coming through -->
-    <path d="M 284 0 L 380 0 L 372 20 L 350 30 L 330 22 L 300 28 Z" fill="#39424a" />
-    <g fill="none" stroke="${C.periwinkle}" stroke-width="3">
-      <path d="M 300 50 l -6 24 M 324 62 l -6 24 M 352 48 l -6 24 M 340 100 l -6 24 M 310 112 l -6 24 M 364 120 l -6 24 M 326 160 l -6 24 M 296 176 l -6 24 M 356 182 l -6 24" />
-    </g>
-    <!-- The grand new sign, gold on wine -->
-    <rect x="40" y="62" width="196" height="64" rx="6" fill="${C.wine}" />
-    <rect x="50" y="72" width="176" height="44" rx="3" fill="none" stroke="${C.mustard}" stroke-width="2.5" />
-    <text x="138" y="102" text-anchor="middle" ${FONT} font-size="22" font-weight="bold" fill="${C.mustard}" stroke="none" letter-spacing="2">HALE’S</text>
-    <path d="M 70 62 L 82 44 M 206 62 L 194 44" fill="none" stroke-width="1.5" />
-    <!-- Every book they'd saved, soaked -->
-    <g stroke-width="1.5">
-      <rect x="270" y="222" width="110" height="14" fill="${C.teal}" transform="rotate(-2 325 229)" />
-      <rect x="276" y="236" width="104" height="16" fill="${C.wine}" />
-      <rect x="282" y="208" width="92" height="14" fill="${C.mustard}" transform="rotate(3 328 215)" />
-      <rect x="390" y="196" width="18" height="56" fill="${C.green}" />
-      <rect x="410" y="204" width="16" height="48" fill="${C.vermilion}" />
-      <rect x="252" y="204" width="16" height="48" fill="${C.periwinkle}" />
-    </g>
-    <g fill="${C.periwinkle}" fill-opacity="0.55" stroke="none">
-      <ellipse cx="330" cy="256" rx="70" ry="7" />
-      <path d="M 300 216 c 10 -4 20 4 30 0 c 6 4 4 10 -4 10 c -10 2 -24 -2 -26 -10 Z" />
-      <path d="M 392 214 c 8 0 14 6 12 12 c -6 2 -12 -4 -12 -12 Z" />
-    </g>
-`;
-
 // ── Wood planks and cash ───────────────────────────────────────────────────
 const plank = (y, tilt) => `    <g transform="rotate(${tilt} 180 ${y})">
       <rect x="40" y="${y}" width="290" height="22" fill="${WOOD}" />
@@ -121,34 +90,11 @@ ${plank(150, -1)}${plank(176, 0.5)}${plank(202, -0.5)}${plank(228, 1)}
       <text x="300" y="104" ${FONT} font-size="10" fill="${C.green}" stroke="none">TEN POUNDS</text>
     </g>
     <text x="364" y="276" text-anchor="middle" ${FONT} font-size="16" font-weight="bold" fill="${CREAM}" stroke="none">£10</text>
-    <text x="240" y="30" text-anchor="middle" ${FONT} font-size="15" font-style="italic" fill="${CREAM}" stroke="none">For the whole week</text>
-`;
-
-// ── Glass delivery: a pane in its crate, and the week ─────────────────────
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-const glass = `    <rect x="0" y="0" width="${W}" height="${H}" fill="${CREAM}" />
-    <rect x="0" y="240" width="${W}" height="60" fill="${BROWN}" />
-    <!-- One pane of window glass, packed in straw -->
-    <path d="M 64 40 L 186 40 L 186 196 L 64 196 Z" fill="#dce8ee" />
-    <path d="M 84 70 L 120 54 M 84 96 L 150 66" fill="none" stroke="${PAPER}" stroke-width="4" />
-    <path d="M 50 120 L 200 120 L 200 240 L 50 240 Z" fill="${TAN}" />
-    <path d="M 52 120 C 62 108 70 118 78 110 C 90 116 100 104 112 114 C 124 104 134 116 146 108 C 160 116 170 106 182 114 C 190 108 196 116 198 120" fill="${C.mustard}" />
-    <path d="M 50 150 H 200 M 50 190 H 200" fill="none" stroke-width="1.5" />
-    <rect x="86" y="200" width="78" height="26" fill="${PAPER}" stroke-width="1.5" />
-    <text x="125" y="218" text-anchor="middle" ${FONT} font-size="11" font-weight="bold" fill="${INK}" stroke="none">HALE’S</text>
-    <!-- The week, with the delivery ringed -->
-    <rect x="232" y="70" width="226" height="110" fill="${PAPER}" />
-    <text x="345" y="94" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="14" font-weight="bold" fill="${INK}" stroke="none">DELIVERY</text>
-${days.map((d, i) => `    <text x="${256 + i * 44}" y="136" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="14" fill="${INK}" stroke="none">${d}</text>`).join("\n")}
-    <ellipse cx="344" cy="131" rx="24" ry="17" fill="none" stroke="${C.vermilion}" stroke-width="3" />
-    <text x="344" y="166" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="11" fill="${C.vermilion}" stroke="none">morning</text>
 `;
 
 const files = {
   "clue-repair-notes.svg": ["Walter's sketch: new shelves where the rubble is, books waiting in their crates", notes],
-  "clue-walter-diary.svg": ["the grand new sign, and Wednesday's rain coming through the roof onto the saved books", diary],
   "clue-budget.svg": ["four wood planks and a ten-pound note for the whole week", budget],
-  "clue-glass-slip.svg": ["one pane of glass in its crate, and the week with Wednesday morning ringed", glass],
 };
 for (const [name, [note, body]] of Object.entries(files)) {
   writeFileSync(join(OUT, name), svg(name.replace(".svg", ""), note, body));

@@ -36,7 +36,6 @@
       <text x="300" y="104" font-family="Georgia, 'Times New Roman', serif" font-size="10" fill="#31542f" stroke="none">TEN POUNDS</text>
     </g>
     <text x="364" y="276" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="16" font-weight="bold" fill="#f2e4c9" stroke="none">£10</text>
-    <text x="240" y="30" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-style="italic" fill="#f2e4c9" stroke="none">For the whole week</text>
 
   </g>
 </svg>
