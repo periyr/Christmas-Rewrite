@@ -251,9 +251,9 @@ inscription : InscriptionSource -> Document
 inscription source =
     case source of
         FamilyArchive ->
-            { title = "From the shop archive"
+            { title = "A photograph from the 1973 shadow story"
             , paragraphs =
-                [ "A photograph from the 1973 shadow story: Ruth and Lucy in the front row."
+                [ "From the shop archive: Ruth and Lucy in the front row."
                 , "Henry’s note on the back: “Ruth writes ‘For Lucy, love Mum’ in every book she gives her.”"
                 ]
             }

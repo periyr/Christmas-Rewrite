@@ -398,7 +398,7 @@ inspection world model =
 
                 Nothing ->
                     [ Common.documentSheet
-                        { variant = sheetVariant clue
+                        { variant = sheetVariant world clue
                         , document = document
                         , picture = cluePicture world clue
                         , buttonLabel = "Put it back"
@@ -436,10 +436,11 @@ cluePicture world clue =
         CutoutBox ->
             Just "assets/clue-cutout-box.svg"
 
-        -- From the shop archive, the photo itself (the one on the community wall).
+        -- From the shop archive: the photo's front (the one on the community
+        -- wall) and its back, with Henry's note in his hand.
         InscriptionClue ->
             if world.inscriptionSource == FamilyArchive then
-                Just "assets/clue-ruth-lucy-photo.svg"
+                Just "assets/clue-archive-photo.svg"
 
             else
                 Nothing
@@ -493,8 +494,8 @@ foundationFile foundation =
             "established"
 
 
-sheetVariant : ClueId -> String
-sheetVariant clue =
+sheetVariant : World -> ClueId -> String
+sheetVariant world clue =
     case clue of
         FamilyPhotograph ->
             "sheet--picture sheet--photo"
@@ -518,8 +519,13 @@ sheetVariant clue =
         CutoutBox ->
             "sheet--scene"
 
+        -- The photo's front and back are the clue; the words stay for screen readers.
         InscriptionClue ->
-            "sheet--scene sheet--photo-print"
+            if world.inscriptionSource == FamilyArchive then
+                "sheet--picture sheet--archive"
+
+            else
+                ""
 
         StageSketch ->
             "sheet--scene"
