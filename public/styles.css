@@ -1853,6 +1853,17 @@ svg-art { display: contents; }
 }
 
 .sheet--note { width: 36rem; }
+
+/* A present-day hub prop: its picture above the words. */
+.sheet--scene .sheet__picture {
+  max-height: 18rem;
+  border: 0.15rem solid var(--ink);
+  border-radius: 0.2rem;
+  background: none;
+  object-fit: contain;
+  width: auto;
+  margin: 0 auto 0.9rem;
+}
 .sheet--note .sheet__picture { filter: drop-shadow(0.25rem 0.3rem 0.2rem rgba(0, 0, 0, 0.3)); }
 
 /* ---------- Chapter props in the room ---------- */

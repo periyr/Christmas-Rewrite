@@ -199,6 +199,11 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
 | `clue-family-photographs-taped.svg` | `FamilyPhotograph` after 1973 | 600 × 470 | The same photograph, its glass cracked along the nine pieces of the 1973 puzzle, with a strip of tape along every crack. Same generator. |
 | `frame-photo-1973.svg` | (the 1973 broken-frame puzzle) | 480 × 330 | The same family photograph without frame or caption, so the puzzle shows exactly the picture in the shop. `Views.Frame` draws the glass pieces over it. Same generator. |
 | `clue-closure-notice.svg` | `ClosureNotice` | 480 × 440 | Edwin's handwritten notice, taped up, with the words of `Content.Clues ClosureNotice`. Handwriting is the Caveat font (SIL OFL 1.1) as outlines, built by `docs/asset-sources/closure-note.mjs`. |
+| `clue-roof-<state>.svg` | `HubProp RoofAndShelves` (from `world.premises`) | 480 × 300 | `original`: water stain, sagging shelves, damp archive door. `missing`: stain, a bucket under the drip, planks on bricks, the archive boarded up. `established`: Walter's sound patch, full straight shelves, the archive open with its boxes. |
+| `clue-wall-<state>.svg` | `HubProp CommunityWall` (from `world.tradition`) | 480 × 300 | `original`: a bare board with pin holes by the children's corner. `missing`: one faded "Christmas Reading 1973" poster. `established`: shadow-story posters, children's fox-and-lantern drawings, and the 1973 photo of Ruth and Lucy. |
+| `clue-desk-<state>.svg` | `HubProp OrderDesk` (from `world.onlineService`) | 480 × 300 | `original`: an empty desk and a switched-off computer. `missing`: the drawer open with one printed email. `established`: the computer on, a printer full of orders, parcels for France, Canada and Japan, and the framed "You found Lucy's book!" email. |
+
+`<state>` is `original` (NotRevisited), `missing` or `established`. The hub props are built by `docs/asset-sources/hub-props.mjs` and shown above their words (`sheet--scene`).
 
 The room overlays for the frame (bare wall and glass on the floor in 1973, tape on the glass afterwards) are drawn in `public/index.html` (`r-frame-gone`, `r-frame-tape`) and switched by `data-frame` on the stage.
 

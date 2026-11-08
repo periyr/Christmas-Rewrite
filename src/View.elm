@@ -412,8 +412,31 @@ cluePicture world clue =
         ClosureNotice ->
             Just "assets/clue-closure-notice.svg"
 
+        HubProp RoofAndShelves ->
+            Just ("assets/clue-roof-" ++ foundationFile world.premises ++ ".svg")
+
+        HubProp CommunityWall ->
+            Just ("assets/clue-wall-" ++ foundationFile world.tradition ++ ".svg")
+
+        HubProp OrderDesk ->
+            Just ("assets/clue-desk-" ++ foundationFile world.onlineService ++ ".svg")
+
         _ ->
             Nothing
+
+
+{-| Each hub prop has a picture per state of the foundation it shows. -}
+foundationFile : Foundation -> String
+foundationFile foundation =
+    case foundation of
+        NotRevisited ->
+            "original"
+
+        Missing ->
+            "missing"
+
+        Established ->
+            "established"
 
 
 sheetVariant : ClueId -> String
@@ -424,6 +447,9 @@ sheetVariant clue =
 
         ClosureNotice ->
             "sheet--picture sheet--note"
+
+        HubProp _ ->
+            "sheet--scene"
 
         WalterDiaryPage ->
             "sheet--diary"

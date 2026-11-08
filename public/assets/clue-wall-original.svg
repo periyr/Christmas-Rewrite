@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300">
+  <!-- clue-wall-original: the 1973 story not revisited: a bare board by the children's corner, only pin holes. Built by docs/asset-sources/hub-props.mjs -->
+  <g stroke="#291e1a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="0" y="0" width="480" height="250" fill="#f2e4c9" />
+    <rect x="0" y="250" width="480" height="50" fill="#5a3428" />
+    <!-- The children's corner: rug and a little chair -->
+    <ellipse cx="370" cy="282" rx="90" ry="14" fill="#496669" />
+    <path d="M 410 232 L 446 232 L 446 270 M 410 232 L 410 270 M 410 252 L 446 252" fill="none" stroke="#a6652b" stroke-width="5" />
+    <path d="M 410 232 L 446 232 L 446 270 M 410 232 L 410 270 M 410 252 L 446 252" fill="none" stroke-width="1.5" />
+    <!-- The wall board -->
+    <rect x="40" y="26" width="330" height="200" rx="3" fill="#c79a62" />
+    <g fill="#291e1a" stroke="none"><circle cx="82" cy="52" r="1.8" /><circle cx="150" cy="60" r="1.8" /><circle cx="226" cy="48" r="1.8" /><circle cx="300" cy="66" r="1.8" /><circle cx="110" cy="140" r="1.8" /><circle cx="188" cy="118" r="1.8" /><circle cx="262" cy="150" r="1.8" /><circle cx="330" cy="120" r="1.8" /><circle cx="96" cy="196" r="1.8" /><circle cx="214" cy="190" r="1.8" /><circle cx="318" cy="204" r="1.8" /></g>
+
+  </g>
+</svg>
