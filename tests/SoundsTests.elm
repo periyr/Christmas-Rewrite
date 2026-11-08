@@ -57,7 +57,7 @@ suite =
                         Update.update Submit ready
                 in
                 ( performed.phase, step Advance performed )
-                    |> Expect.equal ( Transition (Slideshow Shadows1973 0), [ "page", "scene-stop", "scene-door-owl" ] )
+                    |> Expect.equal ( Transition (Slideshow Shadows1973 0), [ "page", "scene-door-owl" ] )
         , test "the clock stopping has its own sound" <|
             \_ ->
                 step Advance { initial | phase = Introduction DiariesFound }

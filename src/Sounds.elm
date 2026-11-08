@@ -351,24 +351,18 @@ showSounds before after =
         []
 
     else
-        let
-            stop =
-                case performance before of
-                    Just _ ->
-                        [ "scene-stop" ]
+        -- One name per step: a step's port commands can reach the page in any
+        -- order, so a separate stop could cut off the scene that just began.
+        -- Starting a scene already fades out the one before it (audio.js).
+        case ( performance before, performance after ) of
+            ( _, Just name ) ->
+                [ "scene-" ++ name ]
 
-                    Nothing ->
-                        []
+            ( Just _, Nothing ) ->
+                [ "scene-stop" ]
 
-            start =
-                case performance after of
-                    Just name ->
-                        [ "scene-" ++ name ]
-
-                    Nothing ->
-                        []
-        in
-        stop ++ start
+            ( Nothing, Nothing ) ->
+                []
 
 
 {-| The scene on screen, named like its animation (Components.Props, the
