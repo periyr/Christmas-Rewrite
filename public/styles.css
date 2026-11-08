@@ -1874,6 +1874,9 @@ svg-art { display: contents; }
   white-space: nowrap;
 }
 
+/* A loose photo: no outline, so its own white border shows. */
+.sheet--scene.sheet--photo-print .sheet__picture { border: 0; max-height: 15rem; }
+
 /* A clue picture above its words. */
 .sheet--scene .sheet__picture {
   max-height: 22rem;
