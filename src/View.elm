@@ -18,6 +18,7 @@ import Timeline
 import Update
 import Views.Common as Common
 import Views.BookTable
+import Views.ClueSheets
 import Views.Frame
 import Views.Labels exposing (eraYear)
 import Views.RepairBoard
@@ -379,14 +380,30 @@ inspection : World -> Model -> List (Html Msg)
 inspection world model =
     case model.inspecting of
         Just clue ->
-            [ Common.documentSheet
-                { variant = sheetVariant clue
-                , document = Content.Clues.clue world clue
-                , picture = cluePicture world clue
-                , buttonLabel = "Put it back"
-                , onPress = CloseInspection
-                }
-            ]
+            let
+                document =
+                    Content.Clues.clue world clue
+            in
+            case Views.ClueSheets.custom clue document of
+                Just ( variant, body ) ->
+                    [ Common.customSheet
+                        { variant = variant
+                        , title = document.title
+                        , body = body
+                        , buttonLabel = "Put it back"
+                        , onPress = CloseInspection
+                        }
+                    ]
+
+                Nothing ->
+                    [ Common.documentSheet
+                        { variant = sheetVariant clue
+                        , document = document
+                        , picture = cluePicture world clue
+                        , buttonLabel = "Put it back"
+                        , onPress = CloseInspection
+                        }
+                    ]
 
         Nothing ->
             []
