@@ -459,11 +459,12 @@ sheetVariant clue =
         HubProp _ ->
             "sheet--scene"
 
+        -- Handwritten pages: the picture is the page, the words stay for screen readers.
         WalterDiaryPage ->
-            "sheet--diary sheet--scene"
+            "sheet--picture sheet--note"
 
         GlassDeliverySlip ->
-            "sheet--form sheet--scene"
+            "sheet--picture sheet--note"
 
         RubbleAndShelvesNote ->
             "sheet--scene"

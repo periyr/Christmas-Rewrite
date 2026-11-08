@@ -200,12 +200,12 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
 | `frame-photo-1973.svg` | (the 1973 broken-frame puzzle) | 480 × 330 | The same family photograph without frame or caption, so the puzzle shows exactly the picture in the shop. `Views.Frame` draws the glass pieces over it. Same generator. |
 | `clue-closure-notice.svg` | `ClosureNotice` | 480 × 440 | Edwin's handwritten notice, taped up, with the words of `Content.Clues ClosureNotice`. Handwriting is the Caveat font (SIL OFL 1.1) as outlines, built by `docs/asset-sources/closure-note.mjs`. |
 | `clue-repair-notes.svg` | `RubbleAndShelvesNote` | 480 × 300 | Walter's pencil sketch: new shelves drawn in dashes over the rubble ("rubble out first"), books waiting in a crate. |
-| `clue-walter-diary.svg` | `WalterDiaryPage` | 480 × 300 | The grand new HALE'S sign, and rain through the hole in the roof onto the saved books. |
-| `clue-budget.svg` | `BudgetAllocation` | 480 × 300 | Four wood planks and a ten-pound note, "For the whole week". |
-| `clue-glass-slip.svg` | `GlassDeliverySlip` | 480 × 300 | One pane of glass packed in a crate, and the week with Wednesday morning ringed. |
+| `clue-walter-diary.svg` | `WalterDiaryPage` | 480 × ~400 | The entry itself, handwritten on Walter's ruled diary page with a margin and ribbon. Shown as the whole page (`sheet--picture`); the words stay for screen readers. Built by `docs/asset-sources/handwritten-clues.mjs` (Caveat, SIL OFL 1.1). |
+| `clue-budget.svg` | `BudgetAllocation` | 480 × 300 | Four wood planks and a ten-pound note. |
+| `clue-glass-slip.svg` | `GlassDeliverySlip` | 460 × 330 | The supplier's handwritten delivery slip on a buff pad page, with the words of the clue. Shown as the whole page; the words stay for screen readers. Built by `docs/asset-sources/handwritten-clues.mjs`. |
 | `clue-wall-<state>.svg` | `HubProp CommunityWall` (from `world.tradition`) | 480 × 300 (original: 332 × 202) | `original`: just the bare board with its old pin holes. `missing`: one faded "Christmas Reading 1973" poster. `established`: shadow-story posters, children's fox-and-lantern drawings, and the 1973 photo of Ruth and Lucy. |
 
-`<state>` is `original` (NotRevisited), `missing` or `established`. The 1950 clue pictures are built by `docs/asset-sources/repair-clues.mjs` (each shows only what its words say, never how to plan the week). The roof and shelves and the order desk have no picture. The community wall's pictures are built by `docs/asset-sources/hub-props.mjs` and shown above their words (`sheet--scene`).
+`<state>` is `original` (NotRevisited), `missing` or `established`. The repair notes and budget pictures are built by `docs/asset-sources/repair-clues.mjs` (each shows only what its words say, never how to plan the week). The roof and shelves and the order desk have no picture. The community wall's pictures are built by `docs/asset-sources/hub-props.mjs` and shown above their words (`sheet--scene`).
 
 The room overlays for the frame (bare wall and glass on the floor in 1973, tape on the glass afterwards) are drawn in `public/index.html` (`r-frame-gone`, `r-frame-tape`) and switched by `data-frame` on the stage.
 
