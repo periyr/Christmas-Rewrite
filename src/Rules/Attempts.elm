@@ -1,19 +1,21 @@
-module Rules.Attempts exposing (SubmitResult(..), attemptsUsed, maxAttempts, retry, submit)
+module Rules.Attempts exposing (SubmitResult(..), attemptsUsed, maxAttempts, maxAttemptsFor, retry, submit)
 
-{-| The shared two-attempt rule for the three main puzzles.
+{-| The shared attempt rule for the three main puzzles. 1950 and 1973 give two
+attempts; the 1998 book gives one (the team's change): sending the wrong book
+loses that chapter straight away.
 
   - Submitting while first-attempt feedback is open is ignored.
   - An incomplete arrangement spends nothing.
   - A complete submission spends one attempt and is validated.
-  - Correct on either attempt: resolved as Succeeded.
-  - Wrong on the first attempt: local feedback, retry allowed.
-  - Wrong on the second attempt: resolved as Failed.
+  - Correct on any attempt: resolved as Succeeded.
+  - Wrong with an attempt left: local feedback, retry allowed.
+  - Wrong on the last attempt: resolved as Failed.
 
 Only Resolved results become history.
 
 -}
 
-import Domain exposing (Attempts(..), ChapterRecord, Era, FinalSubmission, MainPuzzle, Outcome(..), Violation)
+import Domain exposing (Attempts(..), ChapterRecord, Era(..), FinalSubmission, MainPuzzle, Outcome(..), Violation)
 
 
 type SubmitResult
@@ -23,9 +25,21 @@ type SubmitResult
     | Resolved ChapterRecord
 
 
+{-| The usual number of attempts (1950 and 1973). -}
 maxAttempts : Int
 maxAttempts =
     2
+
+
+{-| Attempts for each main puzzle: one for the 1998 book, two otherwise. -}
+maxAttemptsFor : Era -> Int
+maxAttemptsFor era =
+    case era of
+        Search1998 ->
+            1
+
+        _ ->
+            maxAttempts
 
 
 attemptsUsed : Attempts -> Int
@@ -77,7 +91,7 @@ submit config puzzle =
             if List.isEmpty violations then
                 resolve Succeeded
 
-            else if used < maxAttempts then
+            else if used < maxAttemptsFor config.era then
                 FirstMistake violations
 
             else

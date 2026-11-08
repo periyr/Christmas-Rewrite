@@ -20,7 +20,7 @@ The Hale family bookshop has lasted four generations, but tonight it closes. Pac
 - **1973:** stage a shadow story by torchlight during a power cut.
 - **1998:** find the one book a customer's daughter loved, from a picture, a remembered line and an inscription.
 
-Each main puzzle gives you two attempts. What happens in one decade changes the clues in the next and the shop you return to. Save all three, and the shop opens again at midnight. Any failure leads to a different ending.
+The 1950 and 1973 puzzles give you two attempts; the forgotten book in 1998 gives you one. What happens in one decade changes the clues in the next and the shop you return to. Save all three, and the shop opens again at midnight. Any failure leads to a different ending.
 
 A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10â€“15 minutes.
 
@@ -30,7 +30,7 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10â
 - **Use** what's nearby with **E** when its prompt appears. Or **click** an object's label: your character walks there and uses it.
 - **Inspect** documents and objects to read them; this never costs anything.
 - **To move something:** click to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click the same object again to put it down.
-- **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses one of two attempts.
+- **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses an attempt: two each in 1950 and 1973, only one in 1998.
 - **Help:** every puzzle screen has a Help button that explains its controls.
 - **Replaying:** after an ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** to replay from that chapter, or **Start again**.
 

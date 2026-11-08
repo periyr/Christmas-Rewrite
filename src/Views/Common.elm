@@ -1,4 +1,4 @@
-module Views.Common exposing (attemptsDisplay, closePanel, clueNote, customSheet, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar, yearBadge)
+module Views.Common exposing (attemptsDisplay, attemptsDisplayOf, closePanel, clueNote, customSheet, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar, yearBadge)
 
 {-| Pieces shared by several screens. -}
 
@@ -21,13 +21,16 @@ topbar era title extras =
 
 
 attemptsDisplay : Attempts -> Html msg
-attemptsDisplay attempts =
+attemptsDisplay =
+    attemptsDisplayOf Rules.Attempts.maxAttempts
+
+
+{-| The attempts tokens for a puzzle with `total` attempts. -}
+attemptsDisplayOf : Int -> Attempts -> Html msg
+attemptsDisplayOf total attempts =
     let
         used =
             Rules.Attempts.attemptsUsed attempts
-
-        total =
-            Rules.Attempts.maxAttempts
 
         figure =
             String.fromInt (total - used) ++ " of " ++ String.fromInt total

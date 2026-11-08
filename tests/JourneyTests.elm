@@ -210,6 +210,7 @@ failedIn era outcome =
         Nothing
 
 
+{-| Attempts used in 1950 and 1973. The 1998 book has one attempt either way. -}
 attemptsFor : Outcome -> Int
 attemptsFor outcome =
     pick outcome 1 2
@@ -232,7 +233,7 @@ suite =
                                 |> Expect.equal
                                     ( Ending
                                     , Just (expectedFate plan)
-                                    , [ ( Repairs1950, a, attemptsFor a ), ( Shadows1973, b, attemptsFor b ), ( Search1998, c, attemptsFor c ) ]
+                                    , [ ( Repairs1950, a, attemptsFor a ), ( Shadows1973, b, attemptsFor b ), ( Search1998, c, 1 ) ]
                                     )
                 )
                 combinations

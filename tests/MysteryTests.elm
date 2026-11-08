@@ -112,7 +112,7 @@ suite =
                             )
                         |> Expect.equal [ 2, 2, 2 ]
             ]
-        , describe "Send this book (two attempts, through Update)"
+        , describe "Send this book (one attempt, through Update)"
             [ test "A succeeds whichever source gave the inscription (1973 succeeded or failed)" <|
                 \_ ->
                     [ ( Succeeded, Succeeded ), ( Succeeded, Failed ), ( Failed, Succeeded ), ( Failed, Failed ) ]
@@ -140,49 +140,34 @@ suite =
                     in
                     ( attemptsOf after, after.notice )
                         |> Expect.equal ( Just NoAttemptUsed, Just IncompleteSubmission )
-            , test "the first mistake names the detail that does not match, and keeps the choice" <|
+            , test "a wrong book fails 1998 at once, recording the detail that does not match" <|
                 \_ ->
-                    case (send [ ChooseCandidate CandidateC, Submit ] (mysteryAfter Succeeded Succeeded)).phase of
-                        BookMystery puzzle ->
-                            ( puzzle.attempts, puzzle.arrangement )
-                                |> Expect.equal ( ReviewingFirstMistake [ DetailDoesNotMatch LanternSentence ], Just CandidateC )
-
-                        other ->
-                            Expect.fail ("Expected the book mystery, got " ++ Debug.toString other)
-            , test "a double click on a wrong book spends one attempt only" <|
-                \_ ->
-                    send [ ChooseCandidate CandidateB, Submit, Submit ] (mysteryAfter Succeeded Succeeded)
-                        |> attemptsOf
-                        |> Maybe.map Attempts.attemptsUsed
-                        |> Expect.equal (Just 1)
-            , test "B then A succeeds on the second attempt" <|
-                \_ ->
-                    send [ ChooseCandidate CandidateB, Submit, Retry, ChooseCandidate CandidateA, Submit ] (mysteryAfter Succeeded Succeeded)
-                        |> .history
-                        |> Timeline.recordFor Search1998
-                        |> Expect.equal
-                            (Just
-                                { era = Search1998
-                                , outcome = Succeeded
-                                , attemptsUsed = 2
-                                , finalSubmission = SentBook CandidateA
-                                , finalViolations = []
-                                }
-                            )
-            , test "C then D fails with D's violation" <|
-                \_ ->
-                    send [ ChooseCandidate CandidateC, Submit, Retry, ChooseCandidate CandidateD, Submit ] (mysteryAfter Succeeded Succeeded)
+                    send [ ChooseCandidate CandidateC, Submit ] (mysteryAfter Succeeded Succeeded)
                         |> .history
                         |> Timeline.recordFor Search1998
                         |> Expect.equal
                             (Just
                                 { era = Search1998
                                 , outcome = Failed
-                                , attemptsUsed = 2
-                                , finalSubmission = SentBook CandidateD
-                                , finalViolations = [ DetailDoesNotMatch FoxLanternIllustration ]
+                                , attemptsUsed = 1
+                                , finalSubmission = SentBook CandidateC
+                                , finalViolations = [ DetailDoesNotMatch LanternSentence ]
                                 }
                             )
+            , test "after a wrong book there is no second try: the consequence slide plays" <|
+                \_ ->
+                    send [ ChooseCandidate CandidateB, Submit, Retry, ChooseCandidate CandidateA, Submit ] (mysteryAfter Succeeded Succeeded)
+                        |> (\m -> ( m.phase, Timeline.outcomeOf Search1998 m.history ))
+                        |> Expect.equal ( Transition (Slideshow Search1998 0), Just Failed )
+            , test "every wrong book fails on its own detail" <|
+                \_ ->
+                    [ CandidateB, CandidateC, CandidateD ]
+                        |> List.map (\c -> send [ ChooseCandidate c, Submit ] (mysteryAfter Succeeded Succeeded) |> .history |> Timeline.recordFor Search1998 |> Maybe.map .finalViolations)
+                        |> Expect.equal
+                            [ Just [ DetailDoesNotMatch LucyInscription ]
+                            , Just [ DetailDoesNotMatch LanternSentence ]
+                            , Just [ DetailDoesNotMatch FoxLanternIllustration ]
+                            ]
             , test "choosing another book is ignored while the first mistake is shown" <|
                 \_ ->
                     let

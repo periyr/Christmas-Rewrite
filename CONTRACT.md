@@ -1,4 +1,4 @@
-# Shared contract v1.7: Person A handoff
+# Shared contract v1.8: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -357,7 +357,7 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 | `shadowFirstAttemptFailed` | `shadowOriginalScript` after performing the retelling's staging: first-attempt feedback open, all three scenes conflicting, stage kept. Only `Retry` works. |
 | `mysteryFamilyArchive` | A fresh 1998 table after a successful 1973 (inscription from the family archive). Player at the books, panel open. |
 | `mysteryFollowUpEmail` | A fresh 1998 table after a failed 1973 (inscription from Ruth's follow-up email). Player at the books, panel open. |
-| `mysteryFirstAttemptFailed` | `mysteryFamilyArchive` after sending book B: first-attempt feedback open (the inscription does not match), B still chosen. Only `Retry` works. |
+| `mysteryWrongBookSent` | `mysteryFamilyArchive` after sending book B. The 1998 book has one attempt (v1.8), so 1998 is lost at once: a Failed record (attemptsUsed 1, the inscription does not match) and the consequence slide. Replaced `mysteryFirstAttemptFailed`. |
 | `shadowsSucceeded` / `shadowsFailed` | Resolved 1973 records, after a successful 1950. |
 | `stageFor staging` | Turns a `Staging` into a stage arrangement, like `boardFor`. |
 
@@ -506,6 +506,14 @@ The page opens on a title screen (`Views.TitleScreen`) with Continue and New Gam
 - **New Game / Start again** replace the save with the new game's first page.
 - **Fonts:** all game text uses Alegreya, the title uses Fraunces, the typed slip uses Courier Prime. The files are bundled in `public/assets/` (credits in `ASSETS.md`), so nothing loads from the network.
 - Tests: `tests/SaveTests.elm`.
+
+## One attempt for the 1998 book, and a shuffled table (added in v1.8)
+
+Requested by the team (Peri):
+
+- **Attempts per chapter:** `Rules.Attempts.maxAttemptsFor : Era -> Int` is 2 for 1950 and 1973 and **1 for 1998**. `submit` uses it, so a wrong book is resolved as `Failed` with `attemptsUsed = 1` and no `ReviewingFirstMistake`. `maxAttempts` (2) stays for the other two. `Views.Common.attemptsDisplayOf total` draws the tokens for any total, and the book table shows one.
+- **Book order:** `Rules.BookTrays.candidates runSeed` gives the four candidates in this game's order (seed offset so it doesn't follow the 1950 trays), and `Views.BookTable.view` takes that order. It is fixed for a run, so resuming a save shows the same table.
+- **Tests:** `AttemptsTests` and `MysteryTests` cover the one-try rule; `BookTrayTests` covers the order.
 
 ## Release build
 

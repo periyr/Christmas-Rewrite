@@ -1,12 +1,14 @@
-module Rules.BookTrays exposing (salvage, shelf)
+module Rules.BookTrays exposing (candidates, salvage, shelf)
 
 {-| Tray orders are derived from the run seed. Placement only tracks where
 each book is, so taking a book out never changes its reserved tray position.
+The 1998 candidate books are laid out in a seeded order too.
 -}
 
-import Domain exposing (BookId, RecoverableBook(..))
+import Domain exposing (BookId, CandidateId, RecoverableBook(..))
 import Random
 import Rules.Books as Books
+import Rules.Mystery as Mystery
 import Rules.Shelf as Shelf
 
 
@@ -29,6 +31,14 @@ shelf seed =
             -- The original tray order is a known unsolved fallback.
             -- No retry loop is needed, even if a seed produces a solution.
             [ LettersFromTheSea, PocketOfWonders, GardensInWinter, WinterTales, AtlasOfSmallPlaces, BirdsongForBeginners ]
+
+
+{-| The four 1998 books in this game's order on the table. The seed is offset
+so this order doesn't follow the 1950 trays.
+-}
+candidates : Int -> List CandidateId
+candidates seed =
+    shuffle (seed + 1998) Mystery.candidates
 
 
 {-| Insert each item at a uniformly chosen position in the shuffled prefix. -}

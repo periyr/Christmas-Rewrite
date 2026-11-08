@@ -146,7 +146,7 @@ screen world model =
             room { emptyScene | line = Just Content.Frame.arrival, panel = Views.Frame.view placement model.notice }
 
         BookMystery puzzle ->
-            station (Views.BookTable.view world puzzle model.notice)
+            station (Views.BookTable.view world (BookTrays.candidates model.runSeed) puzzle model.notice)
 
         Transition (OpeningDiary era) ->
             Views.Shop.openingDiary world era

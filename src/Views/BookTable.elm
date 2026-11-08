@@ -12,6 +12,7 @@ import Domain exposing (..)
 import Html exposing (Html, article, aside, button, div, h3, section, span, text)
 import Html.Attributes exposing (attribute, class, classList, disabled, type_)
 import Html.Events exposing (onClick)
+import Rules.Attempts
 import Rules.Mystery
 import Views.Common as Common
 
@@ -20,8 +21,11 @@ type alias Puzzle =
     MainPuzzle (Maybe CandidateId)
 
 
-view : World -> Puzzle -> Maybe Notice -> List (Html Msg)
-view world puzzle notice =
+{-| `order` is the order the four books lie on the table this game
+(Rules.BookTrays.candidates, from the run seed).
+-}
+view : World -> List CandidateId -> Puzzle -> Maybe Notice -> List (Html Msg)
+view world order puzzle notice =
     let
         reviewing =
             Common.reviewedViolations puzzle.attempts
@@ -35,13 +39,13 @@ view world puzzle notice =
     [ div [ classList [ ( "board-scene", True ), ( "table-scene", True ), ( "is-reviewing", isReviewing ) ] ]
         [ Common.topbar "1998"
             "The Forgotten Book"
-            (Common.attemptsDisplay puzzle.attempts
+            (Common.attemptsDisplayOf (Rules.Attempts.maxAttemptsFor Search1998) puzzle.attempts
                 :: Common.lastTryNotes "Back to the books" puzzle.attempts
                 ++ help
                 ++ [ Common.closePanel (not isReviewing) ]
             )
         , section [ class "book-table", attribute "aria-label" "Four candidate books" ]
-            (List.map (candidateCard puzzle isReviewing numbered) Rules.Mystery.candidates)
+            (List.map (candidateCard puzzle isReviewing numbered) order)
         , aside [ class "side" ]
             [ div [ class "paper-note" ]
                 [ h3 [ class "paper-note__title" ] [ text "Ruth’s request" ]
@@ -73,7 +77,7 @@ help =
     Common.helpButton "Back to the books"
         [ "Look inside each book: its picture, its text and its dedication. Looking never costs anything."
         , "Read Ruth’s email and the notes beside it as often as you like."
-        , "Choose the book you think is Lucy’s, then press Send this book. You have two attempts."
+        , "Choose the book you think is Lucy’s, then press Send this book. You only get one try: if it’s the wrong book, it can’t be taken back."
         ]
 
 
