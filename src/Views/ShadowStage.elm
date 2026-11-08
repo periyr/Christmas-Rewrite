@@ -16,7 +16,6 @@ import Html.Attributes exposing (attribute, class, classList, disabled)
 import Html.Events exposing (onClick)
 import Rules.Placement
 import Rules.Shadow
-import Rules.Shuffle
 import Views.Common as Common
 
 
@@ -24,8 +23,8 @@ type alias Puzzle =
     MainPuzzle (Placement Cutout ShadowSlot)
 
 
-view : Int -> World -> Puzzle -> Maybe Notice -> List (Html Msg)
-view seed world puzzle notice =
+view : World -> Puzzle -> Maybe Notice -> List (Html Msg)
+view world puzzle notice =
     let
         reviewing =
             Common.reviewedViolations puzzle.attempts
@@ -37,7 +36,7 @@ view seed world puzzle notice =
             not (List.isEmpty reviewing)
 
         config =
-            placementConfig (trayOrder seed world.scriptVariant) puzzle isReviewing
+            placementConfig puzzle isReviewing
     in
     [ div [ class "board-scene stage-scene" ]
         [ Common.topbar "1973"
@@ -85,44 +84,12 @@ help =
         ]
 
 
-{-| The tray's cut-outs in a new order each game. Their natural order
-(characters, then props, in script order) is never used, and neither is any
-order that puts a scene's character right next to its prop, so the tray never
-hints at an answer.
--}
-trayOrder : Int -> ScriptVariant -> List Cutout
-trayOrder seed variant =
-    let
-        staging =
-            Rules.Shadow.script variant
-
-        pairs =
-            List.map (\cast -> ( CharacterCutout cast.character, PropCutout cast.prop )) [ staging.scene1, staging.scene2, staging.scene3 ]
-
-        givesAway order =
-            List.map2 Tuple.pair order (List.drop 1 order)
-                |> List.any (\( a, b ) -> List.member ( a, b ) pairs || List.member ( b, a ) pairs)
-
-        attempt tries s =
-            let
-                order =
-                    Rules.Shuffle.permute s Rules.Shadow.allCutouts
-            in
-            if tries <= 0 || not (givesAway order) then
-                order
-
-            else
-                attempt (tries - 1) (Rules.Shuffle.next s)
-    in
-    attempt 50 seed
-
-
-placementConfig : List Cutout -> Puzzle -> Bool -> PlacementUI.Config Cutout ShadowSlot Msg
-placementConfig order puzzle isReviewing =
+placementConfig : Puzzle -> Bool -> PlacementUI.Config Cutout ShadowSlot Msg
+placementConfig puzzle isReviewing =
     { toMsg = StageMove
     , enabled = not isReviewing
     , placement = puzzle.arrangement
-    , items = order
+    , items = Rules.Shadow.allCutouts
     , name = Content.Shadow.cutoutName
     , cardClass = \_ -> "cutout"
     , cardBody = cutoutBody

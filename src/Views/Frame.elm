@@ -19,26 +19,22 @@ import Html exposing (Html, aside, button, div, node, p, section, span, text)
 import Html.Attributes exposing (attribute, class, classList, style, type_)
 import Html.Events exposing (onClick)
 import Rules.Frame
-import Rules.Shuffle as Shuffle
 import Rules.Placement as Placement
 import Views.Common as Common
 
 
-view : Int -> Placement Shard FrameGap -> Maybe Notice -> List (Html Msg)
-view seed placement notice =
+view : Placement Shard FrameGap -> Maybe Notice -> List (Html Msg)
+view placement notice =
     let
         solved =
             Rules.Frame.isSolved placement
-
-        layout =
-            benchLayout seed
     in
     [ div [ class "board-scene frame-scene" ]
         [ Common.topbar "1973"
             Content.Frame.title
             (Common.helpButton "Back to the frame" Content.Frame.help ++ [ Common.closePanel True ])
         , section [ class "frame-bench", attribute "aria-label" "The frame and the broken glass" ]
-            (frame placement :: List.filterMap (benchPiece layout placement) Rules.Frame.shards)
+            (frame placement :: List.filterMap (benchPiece placement) Rules.Frame.shards)
         , aside [ class "side" ]
             [ if solved then
                 p [ class "celebration", attribute "role" "status" ] [ text Content.Frame.mended ]
@@ -115,8 +111,8 @@ frame placement =
 
 
 {-| A piece still on the bench, at its own spot. Held, it is outlined. -}
-benchPiece : List ( Int, ( Float, Float ) ) -> Placement Shard FrameGap -> Shard -> Maybe (Html Msg)
-benchPiece layout placement shard =
+benchPiece : Placement Shard FrameGap -> Shard -> Maybe (Html Msg)
+benchPiece placement shard =
     let
         (Shard n) =
             shard
@@ -124,7 +120,7 @@ benchPiece layout placement shard =
         isHeld =
             placement.selected == Just shard
     in
-    case ( Placement.slotOf shard placement, lookup n pieces, lookup n layout ) of
+    case ( Placement.slotOf shard placement, lookup n pieces, lookup n benchSpots ) of
         ( Nothing, Just points, Just ( left, top ) ) ->
             let
                 box =
@@ -200,10 +196,8 @@ pieces =
     ]
 
 
-{-| The bench spots (top left, in rem) and the hand-made way of filling them,
-mixed up so neighbours in the frame are not neighbours here. Each game deals
-the pieces out to these spots in a new order (benchLayout); this one is the
-fallback.
+{-| Where each loose piece lies on the bench (top left, in rem), mixed up so
+neighbours in the frame are not neighbours here.
 -}
 benchSpots : List ( Int, ( Float, Float ) )
 benchSpots =
@@ -217,123 +211,6 @@ benchSpots =
     , ( 4, ( 47.5, 15.5 ) )
     , ( 2, ( 45, 30 ) )
     ]
-
-
-{-| Which piece lies at which bench spot this game. The pieces are dealt to the
-spots in a seeded random order, keeping only deals where every piece stays on
-the bench, clear of the frame, and overlaps its neighbours no more than the
-hand-made layout does (pieces are cut to shape, so their boxes may touch).
--}
-benchLayout : Int -> List ( Int, ( Float, Float ) )
-benchLayout seed =
-    let
-        spots =
-            List.map Tuple.second benchSpots
-
-        -- Biggest pieces first, so the search settles quickly.
-        order =
-            List.sortBy (\( n, _ ) -> negate (area n)) pieces |> List.map Tuple.first
-
-        area n =
-            let
-                ( w, h ) =
-                    pieceSize n
-            in
-            w * h
-
-        deal salt remaining free placed =
-            case remaining of
-                [] ->
-                    Just (List.reverse placed)
-
-                n :: rest ->
-                    tryEach n rest free placed (Shuffle.shuffle (salt + n * 7919) free) salt
-
-        tryEach n rest free placed candidates salt =
-            case candidates of
-                [] ->
-                    Nothing
-
-                spot :: others ->
-                    if fits n spot placed then
-                        case deal (Shuffle.next salt) rest (List.filter ((/=) spot) free) (( n, spot ) :: placed) of
-                            Just layout ->
-                                Just layout
-
-                            Nothing ->
-                                tryEach n rest free placed others salt
-
-                    else
-                        tryEach n rest free placed others salt
-    in
-    deal seed order spots [] |> Maybe.withDefault benchSpots
-
-
-{-| The bench limits, the frame's box on it, and the most two pieces' boxes
-overlap in the hand-made layout (in rem and square rem).
--}
-benchWidth : Float
-benchWidth =
-    58.4
-
-
-benchHeight : Float
-benchHeight =
-    40.2
-
-
-frameBox : Box
-frameBox =
-    { left = 1, top = 9, right = 31.1, bottom = 30.7 }
-
-
-allowedOverlap : Float
-allowedOverlap =
-    4.3
-
-
-type alias Box =
-    { left : Float, top : Float, right : Float, bottom : Float }
-
-
-pieceSize : Int -> ( Float, Float )
-pieceSize n =
-    case lookup n pieces of
-        Just points ->
-            let
-                box =
-                    bounds points
-            in
-            ( (box.width + 6) * scale, (box.height + 6) * scale )
-
-        Nothing ->
-            ( 0, 0 )
-
-
-boxAt : Int -> ( Float, Float ) -> Box
-boxAt n ( left, top ) =
-    let
-        ( w, h ) =
-            pieceSize n
-    in
-    { left = left, top = top, right = left + w, bottom = top + h }
-
-
-overlap : Box -> Box -> Float
-overlap a b =
-    max 0 (min a.right b.right - max a.left b.left) * max 0 (min a.bottom b.bottom - max a.top b.top)
-
-
-fits : Int -> ( Float, Float ) -> List ( Int, ( Float, Float ) ) -> Bool
-fits n spot placed =
-    let
-        box =
-            boxAt n spot
-    in
-    box.right <= benchWidth
-        && box.bottom <= benchHeight
-        && overlap box frameBox == 0
-        && List.all (\( m, other ) -> overlap box (boxAt m other) <= allowedOverlap) placed
 
 
 {-| rem per photo unit: the photo is drawn 480 x 330 units at 27 x 18.5625 rem. -}
