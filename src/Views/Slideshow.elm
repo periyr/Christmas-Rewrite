@@ -13,6 +13,7 @@ import Html.Attributes exposing (attribute, class, type_)
 import Html.Events exposing (onClick)
 import Timeline
 import Views.Common as Common
+import Views.Labels exposing (eraYear)
 
 
 view : World -> History -> Era -> Int -> List (Html Msg)
@@ -49,7 +50,8 @@ view world history era index =
     in
     Art.room
         :: (current |> Maybe.map Props.forSlide |> Maybe.withDefault [])
-        ++ [ Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
+        ++ [ Common.yearBadge (eraYear era)
+           , Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
            ]
 
 

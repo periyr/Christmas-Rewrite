@@ -1,4 +1,4 @@
-# Shared contract v1.3: Person A handoff
+# Shared contract v1.6: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -11,6 +11,7 @@ The only requirement is Node.js 18 or newer. Nothing needs to be installed globa
 | Install (once, and after pulling a `package.json` change) | `npm install` |
 | Live preview at http://localhost:8000 (reload the page to rebuild) | `npm start` |
 | Build into `build/` (git-ignored) | `npm run build` |
+| Release build for submission into `release/one-more-christmas/` (git-ignored) | `npm run release` |
 | Run the tests | `npm test` |
 
 Compile errors appear in the browser while `npm start` is running. The page `build/index.html` can also be opened directly once it has been built. To use another port, run `PORT=9000 npm start` on Mac, or `$env:PORT=9000; npm start` in PowerShell.
@@ -45,14 +46,16 @@ view : Model -> Html Msg          -- in src/View.elm
 |---|---|---|
 | `Introduction step` (`PackingUp`, `DiariesFound`, `ClockStopped`) | shop, notice, photo, box, diaries | `Inspect ClosureNotice`, `Inspect FamilyPhotograph`, `Advance`. After `ClockStopped`, `Advance` goes to `PresentHub`. |
 | `PresentHub` | the shop, built from `deriveWorld` (`premises`, `tradition`, `onlineService` are each `NotRevisited`, `Established` or `Missing`); the diary in `nextDiary` glows | `Inspect (HubProp p)`, `OpenNextDiary` |
-| `Transition (OpeningDiary era)` | page-turn into that diary | `Advance` |
-| `Salvage placement` | 9 books, 3 crates of 3 spaces, live misplaced marks | `SalvageMove …`, then `Advance` to continue (stays put with `NotSolvedYet` until solved) |
+| `Transition (OpeningDiary era)` | the diary's passage, over the present-day shop | `Advance` ("Step into …") starts the trip back (v1.5) |
+| `Transition (TimeTravel era elapsed)` | the trip back into that era (`Views.TimeTravel`, v1.5) | `SkipTravel`; everything else is ignored |
+| `Salvage placement` | 9 books, 3 crates of 3 spaces, a live count of misplaced books (not which ones, since #19) | `SalvageMove …`, then `Advance` to continue (stays put with `NotSolvedYet` until solved) |
 | `RepairBoard puzzle` | tray, Mon–Fri, two "Not this week" spaces, spent/remaining | `BoardMove …`, `Inspect` the four clues, `Submit` ("Finish week"), `Retry` |
 | `Transition (Slideshow era i)` | slide `i` of `Timeline.slides era model.history` | `Advance` |
 | `ReopeningShelf placement` | 6 positions, plaque, matched order when complete | `ShelfMove …`, `Inspect ShelfPlaque`, then `Advance` to continue (stays put with `NotSolvedYet` until ordered) |
 | `ShadowPuzzle puzzle` | 3 panels, each with a character slot and a prop slot | `StageMove …`, `Inspect ShadowScript / StageSketch / CutoutBox`, `Submit` ("Perform the story"), `Retry` |
 | `BookMystery puzzle` | 4 candidates, tabs | `Inspect (CandidatePage c tab)`, `Inspect RuthsEmail / RememberedSentence / InscriptionClue`, `ChooseCandidate c`, `Submit` ("Send this book"), `Retry` |
-| `Transition ReturningToPresent` | room changing back | `Advance` |
+| `Transition (TearToPresent era elapsed)` | the tear home from that era's finished room (`Views.Tear`, v1.6) | `SkipTravel`; everything else is ignored |
+| `Transition ReturningToPresent` | "Back to the present" narration over the present-day shop | `Advance` |
 | `Ending` | fate from `(deriveWorld history).fate`: `ShopSaved` or `ShopClosed failedEras` | `ReopenDiary era`, `StartAgain` |
 
 In every phase, if `model.inspecting = Just clue`, show the overlay and dispatch `CloseInspection`. If `model.notice = Just n`, show neutral text and dispatch `DismissNotice` (it also clears on the next move). The notices are `IncompleteSubmission`, `TargetFull`, `DoesNotFitThere` and `NotSolvedYet` (added in v1.2).
@@ -144,8 +147,8 @@ Never call `Rules.Repair.validate` from a view. Correctness exists only after `S
 
 After resolution, keep sending `Advance` for each slide in `Timeline.slides Repairs1950 model.history`:
 
-- **Success:** `WeekdaySlide day task` for Monday to Friday, in the submitted order. On the `ShelveBooks` day the phase becomes `ReopeningShelf`; after the shelf, the slides resume, then `ReopeningSaturday`, `ReturningToPresent` and `PresentHub`.
-- **Failure:** one `ConsequenceSlide Repairs1950 violation` built from the first recorded violation, then `ReturningToPresent` and `PresentHub`. The shelf is not played.
+- **Success:** `WeekdaySlide day task` for Monday to Friday, in the submitted order. On the `ShelveBooks` day the phase becomes `ReopeningShelf`; after the shelf, the slides resume, then `ReopeningSaturday`, the tear home (v1.6), `ReturningToPresent` and `PresentHub`.
+- **Failure:** one `ConsequenceSlide Repairs1950 violation` built from the first recorded violation, then the tear home (v1.6), `ReturningToPresent` and `PresentHub`. The shelf is not played.
 
 ### Violations the repair board can produce (for B's feedback and C's text)
 
@@ -183,11 +186,11 @@ The whole 1950 chapter now runs through `Update`, from a new game to the present
 ### Flow
 
 ```
-Introduction ×3 --Advance--> PresentHub --OpenNextDiary--> OpeningDiary Repairs1950 --Advance-->
+Introduction ×3 --Advance--> PresentHub --OpenNextDiary--> OpeningDiary Repairs1950 --Advance--> TimeTravel (2.5 s, or SkipTravel) -->
 Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUsed) --Submit-->
   success: Slideshow 0..  shelving-day slide --Advance--> ReopeningShelf --Advance (when ordered)-->
-           Slideshow (day after shelving) .. ReopeningSaturday --Advance--> ReturningToPresent --Advance--> PresentHub
-  failure: ConsequenceSlide --Advance--> ReturningToPresent --Advance--> PresentHub   (no shelf)
+           Slideshow (day after shelving) .. ReopeningSaturday --Advance--> TearToPresent (v1.6) --> ReturningToPresent --Advance--> PresentHub
+  failure: ConsequenceSlide --Advance--> TearToPresent (v1.6) --> ReturningToPresent --Advance--> PresentHub   (no shelf)
 ```
 
 - The week follows the submitted order. It pauses once, on the `WeekdaySlide day ShelveBooks` slide. After the shelf it resumes on the next day: Friday if shelving was Thursday, straight to Saturday if shelving was Friday. The shelving day is never replayed.
@@ -197,11 +200,11 @@ Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUse
 
 | Function | Meaning |
 |---|---|
-| `Rules.Salvage.misplaced placement : List BookId` | Books sitting in the wrong crate, in `Rules.Books.allBooks` order. Books in the tray are not listed. Use this for the immediate per-book feedback. |
+| `Rules.Salvage.misplaced placement : List BookId` | Books sitting in the wrong crate, in `Rules.Books.allBooks` order. Books in the tray are not listed. Its length gives the live count of misplaced books (the view no longer marks which ones, since #19). It was first meant for the immediate per-book feedback. |
 | `Rules.Salvage.isSolved placement : Bool` | All nine books placed, each exactly once, all in the right crates. Move order and the space used within a crate don't matter. |
 | `Rules.Placement.inTray Rules.Books.allBooks placement` | Books still to sort. |
 | `Rules.Salvage.crateSlots crate` | A crate's three spaces. Send `SalvageMove (PlaceSelectedInGroup (crateSlots crate))` when a crate is clicked. |
-| `Rules.Shelf.matchedOrder placement : Maybe ShelfOrder` | `Just ByHeight`, `Just ByColour` or `Just Alphabetical` when the shelf is full and in one of the three orders. Otherwise `Nothing`. Use it to show the celebration as soon as an order matches. |
+| `Rules.Shelf.matchedOrder placement : Maybe ShelfOrder` | `Just ByHeight`, `Just TallToSmall`, `Just ByColour` or `Just Alphabetical` when the shelf is full and in one of the four orders (`TallToSmall` was added by C at the team's request after playtesting). Otherwise `Nothing`. Use it to show the celebration as soon as an order matches. |
 
 ### Leaving the warm-ups
 
@@ -212,7 +215,7 @@ Send `Advance` for both. If the warm-up isn't solved yet, the phase and arrangem
 - **`Content.Feedback.notice NotSolvedYet`**: one gentle line that works for both salvage and the shelf, such as "Not quite yet – keep arranging."
 - **`Content.Shelf.matched : ShelfOrder -> String`**: celebration text for each order.
 - **`Content.Books.book`**: titles and damage marks for all nine `BookId`s. Condition must be visible without relying on cover colour.
-- **`Content.Clues.clue ShelfPlaque`**: the plaque text ("Small to tall / rainbow / A–Z").
+- **`Content.Clues.clue ShelfPlaque`**: the plaque text. Since the playtest change it hints that there are four orders.
 - **Hub props** (`HubProp`) and **diary passages**: with `NotRevisited` foundations, i.e. the present before 1950 is played.
 
 ## The walking room (added in v1.3)
@@ -231,7 +234,7 @@ type alias Model = { history, phase, inspecting, notice, room : Room }   -- one 
 type alias Room = { player : Player, panelOpen : Bool }
 
 type alias Player =
-    { x : Float              -- centre of the feet, logical px, 72..1208; the feet are always at y = 650
+    { x : Float              -- centre of the feet, logical px, 72..1208; the feet are always at y = 708 (650 before v1.4)
     , facing : Facing        -- FacingLeft | FacingRight
     , walking : Bool         -- True while moving: draw the walk cycle; False: idle pose
     , held : List WalkKey    -- WalkLeft | WalkRight, most recent first (Main fills this in)
@@ -260,7 +263,7 @@ ApproachHotspot Hotspot | ClosePanel
 | Helper | Meaning |
 |---|---|
 | `width`, `height` | The logical room: 1280 × 720. The stage is 80rem × 45rem, so **1rem = 16 logical px**. Place anything at `left: x/16 rem; top: y/16 rem`. |
-| `floorY` | 650, the y of the player's feet. |
+| `floorY` | 708, the y of the player's feet: the front edge of the painted floor, in front of all the furniture (v1.4; it was 650). |
 | `minX`, `maxX` | 72 and 1208, the bounds of the player's x. |
 | `startX` | 160. The player starts here, facing right, on a new game, on entering a diary and on returning to the present. |
 | `interactionDistance` | 64. A hotspot is in reach when the player's x is within 64 of the hotspot's x. |
@@ -331,7 +334,7 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 ### For C
 
 - **Prompt labels:** proposed `Content.Room.label : Hotspot -> String`, a short verb phrase for the prompt and the hotspot's accessible name, such as "Sort the salvaged books" for `CratesSpot`. Clue hotspots can reuse their clue titles, so only the seven other hotspots need words.
-- **Character art:** one base paper-cutout human, two to four walk poses plus an idle pose, facing right (views mirror it), with era variants for present-day Edwin, Walter, Henry and young Edwin. Put the feet at the bottom centre of each image so it can stand on (`x`, 650). The counter is about 165 px tall in the room, so a grown-up is roughly 290 px tall. Agree file names with B.
+- **Character art:** one base paper-cutout human, two to four walk poses plus an idle pose, facing right (views mirror it), with era variants for present-day Edwin, Walter, Henry and young Edwin. Put the feet at the bottom centre of each image so it can stand on (`x`, `floorY`). The counter is about 165 px tall in the room, so a grown-up is roughly 290 px tall. Agree file names with B.
 - **Room props** at the coordinates above: crates, timber and the planning board in 1950; torch, sheet and cut-out box in 1973; computer, book stacks and parcels in 1998.
 
 ## Fixtures (`src/Fixtures.elm`)
@@ -349,8 +352,26 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 | `hubAfterRepairs` | The present after a successful 1950. |
 | `salvageWalking` | 1950 salvage in the room (v1.3): the player mid-walk to the crates, panel closed. |
 | `repairBoardPanelOpen` | `repairBoardInProgress` with the player at the board and its panel open (v1.3). |
+| `shadowOriginalScript` | A fresh 1973 stage after a successful 1950 (original script). Player at the stage, panel open. |
+| `shadowRetelling` | A fresh 1973 stage after a failed 1950 (neighbours' retelling). Player at the stage, panel open. |
+| `shadowFirstAttemptFailed` | `shadowOriginalScript` after performing the retelling's staging: first-attempt feedback open, all three scenes conflicting, stage kept. Only `Retry` works. |
+| `mysteryFamilyArchive` | A fresh 1998 table after a successful 1973 (inscription from the family archive). Player at the books, panel open. |
+| `mysteryFollowUpEmail` | A fresh 1998 table after a failed 1973 (inscription from Ruth's follow-up email). Player at the books, panel open. |
+| `mysteryFirstAttemptFailed` | `mysteryFamilyArchive` after sending book B: first-attempt feedback open (the inscription does not match), B still chosen. Only `Retry` works. |
+| `shadowsSucceeded` / `shadowsFailed` | Resolved 1973 records, after a successful 1950. |
+| `stageFor staging` | Turns a `Staging` into a stage arrangement, like `boardFor`. |
 
-To preview a fixture, temporarily change `init` in `Main.elm` to `\_ -> ( Fixtures.repairBoardInProgress, Cmd.none )`. Don't commit that change.
+The feedback fixtures are produced by the real `Submit`, and `tests/FixtureTests.elm` checks that every fixture derives the variant in its name. Send `ClosePanel` (or press its close button) to see the room behind a panel.
+
+To preview a fixture, make two temporary edits in `src/Main.elm`, then reload the page while `npm start` is running:
+
+```elm
+import Fixtures                                           -- add next to the other imports
+
+        { init = \_ -> ( Fixtures.shadowRetelling, Cmd.none )   -- instead of Update.init
+```
+
+Don't commit either edit: normal startup stays `Update.init`. Check with `git diff src/Main.elm` before committing.
 
 ## 1973 and 1998 validators (added in v1.3)
 
@@ -361,13 +382,13 @@ Both main puzzles are now playable through `Update`, with the same two-attempt f
 - **Complete:** `Rules.Shadow.complete placement` gives `Just staging` only when all six slots hold the right kind of cut-out and each cut-out is used exactly once. Anything else is `IncompleteSubmission` and spends nothing.
 - **Validate:** `Rules.Shadow.validate scriptVariant staging` returns one `SceneConflictsWithScript scene` per scene whose character or prop differs from the script, in scene order. The variant comes from `(Timeline.deriveWorld history).scriptVariant`: the original script after a successful 1950, the neighbours' retelling after a failed one.
 - The scenes are numbered slots, so there are 3! × 3! = **36** complete stagings, not 216. Each variant accepts exactly one, and no staging passes under both. A wrong staging always conflicts in at least two scenes.
-- **Success** plays `PerformanceSlide Scene1..3` with the performed cast. **Failure** plays `ConsequenceSlide Shadows1973 (SceneConflictsWithScript firstScene)`. Then `ReturningToPresent` and `PresentHub`, with the 1998 journal next.
+- **Success** plays `PerformanceSlide Scene1..3` with the performed cast. **Failure** plays `ConsequenceSlide Shadows1973 (SceneConflictsWithScript firstScene)`. Then the tear home (v1.6), `ReturningToPresent` and `PresentHub`, with the 1998 journal next.
 
 ### 1998 forgotten book
 
 - **Complete:** a chosen candidate (`ChooseCandidate c`). Submitting with none chosen is `IncompleteSubmission`.
 - **Validate:** `Rules.Mystery.validate candidate` returns one `DetailDoesNotMatch detail` per remembered detail the book lacks: B lacks `LucyInscription`, C lacks `LanternSentence`, D lacks `FoxLanternIllustration`, and A has all three. The answer doesn't depend on history; only the inscription clue's source does (`FamilyArchive` or `FollowUpEmail`).
-- **Success** plays `ServiceFoundedSlide`. **Failure** plays `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)`. Then `ReturningToPresent` goes straight to `Ending`, because all three chapters are resolved.
+- **Success** plays `ServiceFoundedSlide`. **Failure** plays `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)`. Then the tear home (v1.6) and `ReturningToPresent`, which goes straight to `Ending`, because all three chapters are resolved.
 
 ### For B
 
@@ -380,13 +401,104 @@ Both main puzzles are now playable through `Update`, with the same two-attempt f
 - Every 1973 and 1998 violation can now reach `Content.Feedback.violation` and `Content.Slides.slide` (`ConsequenceSlide Shadows1973 (SceneConflictsWithScript scene)` for any scene, and `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)` for any detail).
 - `docs/test-examples-for-A.md` says there are 216 complete stagings. Please change it to 36: the scenes are fixed slots, so only the characters' order (3!) and the props' order (3!) vary. All the other examples matched the implementation exactly and are now tests.
 
+## Time travel into a diary (added in v1.5)
+
+"Step into [year]" on a diary's passage now plays a 2.5-second trip back in time before the chapter starts. The passage itself still waits for the player.
+
+### State and messages
+
+```elm
+type Transition = OpeningDiary Era | TimeTravel Era Float | Slideshow Era Int | TearToPresent Era Float | ReturningToPresent   -- TimeTravel is new (TearToPresent: v1.6)
+type Msg = ... | SkipTravel                                                                          -- new
+```
+
+- `TimeTravel era elapsed` is the trip into `era`, `elapsed` milliseconds in. It lives in the phase like every other screen, so it can't outlive the trip, and every trip starts at 0, including reopening the same era again.
+- `Advance` on `OpeningDiary era` starts `TimeTravel era 0`. Nothing else starts a trip.
+- `AnimationFrame dt` moves it on by `dt` clamped to 0–50 ms (a hidden tab coming back can't jump ahead). At 2500 ms the chapter starts by itself.
+- `SkipTravel` starts the chapter at once. Skipping and finishing both go through `Update.arrive`, which is the old chapter entry (`startChapter era` in a fresh room), so they give exactly the same state.
+- During the trip everything else is ignored: `Advance` (so a double click on "Step into" can't skip), walking, `E`, hotspots, `Inspect`, puzzle moves, `Submit`, `Retry`, diary actions. A second `SkipTravel`, and frames after arrival, do nothing to the chapter that started. History is never touched; reopening keeps the usual rewind (`ReopenDiary` rewinds, then the same passage and trip).
+- `Main` asks for animation frames while walking or travelling (`Rules.Travel.wantsFrames`). It also ignores the browser's key auto-repeat now, so a key held through the trip (or a panel) doesn't start walking in the new room until it is pressed again.
+
+### `Rules.Travel`
+
+| Helper | Meaning |
+|---|---|
+| `returnDuration`, `hasReturned` | 1800 ms: the tear home (v1.6, below). |
+| `duration`, `bookOpen`, `arrival` | 2500, 500 and 1800 ms: the book opens by 500, the destination is reached at 1800, the chapter starts at 2500. |
+| `yearAt era elapsed` | The year on the open book: `Nothing` (the present) until the pages turn, then each year back in turn, then `Just era` from arrival. To 1950: Present, 1998, 1973, 1950. To 1973: Present, 1998, 1973. To 1998: Present, 1998. |
+| `yearsBack era` | That whole list. |
+| `hasArrived elapsed` | From 1800 ms: the room behind the book is the destination's starting room. |
+| `isTravelling phase`, `wantsFrames model` | True during either trip (`TimeTravel` or `TearToPresent`). For views and `Main`. |
+
+### The view (`Views.TimeTravel`, `public/styles.css`)
+
+Made by A for this feature, in B's files, at the team's request; B is free to restyle it.
+
+- One component for all three eras, drawn entirely from `elapsed`: no timers, CSS animations or view state. The shop darkens, and the diary (its existing cover picture) grows in the centre and opens. Paper pages (layered HTML shapes with perspective) turn back while a large faint clock spins backwards behind the book and warm light grows. The year counts back on the right-hand page, then stays while the book and light fade to reveal the room.
+- **Rooms:** the passage is read in the present-day shop, and the trip shows it until 1800 ms. Then, under the brightest light, `View` swaps in exactly the room the chapter starts in (`startChapter era` with a fresh room), so the end of the trip runs straight into the chapter.
+- A **Skip** button is visible the whole time. The overlay covers the stage and takes every click.
+- **Reduced motion** (`prefers-reduced-motion: reduce`): no turning, spinning or growing. The shop darkens, the open diary shows the destination year, and it fades to the room.
+
+`tests/TravelTests.elm` covers the timing, the clamp, Skip matching finishing, repeated clicks, ignored input, held keys, reopening and the year order.
+
+## The tear home (added in v1.6)
+
+After a chapter's last slide, "Return to the present" no longer cuts straight to the present. It plays a 1.8-second tear in the page, deliberately unlike the trip into the past: no book, no clock, no years.
+
+### State and flow
+
+```elm
+type Transition = ... | TearToPresent Era Float | ...   -- new: the finished era, elapsed ms
+```
+
+```
+last slide of era --Advance--> TearToPresent era 0 --(frames to 1800 ms, or SkipTravel)--> ReturningToPresent --Advance--> PresentHub, or Ending after 1998
+```
+
+- Only `Advance` on a chapter's **last** slide starts it; earlier slides still move on to the next slide. Every era and both outcomes use it.
+- It uses the same clamped frame step as the trip into a diary (`Rules.Travel.step`), and finishes at `Rules.Travel.returnDuration`. `SkipTravel` (the same Skip message) finishes it at once. Both go through `Update.backInThePresent`, which leads to the existing `ReturningToPresent` narration, so they give the same state.
+- During the tear everything else is ignored, as during the trip in: `Advance` (a double click on "Return to the present" starts one tear), walking, `Inspect`, puzzle moves, diary actions. A second `SkipTravel`, and frames afterwards, do nothing. History, attempts and results are never touched. The hub, unlocking and endings that follow are unchanged.
+
+### The view (`Views.Tear`, `public/styles.css`)
+
+Made by A for this feature, in B's files; B is free to restyle it.
+
+- **Two rooms at once,** each in its own `.stage` layer with its own attributes, so neither picks up the other's look:
+  - **the finished era's room** exactly as its last slide left it (`stageAttributes` of that slide: roof, rubble, shelves, window, lights down, and its props), without the caption;
+  - **the present** exactly as the "Back to the present" screen draws it (`present` plus `premises` from the derived world, its props, and Edwin), without the narration.
+
+  So the present behind the tear reflects the real outcomes. After a failed 1950, for example, it shows the stain and the bucket, and parcels appear only if 1998 succeeded.
+- **Timing,** all drawn from `elapsed`:
+  - 0–150 ms: the room holds still.
+  - 150–550 ms: a paper tint and texture settle over it.
+  - 450–700 ms: a thin, ragged golden tear opens near the centre (a `clip-path` polygon on the present layer).
+  - 700–1500 ms: the tear widens past both edges, its paper edges glowing gold.
+  - 1450–1800 ms: the glow fades, then the narration.
+- A **Skip** button is visible throughout, and the overlay takes every click.
+- **Reduced motion:** a plain crossfade from the finished room to the present, with no tear, tint or glow.
+
+`tests/ReturnTests.elm` covers the start from the last slide for every era and outcome, the timing and clamp, Skip matching a finished tear, repeated clicks, ignored input, unchanged history, and the hub, unlocking and endings that follow.
+
 ## Release build
 
-There are no `Debug.todo` stubs left. `npm run build -- --optimize` builds the release, and the tests check every rule.
+There are no `Debug.todo` stubs left, so the optimized build works. For the submission, run:
+
+```
+npm test
+npm run release
+```
+
+`npm run release` compiles with `--optimize` and puts the whole game in `release/one-more-christmas/`: `index.html`, `elm.js`, `styles.css` and `assets/`. It then checks that every asset the page, the styles and the compiled Elm refer to is in the folder, and that every path is relative. It stops with a message if anything is missing.
+
+- **Upload:** zip the *contents* of `release/one-more-christmas/`, so `index.html` is at the top of the zip (game hosts such as itch.io require this). Nothing else is needed: no server code, no network access while playing.
+- **Play locally:** open `release/one-more-christmas/index.html` in a browser, or serve the folder with any static file server.
+- **Why a separate folder:** `npm start` rebuilds `build/` as a debug build on every page load, so an optimized build left in `build/` can be silently replaced. `release/` is only written by `npm run release`.
+- **Not yet checked:** opening `index.html` straight from disk was not tested in a desktop browser (the checks so far served the folder over HTTP). Check that once in Chrome, Firefox or Safari and on Windows before submitting.
 
 ## Open coordination items
 
-1. **The walking room (v1.3).** B builds the room, player, hotspots, prompts and panel overlays against the section above. C supplies prompt labels and character poses. A implements the movement in `Update` and `Main`.
+1. **The 1973 and 1998 screens.** The walking room, player and 1950 panels are in (B, #21). The shadow stage and candidate-book panels still show `Views.Shop.unbuiltChapter`. Their rules, attempts and fixtures are ready: see the fixtures table.
 2. **Audio.** There are no ports yet. If B wants sound, agree a port name (suggested: `port playSound : String -> Cmd msg`), and A will add it to `Main.elm`.
 3. **The `svg-art` element in `public/index.html`** sets `innerHTML` from Art.elm strings. That goes beyond the brief's "startup and audio" JavaScript. The team should agree to keep it, or A can add `elm/svg` to `elm.json` instead.
 4. **Keys and window focus.** Elm can see the page being hidden but not the window losing focus. If a key is held while switching to another window, the player keeps walking until the wall (where they stop) or until the key is pressed and released again. Hiding the tab clears it.
+5. **Floor alignment (resolved in v1.4).** With the feet at 650, the painted armchair, lamp table, door and boxes (which stand at y 660–715) were nearer than the player, so #26 painted an opaque strip of boards over the bottom of every room from y 640. That hid the bottom of the furniture. Agreed fix, one coordinated change: `Rules.Room.floorY` is now 708, the front edge of the painted floor, so the player walks in front of everything and the strip is gone (`public/index.html`, `public/styles.css`). The sprite anchor is unchanged: (48, 152) at scale 2, drawn from `floorY` by `Components.Actor`. The walking hint (`room-bar`) moved from the floor to the ceiling at the top left, and the intro's top narration starts below it. The bottom narration box (intro narration screens, slides, return) still sits over the lower room; B may want to revisit that.

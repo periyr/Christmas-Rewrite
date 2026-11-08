@@ -106,11 +106,11 @@ placementOf staging =
 
 
 {-| The 1973 puzzle after the given 1950 record, reached by playing on from
-the present: open the next diary, turn the page.
+the present: open the next diary, step in, skip the trip.
 -}
 shadowAfter : ChapterRecord -> Model
 shadowAfter record =
-    send [ OpenNextDiary, Advance ] { hub | history = [ record ] }
+    send [ OpenNextDiary, Advance, SkipTravel ] { hub | history = [ record ] }
 
 
 hub : Model
@@ -411,7 +411,7 @@ flow =
                         )
         , test "after 1973 resolves, the story returns to the present with the 1998 journal next" <|
             \_ ->
-                send (perform retelling ++ [ Submit, Retry, Submit, Advance, Advance, Advance ]) (shadowAfter Fixtures.repairsSucceeded)
+                send (perform retelling ++ [ Submit, Retry, Submit, Advance, SkipTravel, Advance, Advance ]) (shadowAfter Fixtures.repairsSucceeded)
                     |> (\m -> ( m.phase, (Timeline.deriveWorld m.history).nextDiary ))
                     |> Expect.equal ( PresentHub, Just Search1998 )
         ]

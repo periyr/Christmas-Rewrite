@@ -104,7 +104,7 @@ The plaque only says "Organize these books. Hint: There are four different ways 
 
 ## 1973: the shadow story (Henry)
 
-Clues: the script, the stage sketch and the box of cut-outs. Each scene takes one character and one prop, and every cut-out is used once. The script lists who does what. The sketch gives the scene order.
+Clues: the script, the stage sketch and the box of cut-outs. Each scene takes one character and one prop, and every cut-out is used once. The script lists who does what. The sketch gives the scene order, and the stage panels show each scene's setting too.
 
 The puzzle depends on how 1950 went.
 
@@ -168,6 +168,6 @@ A failed chapter stays failed for that run. Succeeding later doesn't undo it.
 **Closed endings:** submit a wrong answer twice in any chapter you want to fail.
 
 **Replaying:**
-- After either ending, **Reopen a diary** replays that chapter and every later one, each with two fresh attempts. Earlier chapters keep their results. Reopening 1950 starts again from the book sorting.
+- After either ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** replays that chapter and every later one, each with two fresh attempts. Earlier chapters keep their results. Reopening 1950 starts again from the book sorting.
 - **Start again** begins a new run.
 - Reopening 1950 can switch the 1973 script version. Reopening 1973 can switch where the 1998 inscription clue comes from.

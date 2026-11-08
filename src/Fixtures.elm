@@ -12,6 +12,15 @@ module Fixtures exposing
     , hubAfterRepairs
     , salvageWalking
     , repairBoardPanelOpen
+    , shadowOriginalScript
+    , shadowRetelling
+    , shadowFirstAttemptFailed
+    , stageFor
+    , shadowsSucceeded
+    , shadowsFailed
+    , mysteryFamilyArchive
+    , mysteryFollowUpEmail
+    , mysteryFirstAttemptFailed
     )
 
 {-| Development fixtures for building views and tests against the contract.
@@ -24,6 +33,7 @@ To preview one, temporarily start Main from it instead of Update.init.
 import Domain exposing (..)
 import Rules.Repair
 import Rules.Room
+import Rules.Shadow
 import Update
 
 
@@ -200,3 +210,126 @@ repairBoardPanelOpen =
             , panelOpen = True
             }
     }
+
+
+
+-- 1973 AND 1998
+--
+-- Each puzzle fixture has the player standing at the puzzle's station with
+-- its panel open, so the screen shows at once. ClosePanel shows the room.
+-- The history before it is real, so Timeline.deriveWorld gives the variant
+-- named in the fixture.
+
+
+{-| A puzzle phase in the room: the player at `station`, its panel open. -}
+atStation : Hotspot -> History -> Phase -> Model
+atStation station history phase =
+    let
+        player =
+            Rules.Room.initialPlayer
+    in
+    { history = history
+    , phase = phase
+    , inspecting = Nothing
+    , notice = Nothing
+    , room = { player = { player | x = (Rules.Room.position station).x }, panelOpen = True }
+    }
+
+
+{-| The stage arrangement for a complete staging: each scene's character and
+prop in that scene's two slots.
+-}
+stageFor : Staging -> Placement Cutout ShadowSlot
+stageFor staging =
+    { placed =
+        List.concatMap
+            (\( scene, cast ) -> [ ( CharacterCutout cast.character, CharacterSlot scene ), ( PropCutout cast.prop, PropSlot scene ) ])
+            [ ( Scene1, staging.scene1 ), ( Scene2, staging.scene2 ), ( Scene3, staging.scene3 ) ]
+    , selected = Nothing
+    }
+
+
+{-| A fresh 1973 stage after a successful 1950: the original script
+(Fox + Lantern, Owl + Key, Child + Book). Nothing placed, two attempts.
+-}
+shadowOriginalScript : Model
+shadowOriginalScript =
+    atStation StageSpot [ repairsSucceeded ] (Update.startChapter Shadows1973)
+
+
+{-| A fresh 1973 stage after a failed 1950: the neighbours' retelling
+(Child + Key, Owl + Book, Fox + Lantern). Nothing placed, two attempts.
+-}
+shadowRetelling : Model
+shadowRetelling =
+    atStation StageSpot [ repairsFailed ] (Update.startChapter Shadows1973)
+
+
+{-| shadowOriginalScript after performing the retelling's staging by mistake:
+first-attempt feedback is open (every scene conflicts), the stage is kept,
+and only Retry is possible. Produced by the real Submit.
+-}
+shadowFirstAttemptFailed : Model
+shadowFirstAttemptFailed =
+    Update.update Submit (withStage (Rules.Shadow.script NeighboursRetelling) shadowOriginalScript)
+
+
+withStage : Staging -> Model -> Model
+withStage staging model =
+    case model.phase of
+        ShadowPuzzle puzzle ->
+            { model | phase = ShadowPuzzle { puzzle | arrangement = stageFor staging } }
+
+        _ ->
+            model
+
+
+{-| 1973 performed correctly (original script, after a successful 1950). -}
+shadowsSucceeded : ChapterRecord
+shadowsSucceeded =
+    { era = Shadows1973
+    , outcome = Succeeded
+    , attemptsUsed = 1
+    , finalSubmission = ShadowPerformance (Rules.Shadow.script OriginalScript)
+    , finalViolations = []
+    }
+
+
+{-| 1973 failed after a successful 1950: the retelling's staging performed
+twice under the original script.
+-}
+shadowsFailed : ChapterRecord
+shadowsFailed =
+    { era = Shadows1973
+    , outcome = Failed
+    , attemptsUsed = 2
+    , finalSubmission = ShadowPerformance (Rules.Shadow.script NeighboursRetelling)
+    , finalViolations = Rules.Shadow.validate OriginalScript (Rules.Shadow.script NeighboursRetelling)
+    }
+
+
+{-| A fresh 1998 table after a successful 1973: the inscription clue comes
+from the family archive. No book chosen, two attempts.
+-}
+mysteryFamilyArchive : Model
+mysteryFamilyArchive =
+    atStation BookTableSpot [ repairsSucceeded, shadowsSucceeded ] (Update.startChapter Search1998)
+
+
+{-| A fresh 1998 table after a failed 1973: the inscription clue comes from
+Ruth's follow-up email. No book chosen, two attempts.
+-}
+mysteryFollowUpEmail : Model
+mysteryFollowUpEmail =
+    atStation BookTableSpot [ repairsSucceeded, shadowsFailed ] (Update.startChapter Search1998)
+
+
+{-| mysteryFamilyArchive after sending candidate B (the school edition):
+first-attempt feedback is open (the inscription does not match), the choice
+is kept, and only Retry is possible. Produced by the real Submit.
+-}
+mysteryFirstAttemptFailed : Model
+mysteryFirstAttemptFailed =
+    mysteryFamilyArchive
+        |> Update.update (ChooseCandidate CandidateB)
+        |> Update.update Submit

@@ -486,9 +486,27 @@ type IntroStep
     | ClockStopped
 
 
+{-| Between screens.
+
+  - OpeningDiary era: the diary's passage, read in the present. "Step into"
+    (Advance) starts the travel.
+  - TimeTravel era elapsed: the trip back in time into `era`, `elapsed`
+    milliseconds in (added in contract v1.5). Animation frames move it on, and
+    it enters the chapter by itself at Rules.Travel.duration, or at once on
+    SkipTravel.
+  - Slideshow era index: after a chapter is resolved.
+  - TearToPresent era elapsed: the way back after the last slide of `era`, a
+    widening tear in the page, `elapsed` milliseconds in (contract v1.6).
+    Frames move it on to ReturningToPresent at Rules.Travel.returnDuration,
+    or at once on SkipTravel.
+  - ReturningToPresent: the "Back to the present" narration.
+
+-}
 type Transition
     = OpeningDiary Era
+    | TimeTravel Era Float
     | Slideshow Era Int
+    | TearToPresent Era Float
     | ReturningToPresent
 
 
@@ -628,6 +646,8 @@ type Msg
     | AnimationFrame Float
     | ClosePanel
     | PageVisibilityChanged Bool
+      -- Time travel (contract v1.5/1.6): the Skip button during TimeTravel or TearToPresent.
+    | SkipTravel
 
 
 

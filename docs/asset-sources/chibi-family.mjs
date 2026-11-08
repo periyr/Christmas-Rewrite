@@ -11,7 +11,8 @@
 // Fixes to Gemini's Walter: bigger outline-free irises, features shifted right,
 // moustache reshaped so it can't read as lips, both blushes visible, a wide
 // arm swing in walk-1, a non-crossing narrow stride in walk-2, and a gap
-// between the idle shoes. Henry's look (long hair, round glasses, turtleneck,
+// between the idle shoes. Every shoe has its rounded toe at the front (right),
+// so nobody seems to walk backwards. Henry's look (long hair, round glasses, turtleneck,
 // corduroy, flares) follows Gemini's Henry design, redrawn on Walter's body.
 //
 // Every outer shape is drawn twice: in cream (stroke 7) as the cut-out border,
@@ -43,11 +44,11 @@ const ARMS = {
 };
 // Legs: [trouser quad (top-left, bottom-left, bottom-right, top-right), shoe]
 const LEGS = {
-  idleFar: [[[38, 115], [36, 142], [46, 142], [48, 115]], "M 36,142 L 46,142 L 46,152 L 30,152 C 30,144 33,142 36,142 Z"],
+  idleFar: [[[38, 115], [34, 142], [44, 142], [48, 115]], "M 34,142 L 44,142 C 47,142 48,146 48,152 L 33,152 C 33,146 33,142 34,142 Z"],
   idleNear: [[[48, 115], [50, 144], [62, 144], [60, 115]], "M 50,144 L 62,144 C 65,144 66,147 66,152 L 50,152 Z"],
-  wideFar: [[[38, 115], [26, 142], [36, 144], [48, 115]], "M 26,142 L 38,144 L 38,152 L 20,152 C 20,144 24,142 26,142 Z"],
-  wideNear: [[[48, 115], [60, 142], [72, 142], [60, 115]], "M 60,142 L 74,142 L 74,152 L 52,152 C 52,144 58,142 60,142 Z"],
-  narrowFar: [[[38, 115], [34, 142], [44, 143], [48, 115]], "M 34,142 L 45,143 L 45,152 L 28,152 C 28,145 31,142 34,142 Z"],
+  wideFar: [[[38, 115], [26, 142], [36, 144], [48, 115]], "M 26,142 L 36,144 C 40,144.5 42,148 42,152 L 25,152 C 25,146 25,143 26,142 Z"],
+  wideNear: [[[48, 115], [60, 142], [72, 142], [60, 115]], "M 60,142 L 72,142 C 76,142 79,146 79,152 L 59,152 C 59,146 59,142 60,142 Z"],
+  narrowFar: [[[38, 115], [34, 142], [44, 143], [48, 115]], "M 34,142 L 44,143 C 47.5,143.5 49,147 49,152 L 33,152 C 33,146 33,143 34,142 Z"],
   narrowNear: [[[48, 115], [54, 143], [64, 142], [60, 115]], "M 54,143 L 64,142 C 69,142 72,146 72,152 L 53,152 Z"],
 };
 const FRAMES = {
@@ -159,10 +160,10 @@ PEOPLE["edwin-young"] = {
   ],
 };
 
-// Present-day Edwin, Christmas Eve: cosy look from Gemini's design (wine
-// Christmas jumper with a Fair Isle band and ribbed hem, green scarf with
-// mustard stripes, dark jeans, Chelsea boots) plus the grey hair, short beard
-// and round glasses from the brief, redrawn on the shared body.
+// Present-day Edwin, Christmas Eve, about 40: cosy look from Gemini's design
+// (wine Christmas jumper with a Fair Isle band and ribbed hem, green scarf with
+// mustard stripes, dark jeans, Chelsea boots), short brown hair, clean-shaven,
+// thin round glasses, redrawn on the shared body.
 const star = (x, y) => p(`M ${x},${y - 2.6} L ${x},${y + 2.6} M ${x - 2.6},${y} L ${x + 2.6},${y} M ${x - 1.7},${y - 1.7} L ${x + 1.7},${y + 1.7} M ${x - 1.7},${y + 1.7} L ${x + 1.7},${y - 1.7}`, "none", { stroke: CREAM, "stroke-width": 1.1 });
 PEOPLE["edwin-present"] = {
   sleeve: CLOTH.wine, forearm: CLOTH.wine,
@@ -183,21 +184,19 @@ PEOPLE["edwin-present"] = {
     p("M 35,73 C 43,79.5 54,79.5 62,72 L 62.5,79.5 C 54,86.5 43,86.5 34.5,80.5 Z", CLOTH.green),
   ],
   torsoLabel: "Torso (Christmas jumper and scarf)",
-  behindHead: [p("M 16,30 C 12,40 16,54 26,56 L 30,46 Z", HAIR.grey)],
+  behindHead: [],
   face: [
     ...eyes(CLOTH.green),
-    // Short soft beard along the jaw and chin, below both blushes; one smooth outer edge.
-    p("M 29.5,63.5 C 37,63 44,64.5 50,65 C 57,64.5 65,62.5 74,61.5 C 72,70.5 63,78.6 50,78.8 C 38,78.6 31,71.5 29.5,63.5 Z", HAIR.grey, { "stroke-width": 2.4 }),
-    // Warm smile on the beard.
-    p("M 54,67.2 Q 57.5,70.2 61,67.2", "none", { "stroke-width": 2 }),
+    // Warm smile.
+    p("M 54.4,60.6 Q 57.6,63.6 60.8,60.6", "none", { "stroke-width": 2 }),
     // Thin round glasses.
     c(46, 46, 8.2, "none", { "stroke-width": 1.5 }),
     c(65, 46, 8.2, "none", { "stroke-width": 1.5 }),
     p("M 54.2,45 L 56.8,45", "none", { "stroke-width": 1.5 }),
     p("M 37.8,45 L 27,43", "none", { "stroke-width": 1.5 }),
   ],
-  topLabel: "Short grey hair",
-  top: [p("M 18,40 C 16,22 30,13 48,13 C 66,13 80,22 79,36 C 76,33 73,31.5 69,31.5 L 71,27 L 64,29.5 L 63.5,25 L 57,28.5 C 46,27.5 36,30.5 30,37.5 C 26,41.5 22,42 18,40 Z", HAIR.grey)],
+  topLabel: "Short brown hair",
+  top: [p("M 18,40 C 16,22 30,13 48,13 C 66,13 80,22 79,36 C 76,33 73,31.5 69,31.5 L 71,27 L 64,29.5 L 63.5,25 L 57,28.5 C 46,27.5 36,30.5 30,37.5 C 26,41.5 22,42 18,40 Z", HAIR.brown)],
 };
 
 // ── rendering ──────────────────────────────────────────────────────────────

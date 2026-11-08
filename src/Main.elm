@@ -4,8 +4,8 @@ module Main exposing (main)
 commands yet (audio ports, if any, get added here later by agreement).
 
 Subscriptions (contract v1.3) only turn browser events into room messages:
-the walk keys and E, animation frames while the player is moving, and the
-page being hidden.
+the walk keys and E, animation frames while the player is moving or a diary
+trip is playing, and the page being hidden.
 
 -}
 
@@ -14,6 +14,7 @@ import Browser.Events exposing (Visibility(..))
 import Domain exposing (..)
 import Json.Decode as Decode exposing (Decoder)
 import Rules.Room
+import Rules.Travel
 import Update
 import View
 
@@ -34,8 +35,8 @@ subscriptions model =
         [ Browser.Events.onKeyDown (keyDown Rules.Room.keyDown)
         , Browser.Events.onKeyUp (keyUp Rules.Room.keyUp)
         , Browser.Events.onVisibilityChange (\visibility -> PageVisibilityChanged (visibility == Visible))
-        , if Rules.Room.isMoving model then
-            -- Frames only while walking, so an idle room costs nothing.
+        , if Rules.Travel.wantsFrames model then
+            -- Frames only while walking or travelling, so an idle room costs nothing.
             Browser.Events.onAnimationFrameDelta AnimationFrame
 
           else
@@ -44,13 +45,15 @@ subscriptions model =
 
 
 {-| A game key pressed without Ctrl, Cmd or Alt, so browser shortcuts such as
-Cmd+D are left alone.
+Cmd+D are left alone. The browser's auto-repeat while a key stays down is
+ignored too: the key is already held until its keyup, and a key held through
+a panel, the trip into a diary or a phase change must be pressed again.
 -}
 keyDown : (String -> Maybe Msg) -> Decoder Msg
 keyDown toMsg =
-    Decode.map4
-        (\key ctrl meta alt ->
-            if ctrl || meta || alt then
+    Decode.map5
+        (\key ctrl meta alt repeat ->
+            if ctrl || meta || alt || repeat then
                 Nothing
 
             else
@@ -60,6 +63,7 @@ keyDown toMsg =
         (Decode.field "ctrlKey" Decode.bool)
         (Decode.field "metaKey" Decode.bool)
         (Decode.field "altKey" Decode.bool)
+        (Decode.oneOf [ Decode.field "repeat" Decode.bool, Decode.succeed False ])
         |> Decode.andThen orIgnore
 
 

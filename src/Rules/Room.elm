@@ -36,10 +36,14 @@ height =
     720
 
 
-{-| The y of the player's feet. -}
+{-| The y of the player's feet: the front edge of the painted floor. The
+furniture in every room picture (door, armchair, lamp table, boxes) stands at
+y 660-715, so the player walks in front of all of it and nothing has to be
+painted over. Was 650 until the floor fix (contract v1.4).
+-}
 floorY : Float
 floorY =
-    650
+    708
 
 
 {-| The leftmost x the centre of the player can reach. -}

@@ -185,11 +185,14 @@ suite =
                         afterConsequence =
                             Update.update Advance failedTwice
                     in
-                    ( slide, afterConsequence.phase, (Update.update Advance afterConsequence).phase )
+                    ( slide
+                    , afterConsequence.phase
+                    , List.map .phase [ Update.update SkipTravel afterConsequence, send [ SkipTravel, Advance ] afterConsequence ]
+                    )
                         |> Expect.equal
                             ( Just (ConsequenceSlide Repairs1950 (RoofAfterRain Wednesday))
-                            , Transition ReturningToPresent
-                            , PresentHub
+                            , Transition (TearToPresent Repairs1950 0)
+                            , [ Transition ReturningToPresent, PresentHub ]
                             )
             , test "after final failure the present shows missing premises and the retelling" <|
                 \_ ->
