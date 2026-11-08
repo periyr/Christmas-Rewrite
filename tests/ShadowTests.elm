@@ -1,7 +1,7 @@
 module ShadowTests exposing (suite)
 
 {-| 1973 shadow story: Rules.Shadow.validate for both script variants (C's
-examples in docs/test-examples-for-A.md), the whole space of 36 complete
+expected examples), the whole space of 36 complete
 stagings, structural completeness, and the two-attempt flow through Update.
 -}
 

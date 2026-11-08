@@ -44,7 +44,7 @@ The following came from the team, not from AI.
 
 ## 2. Planning
 
-- The design brief (`one-more-christmas-shared-plan.md`) and the code contract (`CONTRACT.md`) set out our idea, the split of work between the three of us, the shared types and a 22-hour schedule. Claude helped us structure and word these documents; the decisions in them are ours.
+- Our design brief and code contract (internal team documents, not included in this repository) set out our idea, the split of work between the three of us, the shared types and a 22-hour schedule. Claude helped us structure and word these documents; the decisions in them are ours.
 - The brief includes a "Shared instruction for every coding assistant", which each of us gave to our own assistant so it would follow our rules and only edit that person's files.
 - Example planning prompt: section 7.
 
