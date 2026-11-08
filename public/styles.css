@@ -2243,6 +2243,9 @@ svg-art { display: contents; }
 .tear__layer {
   position: absolute;
   inset: 0;
+  /* Each room is its own stacking context, so nothing raised inside the past
+     room (its wall clock has z-index 1) can show through the present one. */
+  isolation: isolate;
 }
 
 /* The finished room as old paper: a warm tint, faint fibres and a few flecks. */
