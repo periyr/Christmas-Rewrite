@@ -41,6 +41,7 @@ endingAfterAll =
           , finalViolations = []
           }
         ]
+    , runSeed = Update.init.runSeed
     , phase = Ending
     , inspecting = Nothing
     , notice = Nothing

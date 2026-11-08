@@ -12,6 +12,7 @@ import Content.Frame
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (attribute, class)
+import Rules.BookTrays as BookTrays
 import Rules.Room
 import Rules.Travel
 import Timeline
@@ -130,13 +131,13 @@ screen world model =
             room (Views.Shop.presentHub world model.history)
 
         Salvage placement ->
-            station (Views.Salvage.view placement model.notice)
+            station (Views.Salvage.view (BookTrays.salvage model.runSeed) placement model.notice)
 
         RepairBoard puzzle ->
             station (Views.RepairBoard.view world puzzle model.notice)
 
         ReopeningShelf placement ->
-            station (Views.Shelf.view world placement model.notice)
+            station (Views.Shelf.view world (BookTrays.shelf model.runSeed) placement model.notice)
 
         ShadowPuzzle puzzle ->
             station (Views.ShadowStage.view world puzzle model.notice)

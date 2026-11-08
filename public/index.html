@@ -174,7 +174,8 @@
   const SAVE_KEY = "one-more-christmas-save";
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (_) {}
-  const app = Elm.Main.init({ node: document.getElementById("app"), flags: saved });
+  const seed = crypto.getRandomValues(new Int32Array(1))[0];
+  const app = Elm.Main.init({ node: document.getElementById("app"), flags: { saved, seed } });
   if (app.ports && app.ports.playSound) {
     app.ports.playSound.subscribe((name) => window.GameAudio && window.GameAudio.play(name));
   }

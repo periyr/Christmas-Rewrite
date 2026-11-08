@@ -50,6 +50,7 @@ mysteryAfter : Outcome -> Outcome -> Model
 mysteryAfter outcome1950 outcome1973 =
     send [ OpenNextDiary, Advance, SkipTravel ]
         { history = [ record Repairs1950 outcome1950, record Shadows1973 outcome1973 ]
+        , runSeed = Fixtures.initialModel.runSeed
         , phase = PresentHub
         , inspecting = Nothing
         , notice = Nothing

@@ -1,4 +1,4 @@
-module Update exposing (init, startChapter, update)
+module Update exposing (init, newRun, startChapter, update)
 
 {-| The single, pure update entry point.
 
@@ -27,7 +27,13 @@ import Timeline
 
 init : Model
 init =
+    newRun 0
+
+
+newRun : Int -> Model
+newRun runSeed =
     { history = []
+    , runSeed = runSeed
     , phase = Introduction PackingUp
     , inspecting = Nothing
     , notice = Nothing

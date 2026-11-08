@@ -2,9 +2,8 @@ port module Main exposing (main)
 
 {-| Entry point. Pure core: Update.update does all the work.
 
-The start/load menu wraps the game here, so Domain and Update stay unchanged:
-the page opens on the title screen (Views.TitleScreen) with "New game" and,
-"Continue", which works once there is a save. The save arrives as the flag
+The page opens on the title screen (Views.TitleScreen) with "New game" and
+"Continue", which works once there is a save. The save arrives in the flags
 and is written back through the `saveGame` port whenever the History or the
 player's place changes (see Save), so leaving early is safe. "New game" and
 "Start again" at the ending replace it with the new game's first page.
@@ -25,6 +24,7 @@ import Domain exposing (..)
 import Html exposing (Html)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
+import Random
 import Rules.Room
 import Rules.Travel
 import Save exposing (Saved)
@@ -42,12 +42,13 @@ port saveGame : Encode.Value -> Cmd msg
 port playSound : String -> Cmd msg
 
 
-{-| The title screen or the game, plus the save as it is stored right now,
-so the game is only written when its History actually changed.
+{-| The title screen or game, its last checkpoint and the seed stream supplied
+by the browser. Only starting a new run consumes that stream.
 -}
 type alias App =
     { screen : Screen
     , saved : Maybe Saved
+    , nextSeed : Random.Seed
     }
 
 
@@ -65,11 +66,30 @@ type AppMsg
 main : Program Decode.Value App AppMsg
 main =
     Browser.element
-        { init = \flags -> ( { screen = Title, saved = Save.decode flags }, Cmd.none )
+        { init = init
         , update = update
         , view = view
         , subscriptions = appSubscriptions
         }
+
+
+init : Decode.Value -> ( App, Cmd AppMsg )
+init flags =
+    ( { screen = Title
+      , saved = Decode.decodeValue (Decode.field "saved" Decode.value) flags |> Result.toMaybe |> Maybe.andThen Save.decode
+      , nextSeed = Decode.decodeValue (Decode.field "seed" Decode.int) flags |> Result.withDefault 0 |> Random.initialSeed
+      }
+    , Cmd.none
+    )
+
+
+freshRun : App -> ( Model, App )
+freshRun app =
+    let
+        ( runSeed, nextSeed ) =
+            Random.step (Random.int Random.minInt Random.maxInt) app.nextSeed
+    in
+    ( Update.newRun runSeed, { app | nextSeed = nextSeed } )
 
 
 update : AppMsg -> App -> ( App, Cmd AppMsg )
@@ -77,7 +97,11 @@ update msg app =
     case ( msg, app.screen ) of
         ( NewGame, Title ) ->
             -- The old save is replaced straight away by the new game's first page.
-            checkpoint { screen = Playing Update.init, saved = Nothing }
+            let
+                ( model, seededApp ) =
+                    freshRun app
+            in
+            checkpoint { seededApp | screen = Playing model }
 
         ( Continue, Title ) ->
             case app.saved of
@@ -89,11 +113,15 @@ update msg app =
 
         ( Game gameMsg, Playing model ) ->
             let
-                next =
-                    Update.update gameMsg model
+                ( next, seededApp ) =
+                    if gameMsg == StartAgain && model.phase == Ending then
+                        freshRun app
+
+                    else
+                        ( Update.update gameMsg model, app )
 
                 ( saved, saveCmd ) =
-                    checkpoint { app | screen = Playing next }
+                    checkpoint { seededApp | screen = Playing next }
             in
             ( saved
             , Cmd.batch (saveCmd :: List.map playSound (Sounds.forStep gameMsg model next))
@@ -103,8 +131,8 @@ update msg app =
             ( app, Cmd.none )
 
 
-{-| Saves whenever the History or the player's place differs from the stored
-save. Walking, panels and puzzle moves change neither, so they write nothing.
+{-| Saves when the run seed, History or the player's place changes.
+Walking, panels and puzzle moves write nothing.
 -}
 checkpoint : App -> ( App, Cmd AppMsg )
 checkpoint app =
@@ -112,7 +140,7 @@ checkpoint app =
         Playing model ->
             let
                 current =
-                    { history = model.history, place = Save.placeOf model }
+                    { history = model.history, place = Save.placeOf model, runSeed = model.runSeed }
             in
             if app.saved /= Just current then
                 ( { app | saved = Just current }, saveGame (Save.encode current) )

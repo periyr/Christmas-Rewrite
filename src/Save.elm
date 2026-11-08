@@ -2,8 +2,8 @@ module Save exposing (Place, Saved, decode, encode, placeOf, resume, storageVers
 
 {-| Saving and loading progress (start/load menu).
 
-History is the only stored progress (see CONTRACT.md). A save is that History
-plus the Place the player had reached, turned into JSON. Main writes it to the
+History is the only stored progress (see CONTRACT.md). A save includes that
+History, the Place the player had reached and the run's tray seed. Main writes it to the
 browser's localStorage through a port whenever either changes, and reads it
 back as a flag when the page opens, so a player who leaves early comes back to
 the same screen: the same introduction page, the shop, the ending, or the
@@ -29,6 +29,7 @@ import Update
 type alias Saved =
     { history : History
     , place : Place
+    , runSeed : Int
     }
 
 
@@ -107,10 +108,10 @@ storageVersion =
 
 {-| The model to continue from: the saved History, on the saved Place. -}
 resume : Saved -> Model
-resume { history, place } =
+resume { history, place, runSeed } =
     let
         start =
-            Update.init
+            Update.newRun runSeed
 
         finished =
             (Timeline.deriveWorld history).nextDiary == Nothing
@@ -142,11 +143,12 @@ resume { history, place } =
 
 
 encode : Saved -> E.Value
-encode { history, place } =
+encode { history, place, runSeed } =
     E.object
         [ ( "version", E.int storageVersion )
         , ( "history", E.list encodeRecord history )
         , ( "place", encodePlace place )
+        , ( "runSeed", E.int runSeed )
         ]
 
 
@@ -164,9 +166,11 @@ decoder =
         |> D.andThen
             (\version ->
                 if version == storageVersion then
-                    D.map2 Saved
+                    D.map3 Saved
                         (D.field "history" (D.list recordDecoder))
                         (D.field "place" placeDecoder)
+                        -- Version 1 saves written before shuffling have no seed.
+                        (D.oneOf [ D.field "runSeed" D.int, D.succeed Update.init.runSeed ])
 
                 else
                     D.fail "unknown save version"

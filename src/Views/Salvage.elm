@@ -17,11 +17,11 @@ import Rules.Salvage
 import Views.Common as Common
 
 
-view : Placement BookId SalvageSlot -> Maybe Notice -> List (Html Msg)
-view placement notice =
+view : List BookId -> Placement BookId SalvageSlot -> Maybe Notice -> List (Html Msg)
+view books placement notice =
     let
         config =
-            placementConfig placement
+            placementConfig books placement
     in
     [ div [ class "salvage-scene" ]
         [ Common.topbar "1950"
@@ -48,12 +48,12 @@ view placement notice =
 
 
 {-| No per-book marks: the player is told how many books are misplaced, not which. -}
-placementConfig : Placement BookId SalvageSlot -> PlacementUI.Config BookId SalvageSlot Msg
-placementConfig placement =
+placementConfig : List BookId -> Placement BookId SalvageSlot -> PlacementUI.Config BookId SalvageSlot Msg
+placementConfig books placement =
     { toMsg = SalvageMove
     , enabled = True
     , placement = placement
-    , items = Rules.Books.allBooks
+    , items = books
     , name = \book -> (Content.Books.book book).title
     , cardClass = \_ -> "book--art"
     , cardBody = bookBody
