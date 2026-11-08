@@ -1,7 +1,7 @@
-// Builds the pictures for the three present-day hub props, one per state of the
-// foundation each one shows (Content.Clues hubProp):
+// Builds the pictures for two present-day hub props, one per state of the
+// foundation each one shows (Content.Clues hubProp). The roof and shelves have
+// no picture, by the team's choice.
 //
-//   clue-roof-<state>.svg        RoofAndShelves, from world.premises (1950)
 //   clue-wall-<state>.svg        CommunityWall,  from world.tradition (1973)
 //   clue-desk-<state>.svg        OrderDesk,      from world.onlineService (1998)
 //
@@ -31,107 +31,6 @@ ${body}
   </g>
 </svg>
 `;
-
-// A row of book spines standing on a shelf top at y, from x0 to x1.
-function books(x0, x1, y, { lean = 0, gaps = [], seed = 1 } = {}) {
-  const colours = [C.wine, C.teal, C.mustard, C.green, C.periwinkle, C.vermilion, BROWN, C.olive];
-  let out = "", x = x0, i = seed;
-  while (x < x1 - 10) {
-    const w = 10 + ((i * 7) % 6), h = 34 + ((i * 13) % 14);
-    if (!gaps.some(([a, b]) => x >= a && x <= b)) {
-      const tilt = lean && i % 5 === 0 ? ` transform="rotate(${lean} ${x} ${y})"` : "";
-      out += `    <rect x="${x}" y="${y - h}" width="${w}" height="${h}" fill="${colours[i % colours.length]}" stroke-width="1.5"${tilt} />\n`;
-    }
-    x += w + 1;
-    i += 1;
-  }
-  return out;
-}
-
-// ── Roof and shelves (1950) ────────────────────────────────────────────────
-function roofRoom({ stain, sag, makeshift, bucket, archive }) {
-  // Ceiling, wall, floor.
-  let s = `    <rect x="0" y="0" width="${W}" height="70" fill="${GREY}" />
-    <rect x="0" y="70" width="${W}" height="200" fill="${CREAM}" />
-    <rect x="0" y="270" width="${W}" height="30" fill="${BROWN}" />
-    <path d="M 0 70 L ${W} 70" />
-`;
-  if (stain === "patched") {
-    s += `    <!-- Walter's patch, still sound -->
-    <path d="M 150 14 L 300 10 L 302 30 L 152 34 Z" fill="${TAN}" />
-    <path d="M 152 34 L 302 30 L 304 50 L 154 54 Z" fill="#b97a3a" />
-    <g fill="${INK}" stroke="none"><circle cx="160" cy="22" r="2" /><circle cx="292" cy="18" r="2" /><circle cx="162" cy="44" r="2" /><circle cx="294" cy="40" r="2" /></g>
-`;
-  } else {
-    s += `    <!-- The water stain on the ceiling -->
-    <path d="M 120 8 C 150 -4 200 6 230 2 C 270 -2 320 10 330 26 C 342 44 300 58 260 54 C 230 66 180 62 150 54 C 110 58 92 40 100 26 C 104 16 110 12 120 8 Z" fill="${TAN}" fill-opacity="0.55" stroke-width="1.5" />
-    <path d="M 150 20 C 180 12 230 16 260 14 C 290 14 306 24 298 34 C 280 46 240 44 210 46 C 180 48 150 42 146 32 Z" fill="${BROWN}" fill-opacity="0.35" stroke="none" />
-    <path d="M 160 62 C 156 70 156 74 160 76 C 164 74 164 70 160 62 Z" fill="${C.periwinkle}" stroke-width="1.5" />
-    <path d="M 160 112 C 156 120 156 124 160 126 C 164 124 164 120 160 112 Z" fill="${C.periwinkle}" stroke-width="1.5" />
-`;
-  }
-  // The archive door on the left.
-  s += `    <!-- The back-room archive -->
-    <rect x="30" y="110" width="90" height="160" fill="${archive === "open" ? "#3f2c1c" : BROWN}" />
-    <rect x="18" y="98" width="114" height="16" fill="${TAN}" />
-    <text x="75" y="111" text-anchor="middle" ${FONT} font-size="11" font-weight="bold" fill="${INK}" stroke="none" letter-spacing="1">ARCHIVE</text>
-`;
-  if (archive === "open") {
-    s += `    <g stroke-width="1.5">
-      <rect x="40" y="150" width="34" height="26" fill="${TAN}" /><rect x="76" y="150" width="34" height="26" fill="${TAN}" />
-      <rect x="40" y="180" width="34" height="26" fill="${TAN}" /><rect x="76" y="180" width="34" height="26" fill="${TAN}" />
-      <rect x="40" y="210" width="34" height="26" fill="${TAN}" /><rect x="76" y="210" width="34" height="26" fill="${TAN}" />
-      <rect x="40" y="240" width="34" height="26" fill="${TAN}" /><rect x="76" y="240" width="34" height="26" fill="${TAN}" />
-    </g>
-    <g fill="${CREAM}" stroke-width="1"><rect x="50" y="158" width="14" height="8" /><rect x="86" y="158" width="14" height="8" /><rect x="50" y="188" width="14" height="8" /><rect x="86" y="218" width="14" height="8" /><rect x="50" y="248" width="14" height="8" /></g>
-`;
-  } else if (archive === "lost") {
-    s += `    <circle cx="106" cy="196" r="4" fill="${C.mustard}" />
-    <g fill="${C.green}" fill-opacity="0.6" stroke="none"><circle cx="48" cy="140" r="9" /><circle cx="62" cy="150" r="6" /><circle cx="96" cy="236" r="10" /><circle cx="82" cy="250" r="7" /><circle cx="44" cy="226" r="5" /></g>
-    <path d="M 22 150 L 128 210 M 22 214 L 128 150" stroke="${TAN}" stroke-width="9" />
-    <path d="M 22 150 L 128 210 M 22 214 L 128 150" stroke-width="1.5" fill="none" />
-`;
-  } else {
-    s += `    <circle cx="106" cy="196" r="4" fill="${C.mustard}" />
-    <g fill="${C.green}" fill-opacity="0.5" stroke="none"><circle cx="50" cy="132" r="7" /><circle cx="60" cy="142" r="4" /><circle cx="94" cy="246" r="8" /></g>
-`;
-  }
-  // Shelves on the right.
-  if (makeshift) {
-    s += `    <!-- Makeshift shelves: planks on bricks -->
-    <g fill="${C.vermilion}" stroke-width="1.5">
-      <rect x="200" y="250" width="22" height="20" /><rect x="400" y="250" width="22" height="20" />
-      <rect x="208" y="196" width="22" height="20" /><rect x="392" y="196" width="22" height="20" />
-    </g>
-    <path d="M 192 238 L 432 246 L 432 254 L 192 246 Z" fill="${TAN}" />
-    <path d="M 200 186 L 424 180 L 424 188 L 200 194 Z" fill="${TAN}" />
-${books(210, 300, 240, { seed: 3 })}${books(330, 420, 244, { seed: 9, gaps: [[360, 384]] })}${books(220, 290, 187, { seed: 5 })}
-`;
-  } else {
-    const plank = (y) =>
-      sag
-        ? `    <path d="M 190 ${y} C 260 ${y + 16} 360 ${y + 16} 430 ${y} L 430 ${y + 8} C 360 ${y + 24} 260 ${y + 24} 190 ${y + 8} Z" fill="${TAN}" />\n`
-        : `    <rect x="190" y="${y}" width="240" height="8" fill="${TAN}" />\n`;
-    s += `    <!-- Bookcase -->
-    <rect x="180" y="84" width="260" height="186" fill="${BROWN}" />
-    <rect x="190" y="92" width="240" height="170" fill="#3f2c1c" />
-`;
-    if (sag) {
-      s += `${books(196, 240, 150, { seed: 2 })}${books(370, 424, 150, { seed: 6 })}${books(200, 300, 216, { seed: 4, gaps: [[236, 270]] })}`;
-    } else {
-      s += `${books(194, 428, 140, { seed: 1, lean: -8 })}${books(194, 428, 196, { seed: 4, lean: 6 })}${books(194, 428, 254, { seed: 7 })}`;
-    }
-    s += plank(140) + plank(196) + plank(254);
-  }
-  if (bucket) {
-    s += `    <!-- A bucket under the drip -->
-    <path d="M 138 236 L 182 236 L 176 270 L 144 270 Z" fill="#7c8486" />
-    <path d="M 140 238 C 144 222 176 222 180 238" fill="none" />
-    <path d="M 142 242 L 178 242" stroke="${C.periwinkle}" stroke-width="3" />
-`;
-  }
-  return s;
-}
 
 // ── Community wall (1973) ──────────────────────────────────────────────────
 function communityWall(kind) {
@@ -262,9 +161,6 @@ function orderDesk(kind) {
 }
 
 const files = {
-  "clue-roof-original.svg": ["the 1950 repairs not revisited: a spreading water stain, sagging shelves, a damp archive", roofRoom({ stain: "stain", sag: true, archive: "damp" })],
-  "clue-roof-missing.svg": ["the 1950 repairs failed: stained ceiling, makeshift shelves, the archive lost to damp", roofRoom({ stain: "stain", makeshift: true, bucket: true, archive: "lost" })],
-  "clue-roof-established.svg": ["the 1950 repairs held: a sound patched roof, straight full shelves, a dry full archive", roofRoom({ stain: "patched", archive: "open" })],
   "clue-wall-original.svg": ["the 1973 story not revisited: a bare board by the children's corner, only pin holes", communityWall("bare")],
   "clue-wall-missing.svg": ["the 1973 story failed: one faded poster, Christmas Reading 1973", communityWall("one")],
   "clue-wall-established.svg": ["the 1973 story became a tradition: posters, fox-and-lantern drawings, Ruth and Lucy's photo", communityWall("full")],

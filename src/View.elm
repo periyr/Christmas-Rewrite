@@ -412,8 +412,17 @@ cluePicture world clue =
         ClosureNotice ->
             Just "assets/clue-closure-notice.svg"
 
-        HubProp RoofAndShelves ->
-            Just ("assets/clue-roof-" ++ foundationFile world.premises ++ ".svg")
+        RubbleAndShelvesNote ->
+            Just "assets/clue-repair-notes.svg"
+
+        WalterDiaryPage ->
+            Just "assets/clue-walter-diary.svg"
+
+        BudgetAllocation ->
+            Just "assets/clue-budget.svg"
+
+        GlassDeliverySlip ->
+            Just "assets/clue-glass-slip.svg"
 
         HubProp CommunityWall ->
             Just ("assets/clue-wall-" ++ foundationFile world.tradition ++ ".svg")
@@ -425,7 +434,9 @@ cluePicture world clue =
             Nothing
 
 
-{-| Each hub prop has a picture per state of the foundation it shows. -}
+{-| The community wall and order desk have a picture per state of the
+foundation they show. The roof and shelves are words only.
+-}
 foundationFile : Foundation -> String
 foundationFile foundation =
     case foundation of
@@ -452,10 +463,16 @@ sheetVariant clue =
             "sheet--scene"
 
         WalterDiaryPage ->
-            "sheet--diary"
+            "sheet--diary sheet--scene"
 
         GlassDeliverySlip ->
-            "sheet--form"
+            "sheet--form sheet--scene"
+
+        RubbleAndShelvesNote ->
+            "sheet--scene"
+
+        BudgetAllocation ->
+            "sheet--scene"
 
         _ ->
             ""
