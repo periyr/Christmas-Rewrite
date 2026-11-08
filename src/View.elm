@@ -242,12 +242,21 @@ inspection world model =
             []
 
 
-{-| A 1998 book's picture page shows the picture itself above its description. -}
+{-| A 1998 book's picture page shows the picture itself above its description.
+The family photographs and the handwritten closure notice are shown as pictures
+only; their words stay in the page for screen readers.
+-}
 cluePicture : ClueId -> Maybe String
 cluePicture clue =
     case clue of
         CandidatePage candidate CoverTab ->
             Just (Art.candidateIllustration candidate)
+
+        FamilyPhotograph ->
+            Just "assets/clue-family-photographs.svg"
+
+        ClosureNotice ->
+            Just "assets/clue-closure-notice.svg"
 
         _ ->
             Nothing
@@ -256,6 +265,12 @@ cluePicture clue =
 sheetVariant : ClueId -> String
 sheetVariant clue =
     case clue of
+        FamilyPhotograph ->
+            "sheet--picture sheet--photo"
+
+        ClosureNotice ->
+            "sheet--picture sheet--note"
+
         WalterDiaryPage ->
             "sheet--diary"
 

@@ -191,6 +191,15 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
   - young Edwin in 1998
 - **In the game:** B's `Components.Actor` draws these files (her placeholder figure is gone), using the anchor and scale above. Checked in the browser: the sprite is 192 × 320 room px, the feet sit on y 650, and it flips and cycles both walk frames.
 
+### Clue pictures (shown in the clue sheet instead of text)
+
+| File | Clue | Size | Notes |
+|---|---|---|---|
+| `clue-family-photographs.svg` | `FamilyPhotograph` | 640 × 330 | Four photos in one wooden frame, each outside the shop: the founder in his apron, Walter with a hammer, Henry with an armful of books, young Edwin squinting into the sun. Older photos have a warmer, faded tint. Built from the player sprites by `docs/asset-sources/family-photo.mjs`. |
+| `clue-closure-notice.svg` | `ClosureNotice` | 480 × 440 | Edwin's handwritten notice, taped up, with the words of `Content.Clues ClosureNotice`. Handwriting is the Caveat font (SIL OFL 1.1) as outlines, built by `docs/asset-sources/closure-note.mjs`. |
+
+`View.cluePicture` shows these with the `sheet--picture` style: the picture fills the sheet, and the clue's words stay in the page for screen readers.
+
 ### Room props (overlays for B's room composition)
 
 B owns where these go and when they show. "Player scale" means the same 1 unit ≈ 1.1 cm as the sprites, so draw these at 2 logical px per unit too; "rests on" is the floor line.
