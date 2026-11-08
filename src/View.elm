@@ -140,10 +140,10 @@ screen world model =
             station (Views.Shelf.view world (BookTrays.shelf model.runSeed) placement model.notice)
 
         ShadowPuzzle puzzle ->
-            station (Views.ShadowStage.view world puzzle model.notice)
+            station (Views.ShadowStage.view model.runSeed world puzzle model.notice)
 
         MendingFrame placement ->
-            room { emptyScene | line = Just Content.Frame.arrival, panel = Views.Frame.view placement model.notice }
+            room { emptyScene | line = Just Content.Frame.arrival, panel = Views.Frame.view model.runSeed placement model.notice }
 
         BookMystery puzzle ->
             station (Views.BookTable.view world puzzle model.notice)

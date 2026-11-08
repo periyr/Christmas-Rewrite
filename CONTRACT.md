@@ -507,6 +507,10 @@ The page opens on a title screen (`Views.TitleScreen`) with Continue and New Gam
 - **Fonts:** all game text uses Alegreya, the title uses Fraunces, the typed slip uses Courier Prime. The files are bundled in `public/assets/` (credits in `ASSETS.md`), so nothing loads from the network.
 - Tests: `tests/SaveTests.elm`.
 
+## Shuffled 1973 pieces
+
+Like the 1950 trays (`Rules.BookTrays`), the 1973 puzzles take their layout from `model.runSeed`, through `Rules.Shuffle`: the shadow stage's tray order (never the natural order, and never a scene's character right next to its prop) and which bench spot each piece of glass lies on (only layouts where every piece stays on the bench and clear of the frame). Presentation only: rules and attempts are unchanged. Tests: `tests/ShuffleTests.elm`.
+
 ## Release build
 
 There are no `Debug.todo` stubs left, so the optimized build works. For the submission, run:
