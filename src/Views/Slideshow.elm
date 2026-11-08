@@ -50,7 +50,7 @@ view world history era index =
                 |> Maybe.withDefault { title = "", paragraphs = [] }
     in
     Art.room
-        :: (current |> Maybe.map Props.forSlide |> Maybe.withDefault [])
+        :: (current |> Maybe.map (Props.forSlide Props.Animated world.scriptVariant) |> Maybe.withDefault [])
         ++ [ Common.yearBadge (eraYear era)
            , Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
            ]

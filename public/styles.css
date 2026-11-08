@@ -1874,8 +1874,6 @@ svg-art { display: contents; }
 
 .prop--computer { filter: drop-shadow(0 0 0.9rem rgba(170, 235, 210, 0.55)); }
 
-.prop--puppet { filter: drop-shadow(0.2rem 0.2rem 0.15rem rgba(0, 0, 0, 0.35)); }
-
 /* Switched on, the torch is propped up on its tail and the beam leaves its lens,
    tilted up at the sheet (positions in Components.Props). */
 .prop--torch.is-on { transform-origin: 5% 80%; transform: rotate(-25deg); }
@@ -1883,7 +1881,342 @@ svg-art { display: contents; }
 
 /* House lights down for the performance; the lit sheet and puppets stay bright. */
 .stage[data-lights="down"] .room-art { filter: brightness(0.4) saturate(0.75); }
-.stage[data-lights="down"] .prop:not(.prop--sheet, .prop--puppet, .prop--beam, .prop--torch) { filter: brightness(0.45); }
+.stage[data-lights="down"] .prop:not(.prop--sheet, .prop--beam, .prop--torch) { filter: brightness(0.45); }
+
+/* ---------- 1973 shadow performances ---------- */
+
+.shadow-theatre {
+  position: absolute;
+  left: 18rem;
+  top: 2.6rem;
+  width: 44rem;
+  height: 32.09rem; /* The sheet asset's 170:124 ratio. */
+  pointer-events: none;
+}
+
+.shadow-theatre__sheet,
+.shadow-theatre__puppet { display: block; width: 100%; height: 100%; }
+
+.shadow-theatre__field {
+  position: absolute;
+  inset: 11% 7% 5.5%;
+  overflow: hidden;
+  border-radius: 48% 48% 3% 3% / 2% 2% 2% 2%;
+  background: radial-gradient(ellipse at 42% 67%, #ffe8b5aa 8%, #efb26466 66%, #9a5d3026);
+  --scenery: #5c3e31;
+  --scenery-edge: #443025;
+}
+
+.shadow-theatre__field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 72% 65%, #ffcc72b5, transparent 62%);
+  opacity: var(--home-light, 0);
+}
+
+.shadow-theatre__scenery {
+  position: absolute;
+  bottom: 3.55rem;
+  color: var(--scenery);
+}
+
+.shadow-theatre__scenery::before,
+.shadow-theatre__scenery::after {
+  content: "";
+  position: absolute;
+}
+
+/* The pieces share a travel group. The inner wrappers separate body lean or
+   bounce, prop placement, reaching and the prop's own turn. The base styles
+   are the final pose, also used for reduced motion and the tear home. */
+.shadow-theatre__travel {
+  position: absolute;
+  bottom: 0.55rem;
+  left: 0;
+  width: 15rem;
+  height: 15rem;
+  transform: translateX(var(--theatre-x));
+}
+
+.shadow-theatre__pose {
+  height: 100%;
+  transform-origin: 52% 80%;
+}
+
+.shadow-theatre__pose > img { transform: scaleX(var(--theatre-facing, 1)); }
+
+.shadow-theatre__piece {
+  position: absolute;
+  top: var(--piece-top, 5.9rem);
+  left: var(--piece-left, 9.7rem);
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+.shadow-theatre__turn {
+  transform: rotate(var(--piece-angle, 0deg));
+  transform-origin: var(--piece-pivot, 50% 25%);
+}
+
+[data-shadow-scene="bridge"] { --theatre-x: 21.6rem; }
+[data-shadow-scene="bridge"] .shadow-theatre__scenery {
+  left: 2rem;
+  right: 2rem;
+  bottom: 0.4rem;
+  height: 3.8rem;
+  background: repeating-linear-gradient(95deg, var(--scenery) 0 1.8rem, #684839 1.8rem 1.9rem);
+  clip-path: polygon(0 27%, 12% 27%, 26% 10%, 41% 0, 59% 0, 74% 10%, 88% 27%, 100% 27%,
+    100% 100%, 78% 100%, 71% 73%, 60% 57%, 50% 54%, 40% 57%, 29% 73%, 22% 100%, 0 100%);
+}
+
+[data-shadow-scene="door"] {
+  --theatre-x: 14.8rem;
+  --piece-left: 8.3rem;
+  --piece-top: 2.15rem;
+  --piece-angle: -67deg;
+  --piece-pivot: 56% 76%;
+}
+
+[data-shadow-scene="door"] .shadow-theatre__scenery {
+  right: 4.8rem;
+  width: 8.2rem;
+  height: 13.2rem;
+  border: 0.62rem solid var(--scenery-edge);
+  border-radius: 47% 47% 0 0 / 24% 24% 0 0;
+  background: radial-gradient(ellipse at bottom, #ffeac1, #e99e51);
+  perspective: 21rem;
+}
+
+[data-shadow-scene="door"] .shadow-theatre__scenery::before {
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 23% 63%, #e1b06f 0 0.25rem, transparent 0.29rem),
+    repeating-linear-gradient(90deg, var(--scenery) 0 1.38rem, var(--scenery-edge) 1.4rem 1.5rem);
+  transform-origin: right center;
+  transform: rotateY(-73deg);
+}
+
+[data-shadow-scene="gate"] {
+  --theatre-x: 14.5rem;
+  --theatre-facing: -1;
+  --piece-left: 8.35rem;
+  --piece-top: 5.8rem;
+  --piece-angle: -18deg;
+  --piece-pivot: 50% 68%;
+}
+
+[data-shadow-scene="gate"] .shadow-theatre__scenery {
+  right: 2.25rem;
+  width: 10rem;
+  height: 7.7rem;
+  border-left: 0.65rem solid;
+  border-right: 0.65rem solid;
+  background:
+    linear-gradient(28deg, transparent 44%, currentColor 45% 52%, transparent 53%),
+    linear-gradient(transparent 24%, currentColor 25% 34%, transparent 35% 72%, currentColor 73% 82%, transparent 83%);
+}
+
+[data-shadow-scene="gate"] .shadow-theatre__scenery::before {
+  left: -0.82rem;
+  right: -0.82rem;
+  top: -0.22rem;
+  height: 0.85rem;
+  border-inline: 1rem solid var(--scenery-edge);
+}
+
+[data-shadow-scene="reading-home"],
+[data-shadow-scene="fireplace"] {
+  --piece-left: 7.8rem;
+  --piece-top: 5.05rem;
+  --piece-angle: -5deg;
+  --piece-pivot: 50% 67%;
+  --home-light: 1;
+}
+
+[data-shadow-scene="reading-home"] {
+  --theatre-x: 11.4rem;
+  --theatre-facing: -1;
+}
+
+[data-shadow-scene="fireplace"] { --theatre-x: 11.8rem; }
+[data-shadow-scene="fireplace"] .shadow-theatre__scenery {
+  right: 3.6rem;
+  width: 10.2rem;
+  height: 8.25rem;
+  border: 0.85rem solid var(--scenery);
+  border-bottom-width: 0.55rem;
+  border-radius: 40% 40% 0 0 / 30% 30% 0 0;
+  background: #684532;
+}
+
+[data-shadow-scene="fireplace"] .shadow-theatre__scenery::before {
+  bottom: -0.2rem;
+  left: -1.65rem;
+  right: -1.65rem;
+  height: 0.75rem;
+  background: var(--scenery-edge);
+}
+
+[data-shadow-scene="fireplace"] .shadow-theatre__scenery::after {
+  bottom: 0.45rem;
+  left: 1.55rem;
+  width: 5.1rem;
+  height: 4.75rem;
+  background: linear-gradient(#d5884a, #ffd887 80%, #c78043);
+  clip-path: polygon(0 100%, 4% 71%, 23% 49%, 31% 73%, 47% 38%, 54% 0, 72% 45%, 76% 69%, 89% 47%, 98% 72%, 100% 100%);
+}
+
+[data-shadow-scene="lantern-home"] { --theatre-x: 16.2rem; --home-light: 1; }
+:is([data-shadow-scene="reading-home"], [data-shadow-scene="lantern-home"]) .shadow-theatre__scenery {
+  right: 2.25rem;
+  width: 9.5rem;
+  height: 12.3rem;
+  background: var(--scenery);
+  clip-path: polygon(0 34%, 51% 0, 72% 15%, 72% 5%, 83% 5%, 83% 23%, 100% 34%,
+    92% 34%, 92% 100%, 8% 100%, 8% 34%);
+}
+
+:is([data-shadow-scene="reading-home"], [data-shadow-scene="lantern-home"]) .shadow-theatre__scenery::before {
+  left: 33%;
+  top: 46%;
+  width: 34%;
+  height: 24%;
+  border: 0.23rem solid var(--scenery-edge);
+  background:
+    linear-gradient(90deg, transparent 45%, var(--scenery-edge) 46% 55%, transparent 56%),
+    linear-gradient(transparent 45%, var(--scenery-edge) 46% 55%, transparent 56%),
+    #ffd58d;
+}
+
+:is([data-shadow-scene="bridge"], [data-shadow-scene="lantern-home"]) .shadow-theatre__turn {
+  position: relative;
+}
+
+:is([data-shadow-scene="bridge"], [data-shadow-scene="lantern-home"]) .shadow-theatre__turn::before {
+  content: "";
+  position: absolute;
+  inset: -32% -44% -12%;
+  background: radial-gradient(ellipse, #ffd37dba, transparent 63%);
+}
+
+:is([data-shadow-scene="bridge"], [data-shadow-scene="lantern-home"]) .shadow-theatre__turn img {
+  position: relative;
+}
+
+/* Every cue uses the same one-shot timeline. Navigation can cut it short. */
+@media (prefers-reduced-motion: no-preference) {
+  .shadow-theatre--animated :is(
+    .shadow-theatre__travel, .shadow-theatre__pose, .shadow-theatre__gesture,
+    .shadow-theatre__turn, .shadow-theatre__turn img
+  ),
+  .shadow-theatre--animated .shadow-theatre__field::before,
+  .shadow-theatre--animated .shadow-theatre__scenery::before {
+    --theatre-cue: none;
+    animation: var(--theatre-cue, none) 3.6s both;
+  }
+
+  .shadow-theatre--animated :is([data-shadow-scene="bridge"], [data-shadow-scene="lantern-home"]) .shadow-theatre__travel {
+    --theatre-cue: theatre-cross;
+  }
+  .shadow-theatre--animated :is([data-shadow-scene="bridge"], [data-shadow-scene="lantern-home"]) .shadow-theatre__pose {
+    --theatre-cue: theatre-bob;
+  }
+  .shadow-theatre--animated :is([data-shadow-scene="bridge"], [data-shadow-scene="lantern-home"]) .shadow-theatre__turn {
+    --theatre-cue: theatre-lantern;
+  }
+  .shadow-theatre--animated [data-shadow-scene="door"] .shadow-theatre__travel { --theatre-cue: theatre-hop; }
+  .shadow-theatre--animated [data-shadow-scene="door"] .shadow-theatre__gesture { --theatre-cue: theatre-reach; }
+  .shadow-theatre--animated [data-shadow-scene="door"] .shadow-theatre__turn { --theatre-cue: theatre-unlock; }
+  .shadow-theatre--animated [data-shadow-scene="door"] .shadow-theatre__scenery::before { --theatre-cue: theatre-door; }
+  .shadow-theatre--animated [data-shadow-scene="gate"] .shadow-theatre__travel { --theatre-cue: theatre-gate; }
+  .shadow-theatre--animated [data-shadow-scene="gate"] .shadow-theatre__pose { --theatre-cue: theatre-lean; }
+  .shadow-theatre--animated [data-shadow-scene="gate"] .shadow-theatre__gesture { --theatre-cue: theatre-find-key; }
+  .shadow-theatre--animated [data-shadow-scene="gate"] .shadow-theatre__turn { --theatre-cue: theatre-lift-key; }
+  .shadow-theatre--animated [data-shadow-scene="fireplace"] .shadow-theatre__travel { --theatre-cue: theatre-perch; }
+  .shadow-theatre--animated :is([data-shadow-scene="reading-home"], [data-shadow-scene="fireplace"]) .shadow-theatre__gesture {
+    --theatre-cue: theatre-raise-book;
+  }
+  .shadow-theatre--animated :is([data-shadow-scene="reading-home"], [data-shadow-scene="fireplace"]) .shadow-theatre__turn img {
+    --theatre-cue: theatre-open-book;
+  }
+  .shadow-theatre--animated :is([data-shadow-scene="reading-home"], [data-shadow-scene="lantern-home"])::before {
+    --theatre-cue: theatre-warm;
+  }
+}
+
+@keyframes theatre-cross {
+  from { transform: translateX(0.5rem); }
+  92%, to { transform: translateX(var(--theatre-x)); }
+}
+@keyframes theatre-bob {
+  10%, 30%, 50%, 70% { transform: translateY(-0.44rem) rotate(-2deg); }
+  20%, 40%, 60%, 80%, to { transform: none; }
+  88% { transform: translateY(-0.2rem); }
+}
+@keyframes theatre-lantern {
+  10%, 34%, 58% { transform: rotate(-10deg); }
+  22%, 46%, 70% { transform: rotate(8deg); }
+  82% { transform: rotate(-5deg); }
+  91% { transform: rotate(3deg); }
+}
+@keyframes theatre-hop {
+  from { transform: translateX(1.2rem); }
+  12% { transform: translate(3.8rem, -1.2rem); }
+  23% { transform: translateX(6.4rem); }
+  34% { transform: translate(9.4rem, -1.05rem); }
+  45% { transform: translateX(12.1rem); }
+  52% { transform: translate(13.5rem, -0.5rem); }
+  61%, to { transform: translateX(var(--theatre-x)); }
+}
+@keyframes theatre-reach {
+  from, 53% { transform: translate(-1.2rem, 1.45rem); }
+  66%, 83% { transform: translate(0.65rem, -0.25rem); }
+}
+@keyframes theatre-unlock {
+  from, 66% { transform: rotate(-53deg); }
+  78% { transform: rotate(-100deg); }
+}
+@keyframes theatre-door {
+  from, 76% { transform: none; }
+}
+@keyframes theatre-gate {
+  from { transform: translateX(1.5rem); }
+  46%, to { transform: translateX(var(--theatre-x)); }
+}
+@keyframes theatre-lean {
+  from, 46% { transform: none; }
+  58%, 66% { transform: rotate(14deg); }
+  92%, to { transform: none; }
+}
+@keyframes theatre-find-key {
+  from { transform: translate(13rem, 3.45rem); }
+  46%, 62% { transform: translateY(3.45rem); }
+  90%, to { transform: none; }
+}
+@keyframes theatre-lift-key {
+  from, 62% { transform: rotate(-78deg); }
+  88% { transform: rotate(-11deg); }
+}
+@keyframes theatre-perch {
+  from { transform: translateX(4rem); }
+  12% { transform: translate(6.5rem, -0.95rem); }
+  25% { transform: translateX(9rem); }
+  34% { transform: translate(10.7rem, -0.47rem); }
+  45%, to { transform: translateX(var(--theatre-x)); }
+}
+@keyframes theatre-raise-book {
+  from, 28% { transform: translate(-0.8rem, 3rem); }
+  70% { transform: translateY(-0.35rem); }
+}
+@keyframes theatre-open-book {
+  from, 48% { transform: scaleX(0.24); }
+  82%, to { transform: none; }
+}
+@keyframes theatre-warm {
+  from, 52% { opacity: 0.16; }
+}
 
 /* ---------- Wall clock (Components.Clock) ---------- */
 

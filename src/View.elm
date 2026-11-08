@@ -203,7 +203,7 @@ tearRooms world model era =
     { era = era
     , past =
         Art.room
-            :: (List.reverse slides |> List.head |> Maybe.map Props.forSlide |> Maybe.withDefault [])
+            :: (List.reverse slides |> List.head |> Maybe.map (Props.forSlide Props.Settled world.scriptVariant) |> Maybe.withDefault [])
             ++ [ stoppedClock era ]
     , pastAttributes = stageAttributes world lastSlide
     , present = Clock.view { hour = 23, minute = 59, ticking = False } :: Views.Room.view world present Views.Room.emptyScene
