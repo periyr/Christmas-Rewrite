@@ -38,6 +38,20 @@ jobs:
       - name: Install
         run: npm ci
 
+      # Elm downloads its packages from GitHub the first time it compiles, and
+      # a slow or failed download stops the build. Compiling the game and the
+      # tests up to three times fetches everything before the real steps run.
+      - name: Download Elm packages
+        run: |
+          for attempt in 1 2 3; do
+            if npx elm make src/Main.elm --output=/dev/null && npx elm-test make; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed, retrying in 20 seconds."
+            sleep 20
+          done
+          exit 1
+
       - name: Test
         run: npm test
 
