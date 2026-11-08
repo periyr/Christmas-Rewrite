@@ -186,6 +186,7 @@ reachingTheBoard =
                 atBoard
                     |> Expect.equal
                         { history = []
+                        , runSeed = Update.init.runSeed
                         , phase = RepairBoard { arrangement = Placement.empty, inspected = [], attempts = NoAttemptUsed }
                         , inspecting = Nothing
                         , notice = Nothing

@@ -1,0 +1,45 @@
+module Rules.BookTrays exposing (salvage, shelf)
+
+{-| Tray orders are derived from the run seed. Placement only tracks where
+each book is, so taking a book out never changes its reserved tray position.
+-}
+
+import Domain exposing (BookId, RecoverableBook(..))
+import Random
+import Rules.Books as Books
+import Rules.Shelf as Shelf
+
+
+salvage : Int -> List BookId
+salvage seed =
+    shuffle seed Books.allBooks
+
+
+shelf : Int -> List RecoverableBook
+shelf seed =
+    let
+        shuffled =
+            shuffle seed Books.recoverableBooks
+    in
+    case Shelf.matchedOrder { placed = List.map2 Tuple.pair shuffled Shelf.slots, selected = Nothing } of
+        Nothing ->
+            shuffled
+
+        Just _ ->
+            -- The original tray order is a known unsolved fallback.
+            -- No retry loop is needed, even if a seed produces a solution.
+            [ LettersFromTheSea, PocketOfWonders, GardensInWinter, WinterTales, AtlasOfSmallPlaces, BirdsongForBeginners ]
+
+
+{-| Insert each item at a uniformly chosen position in the shuffled prefix. -}
+shuffle : Int -> List a -> List a
+shuffle seed items =
+    let
+        insert item ( shuffled, current ) =
+            let
+                ( index, next ) =
+                    Random.step (Random.int 0 (List.length shuffled)) current
+            in
+            ( List.take index shuffled ++ (item :: List.drop index shuffled), next )
+    in
+    List.foldl insert ( [], Random.initialSeed seed ) items |> Tuple.first

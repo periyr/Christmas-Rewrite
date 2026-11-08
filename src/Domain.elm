@@ -560,6 +560,7 @@ type Phase
 
 type alias Model =
     { history : History
+    , runSeed : Int
     , phase : Phase
     , inspecting : Maybe ClueId
     , notice : Maybe Notice

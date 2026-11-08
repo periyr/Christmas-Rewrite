@@ -33,7 +33,7 @@ suite =
                 \_ ->
                     let
                         saved =
-                            { history = [], place = Save.placeOf Update.init }
+                            { history = [], place = Save.placeOf Update.init, runSeed = 9123 }
                     in
                     roundTrip saved |> Expect.equal (Just saved)
             , test "every kind of record, submission and violation" <|
@@ -42,6 +42,7 @@ suite =
                         saved =
                             { history = [ Fixtures.repairsFailed, Fixtures.shadowsFailed, failedMystery ]
                             , place = Save.placeOf { initial | history = [ Fixtures.repairsFailed ], phase = PresentHub }
+                            , runSeed = -345
                             }
                     in
                     roundTrip saved |> Expect.equal (Just saved)
@@ -66,7 +67,7 @@ suite =
                         model =
                             { initial | phase = Introduction DiariesFound }
                     in
-                    (Save.resume { history = [], place = Save.placeOf model }).phase
+                    (Save.resume { history = [], place = Save.placeOf model, runSeed = model.runSeed }).phase
                         |> Expect.equal (Introduction DiariesFound)
             , test "a chapter in progress restarts that chapter" <|
                 \_ ->
@@ -74,7 +75,7 @@ suite =
                         history =
                             [ Fixtures.repairsSucceeded ]
                     in
-                    (Save.resume { history = history, place = Save.placeOf { initial | history = history, phase = Update.startChapter Shadows1973 } }).phase
+                    (Save.resume { history = history, place = Save.placeOf { initial | history = history, phase = Update.startChapter Shadows1973 }, runSeed = initial.runSeed }).phase
                         |> Expect.equal (Update.startChapter Shadows1973)
             , test "a chapter already recorded comes back to the shop" <|
                 \_ ->
@@ -82,7 +83,7 @@ suite =
                         history =
                             [ Fixtures.repairsSucceeded ]
                     in
-                    (Save.resume { history = history, place = Save.placeOf { initial | history = history, phase = Transition (Slideshow Repairs1950 0) } }).phase
+                    (Save.resume { history = history, place = Save.placeOf { initial | history = history, phase = Transition (Slideshow Repairs1950 0) }, runSeed = initial.runSeed }).phase
                         |> Expect.equal PresentHub
             , test "the ending" <|
                 \_ ->
@@ -90,9 +91,17 @@ suite =
                         history =
                             [ Fixtures.repairsSucceeded, Fixtures.shadowsSucceeded, failedMystery ]
                     in
-                    (Save.resume { history = history, place = Save.placeOf { initial | history = history, phase = Ending } }).phase
+                    (Save.resume { history = history, place = Save.placeOf { initial | history = history, phase = Ending }, runSeed = initial.runSeed }).phase
                         |> Expect.equal Ending
             ]
+        , test "version 1 saves without a seed still load with a stable default" <|
+            \_ ->
+                D.decodeString D.value "{\"version\":1,\"history\":[],\"place\":{\"kind\":\"Chapter\",\"era\":\"Repairs1950\"}}"
+                    |> Result.toMaybe
+                    |> Maybe.andThen Save.decode
+                    |> Maybe.map Save.resume
+                    |> Maybe.map (\model -> ( model.phase, model.runSeed ))
+                    |> Expect.equal (Just ( Update.startChapter Repairs1950, initial.runSeed ))
         ]
 
 
