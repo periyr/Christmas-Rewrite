@@ -1854,7 +1854,21 @@ svg-art { display: contents; }
 
 .sheet--note { width: 36rem; }
 
-/* A present-day hub prop: its picture above the words. */
+/* The 1973 script: its first line in words, then the handwritten parts as a
+   picture. The parts stay in the page for screen readers. */
+.sheet--script .sheet__body { display: flex; flex-direction: column; }
+.sheet--script .sheet__body p:first-of-type { order: -1; }
+.sheet--script .sheet__picture { max-height: 24rem; margin: 0 auto; border: 0; background: none; width: auto; }
+.sheet--script .sheet__body p:not(:first-of-type) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A clue picture above its words. */
 .sheet--scene .sheet__picture {
   max-height: 18rem;
   border: 0.15rem solid var(--ink);
