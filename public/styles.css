@@ -1876,7 +1876,7 @@ svg-art { display: contents; }
 
 /* A clue picture above its words. */
 .sheet--scene .sheet__picture {
-  max-height: 18rem;
+  max-height: 22rem;
   border: 0.15rem solid var(--ink);
   border-radius: 0.2rem;
   background: none;
