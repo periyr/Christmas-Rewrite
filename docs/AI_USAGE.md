@@ -64,7 +64,7 @@ We used Claude to learn:
 ## 4. Code and debugging
 
 - The game is written in Elm. Each of us worked in our own files and used **Claude Code** as an assistant: to help write parts of the code, to debug it, and, when needed, to make a change or to understand how a change should be made. We reviewed what it produced, ran the tests and played the game in the browser.
-- **The git history shows this openly:** 77 of the 93 non-merge commits on `main` (as of 8 November, after sound and saving were added) carry a `Co-Authored-By: Claude` line.
+- **The git history shows this openly:** 77 of the 93 non-merge commits on `main` (as of 8 November, after sound and saving were added) carry a `Co-Authored-By: Claude` line. To save time, we often had Claude Code make our commits and open our pull requests, and it adds that line to every commit it makes, so the line shows Claude Code was involved in that change, not that it wrote all of it.
 - Claude also helped us debug, for example the wall clock's position (commits "Fixed clock", "Clock fix again", "Clock glitches fixed").
 - **How we checked the code:**
   - About 300 automated tests (`npm test`), including every one of the 2,520 possible repair weeks, all 36 shadow stagings, the four accepted shelf orders out of 720, and whole games through all eight pass/fail combinations.
