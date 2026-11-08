@@ -19,7 +19,7 @@ A full record of where AI was and wasn't used in **Christmas Rewrite**, for the 
 | Consequences between eras and the endings | The team | None |
 | Planning and team coordination | The team | Claude helped structure the brief, the contract and the schedule |
 | Learning Elm and functional programming | The team | Claude explained concepts and our own code |
-| Code | The team, with Claude Code | Claude Code wrote and edited much of the code from our instructions; we reviewed, tested and playtested it |
+| Code | The team, with Claude Code | Used as an assistant to help write code, debug it, and make or understand changes; we reviewed, tested and playtested everything |
 | Debugging | The team, with Claude | Claude helped find and fix bugs |
 | Game text (clues, diaries, slides, endings) | The team | Minimal: written by us; Claude Code only polished the wording |
 | Room backgrounds, book covers, diaries, damage marks, puppets, mystery books | Google Gemini, from our prompts | Generated, then checked and edited by us |
@@ -63,8 +63,8 @@ We used Claude to learn:
 
 ## 4. Code and debugging
 
-- The game is written in Elm. Each of us worked in our own files with **Claude Code** as a coding assistant: we described what we wanted, Claude Code wrote or changed the code, and we reviewed it, ran the tests and played the game in the browser.
-- **The git history shows this openly:** 43 of the 55 non-merge commits on `main` (as of 8 November) carry a `Co-Authored-By: Claude` line.
+- The game is written in Elm. Each of us worked in our own files and used **Claude Code** as an assistant: to help write parts of the code, to debug it, and, when needed, to make a change or to understand how a change should be made. We reviewed what it produced, ran the tests and played the game in the browser.
+- **The git history shows this openly:** 77 of the 93 non-merge commits on `main` (as of 8 November, after sound and saving were added) carry a `Co-Authored-By: Claude` line.
 - Claude also helped us debug, for example the wall clock's position (commits "Fixed clock", "Clock fix again", "Clock glitches fixed").
 - **How we checked the code:**
   - About 300 automated tests (`npm test`), including every one of the 2,520 possible repair weeks, all 36 shadow stagings, the four accepted shelf orders out of 720, and whole games through all eight pass/fail combinations.
