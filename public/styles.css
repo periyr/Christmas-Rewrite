@@ -2284,8 +2284,11 @@ svg-art { display: contents; }
   pointer-events: none;
 }
 
-/* Over the saved ending's painted clock: centre (1161, 107), radius 75. */
-.stage[data-era="saved"] .clock { left: 84.47%; top: 3.78%; width: 12.47%; transform: none; }
+/* Over the saved ending's painted clock: centre (1164, 111), radius about 72
+   with its cut-out edge. It covers the painted one completely and holds still:
+   a swing would show the painted clock's edge and ticks around it. */
+.stage[data-era="saved"] .clock { left: 84.53%; top: 3.75%; width: 13.0%; transform: none; }
+.stage[data-era="saved"] .clock__body { animation: none; }
 
 /* The 1950 and 1973 rooms: centred (1213, 188) above the photograph, clear of
    the bookcase, the ceiling line, the 1973 garland and the frame's hook. It is
