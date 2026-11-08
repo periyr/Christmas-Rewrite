@@ -1,7 +1,7 @@
 // Builds public/assets/clue-archive-photo.svg: the 1998 inscription clue from
 // the shop archive (Content.Clues inscription FamilyArchive). The photograph's
 // front (exactly clue-ruth-lucy-photo.svg, the photo on the community wall) and
-// its back, with Henry's note in his handwriting.
+// its back, with Henry's note in his handwriting, signed "Henry".
 //
 // Run hub-props.mjs first (it writes the front), then:
 //
@@ -67,6 +67,7 @@ const note = lines
   .map((line, i) => `<path d="${toD(hand.getPath(line, BW / 2 - width(line, size) / 2 + (i % 2 ? 6 : -4), noteTop + i * lead, size, NO_KERN))}" />`)
   .join("\n        ");
 const year = toD(hand.getPath("1973", BW - 110, 58, 34, NO_KERN));
+const signature = toD(hand.getPath("– Henry", BW - 70 - width("– Henry", 40), noteTop + (lines.length - 1) * lead + 64, 40, NO_KERN));
 
 const GAP = 60, W = FW + GAP + BW + 40, H = Math.max(FH, BH + 40);
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
@@ -82,7 +83,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
     <g fill="${BLUE_INK}">
         ${note}
     </g>
-    <path d="M ${BW / 2 - 70} ${noteTop + (lines.length - 1) * lead + 26} C ${BW / 2 - 30} ${noteTop + (lines.length - 1) * lead + 20} ${BW / 2 + 30} ${noteTop + (lines.length - 1) * lead + 32} ${BW / 2 + 70} ${noteTop + (lines.length - 1) * lead + 24}" fill="none" stroke="${BLUE_INK}" stroke-width="2.4" stroke-linecap="round" />
+    <g fill="${BLUE_INK}">
+      <path d="${signature}" />
+    </g>
   </g>
 </svg>
 `;
