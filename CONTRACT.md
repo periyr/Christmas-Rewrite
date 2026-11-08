@@ -1,4 +1,4 @@
-# Shared contract v1.7: Person A handoff
+# Shared contract v1.9: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -357,7 +357,7 @@ Walking never changes `history`, attempts, arrangements or the phase. Using a ho
 | `shadowFirstAttemptFailed` | `shadowOriginalScript` after performing the retelling's staging: first-attempt feedback open, all three scenes conflicting, stage kept. Only `Retry` works. |
 | `mysteryFamilyArchive` | A fresh 1998 table after a successful 1973 (inscription from the family archive). Player at the books, panel open. |
 | `mysteryFollowUpEmail` | A fresh 1998 table after a failed 1973 (inscription from Ruth's follow-up email). Player at the books, panel open. |
-| `mysteryFirstAttemptFailed` | `mysteryFamilyArchive` after sending book B: first-attempt feedback open (the inscription does not match), B still chosen. Only `Retry` works. |
+| `mysteryWrongBookSent` | `mysteryFamilyArchive` after sending book B. The 1998 book has one attempt (v1.8), so 1998 is lost at once: a Failed record (attemptsUsed 1, the inscription does not match) and the consequence slide. Replaced `mysteryFirstAttemptFailed`. |
 | `shadowsSucceeded` / `shadowsFailed` | Resolved 1973 records, after a successful 1950. |
 | `stageFor staging` | Turns a `Staging` into a stage arrangement, like `boardFor`. |
 
@@ -496,6 +496,33 @@ Hotspot: | BrokenGlassSpot    -- x 1150, the glass on the floor; opens the panel
 - **Views:** `Views.Frame` (panel), `Content.Frame` (words). The room is the 1973 room with the lights down, Henry walking, and `data-frame="fallen"` (bare wall, glass on the floor).
 - **Afterwards:** whenever 1973 is resolved (`world.tradition /= NotRevisited`), the rooms of 1998, the present and the ending get `data-frame="taped"` (tape on the frame's glass), and `FamilyPhotograph` shows the taped picture and mentions the tape. The present-day hub now also has `ClueSpot FamilyPhotograph` (x 1200).
 - **Tests:** `tests/FrameTests.elm`. The journey, return and shadow tests mend the frame where they used to go straight home from 1973.
+
+## Title screen and saving (added on feature/start-load-menu)
+
+The page opens on a title screen (`Views.TitleScreen`) with Continue and New Game. `Domain.elm` and `Update.elm` are unchanged: `Main.elm` wraps the game in a small `App` model (title or playing) and owns the menu.
+
+- **What is saved:** `Save.elm` stores the History plus the player's place (`InIntroduction step`, `InShop`, `InChapter era`, `AtEnding`) as JSON in `localStorage`, through the `saveGame` port. Main writes it whenever either changes, so walking and puzzle moves write nothing. A chapter in progress resumes from its start, because arrangements are working state.
+- **Loading:** `public/index.html` passes the stored save as the flag. A missing, blocked or unreadable save is treated as no save, and Continue is greyed out.
+- **New Game / Start again** replace the save with the new game's first page.
+- **Fonts:** all game text uses Alegreya, the title uses Fraunces, the typed slip uses Courier Prime. The files are bundled in `public/assets/` (credits in `ASSETS.md`), so nothing loads from the network.
+- Tests: `tests/SaveTests.elm`.
+
+## One attempt for the 1998 book, and a shuffled table (added in v1.8)
+
+Requested by the team (Peri):
+
+- **Attempts per chapter:** `Rules.Attempts.maxAttemptsFor : Era -> Int` is 2 for 1950 and 1973 and **1 for 1998**. `submit` uses it, so a wrong book is resolved as `Failed` with `attemptsUsed = 1` and no `ReviewingFirstMistake`. `maxAttempts` (2) stays for the other two. `Views.Common.attemptsDisplayOf total` draws the tokens for any total, and the book table shows one.
+- **Book order:** `Rules.BookTrays.candidates runSeed` gives the four candidates in this game's order (seed offset so it doesn't follow the 1950 trays), and `Views.BookTable.view` takes that order. It is fixed for a run, so resuming a save shows the same table.
+- **Task cards:** `Rules.BookTrays.tasks runSeed` gives the seven 1950 task cards in this game's tray order (its own seed offset), and `Views.RepairBoard.view` takes that order, the same way.
+- **Tests:** `AttemptsTests` and `MysteryTests` cover the one-try rule; `BookTrayTests` covers both orders.
+
+## Enter to continue (added in v1.9)
+
+Requested by the team (Peri): in the story screens, Enter does what the screen's one button does.
+
+- `Rules.Room.enterContinues model` is True for `Introduction DiariesFound`, `Introduction ClockStopped`, `Transition (OpeningDiary _)`, `Transition (Slideshow _ _)` and `Transition ReturningToPresent`, and only while no clue sheet is open.
+- `Main` subscribes to an Enter keydown in those screens and sends `Advance`. It ignores Enter when a button, link or text field has the focus (the browser already presses a focused button, so nothing is skipped twice), and it ignores held-down repeats and Ctrl/Cmd/Alt.
+- Tests: `tests/EnterKeyTests.elm`.
 
 ## Release build
 

@@ -12,12 +12,14 @@ import Content.Frame
 import Domain exposing (..)
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (attribute, class)
+import Rules.BookTrays as BookTrays
 import Rules.Room
 import Rules.Travel
 import Timeline
 import Update
 import Views.Common as Common
 import Views.BookTable
+import Views.ClueSheets
 import Views.Frame
 import Views.Labels exposing (eraYear)
 import Views.RepairBoard
@@ -129,13 +131,13 @@ screen world model =
             room (Views.Shop.presentHub world model.history)
 
         Salvage placement ->
-            station (Views.Salvage.view placement model.notice)
+            station (Views.Salvage.view (BookTrays.salvage model.runSeed) placement model.notice)
 
         RepairBoard puzzle ->
-            station (Views.RepairBoard.view world puzzle model.notice)
+            station (Views.RepairBoard.view world (BookTrays.tasks model.runSeed) puzzle model.notice)
 
         ReopeningShelf placement ->
-            station (Views.Shelf.view world placement model.notice)
+            station (Views.Shelf.view world (BookTrays.shelf model.runSeed) placement model.notice)
 
         ShadowPuzzle puzzle ->
             station (Views.ShadowStage.view world puzzle model.notice)
@@ -144,7 +146,7 @@ screen world model =
             room { emptyScene | line = Just Content.Frame.arrival, panel = Views.Frame.view placement model.notice }
 
         BookMystery puzzle ->
-            station (Views.BookTable.view world puzzle model.notice)
+            station (Views.BookTable.view world (BookTrays.candidates model.runSeed) puzzle model.notice)
 
         Transition (OpeningDiary era) ->
             Views.Shop.openingDiary world era
@@ -203,7 +205,7 @@ tearRooms world model era =
     { era = era
     , past =
         Art.room
-            :: (List.reverse slides |> List.head |> Maybe.map Props.forSlide |> Maybe.withDefault [])
+            :: (List.reverse slides |> List.head |> Maybe.map (Props.forSlide Props.Settled world.scriptVariant) |> Maybe.withDefault [])
             ++ [ stoppedClock era ]
     , pastAttributes = stageAttributes world lastSlide
     , present = Clock.view { hour = 23, minute = 59, ticking = False } :: Views.Room.view world present Views.Room.emptyScene
@@ -379,14 +381,30 @@ inspection : World -> Model -> List (Html Msg)
 inspection world model =
     case model.inspecting of
         Just clue ->
-            [ Common.documentSheet
-                { variant = sheetVariant clue
-                , document = Content.Clues.clue world clue
-                , picture = cluePicture world clue
-                , buttonLabel = "Put it back"
-                , onPress = CloseInspection
-                }
-            ]
+            let
+                document =
+                    Content.Clues.clue world clue
+            in
+            case Views.ClueSheets.custom clue document of
+                Just ( variant, body ) ->
+                    [ Common.customSheet
+                        { variant = variant
+                        , title = document.title
+                        , body = body
+                        , buttonLabel = "Put it back"
+                        , onPress = CloseInspection
+                        }
+                    ]
+
+                Nothing ->
+                    [ Common.documentSheet
+                        { variant = sheetVariant world clue
+                        , document = document
+                        , picture = cluePicture world clue
+                        , buttonLabel = "Put it back"
+                        , onPress = CloseInspection
+                        }
+                    ]
 
         Nothing ->
             []
@@ -412,12 +430,72 @@ cluePicture world clue =
         ClosureNotice ->
             Just "assets/clue-closure-notice.svg"
 
+        RubbleAndShelvesNote ->
+            Just "assets/clue-repair-notes.svg"
+
+        CutoutBox ->
+            Just "assets/clue-cutout-box.svg"
+
+        -- From the shop archive: the photo's front (the one on the community
+        -- wall) and its back, with Henry's note in his hand.
+        InscriptionClue ->
+            if world.inscriptionSource == FamilyArchive then
+                Just "assets/clue-archive-photo.svg"
+
+            else
+                Nothing
+
+        ShadowScript ->
+            Just ("assets/clue-script-" ++ scriptFile world.scriptVariant ++ ".svg")
+
+        StageSketch ->
+            Just ("assets/clue-sketch-" ++ scriptFile world.scriptVariant ++ ".svg")
+
+        WalterDiaryPage ->
+            Just "assets/clue-walter-diary.svg"
+
+        BudgetAllocation ->
+            Just "assets/clue-budget.svg"
+
+        GlassDeliverySlip ->
+            Just "assets/clue-glass-slip.svg"
+
+        HubProp CommunityWall ->
+            Just ("assets/clue-wall-" ++ foundationFile world.tradition ++ ".svg")
+
         _ ->
             Nothing
 
 
-sheetVariant : ClueId -> String
-sheetVariant clue =
+{-| The 1973 script and stage sketch follow the script variant. -}
+scriptFile : ScriptVariant -> String
+scriptFile variant =
+    case variant of
+        OriginalScript ->
+            "original"
+
+        NeighboursRetelling ->
+            "retelling"
+
+
+{-| The community wall has a picture per state of the 1973 tradition. The
+roof and shelves and the order desk are words only.
+-}
+foundationFile : Foundation -> String
+foundationFile foundation =
+    case foundation of
+        NotRevisited ->
+            "original"
+
+        Missing ->
+            "missing"
+
+        Established ->
+            "established"
+
+
+sheetVariant : World -> ClueId -> String
+sheetVariant world clue =
     case clue of
         FamilyPhotograph ->
             "sheet--picture sheet--photo"
@@ -425,11 +503,39 @@ sheetVariant clue =
         ClosureNotice ->
             "sheet--picture sheet--note"
 
+        HubProp _ ->
+            "sheet--scene"
+
+        -- Handwritten pages: the picture is the page, the words stay for screen readers.
         WalterDiaryPage ->
-            "sheet--diary"
+            "sheet--picture sheet--note"
 
         GlassDeliverySlip ->
-            "sheet--form"
+            "sheet--picture sheet--note"
+
+        RubbleAndShelvesNote ->
+            "sheet--scene"
+
+        CutoutBox ->
+            "sheet--scene"
+
+        -- The photo's front and back are the clue; the words stay for screen readers.
+        InscriptionClue ->
+            if world.inscriptionSource == FamilyArchive then
+                "sheet--picture sheet--archive"
+
+            else
+                ""
+
+        StageSketch ->
+            "sheet--scene"
+
+        -- The handwritten parts are the picture; the first line stays as words.
+        ShadowScript ->
+            "sheet--script"
+
+        BudgetAllocation ->
+            "sheet--scene"
 
         _ ->
             ""

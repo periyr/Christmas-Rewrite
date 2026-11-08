@@ -9,8 +9,8 @@ import Content.Diaries
 import Content.Endings
 import Content.Intro
 import Domain exposing (..)
-import Html exposing (Html, button, div, footer, h2, h3, header, p, section, span, text)
-import Html.Attributes exposing (attribute, class, classList, disabled, type_)
+import Html exposing (Html, button, div, footer, h2, h3, header, img, p, section, span, text)
+import Html.Attributes exposing (alt, attribute, class, classList, disabled, src, type_)
 import Html.Events exposing (onClick)
 import Timeline
 import Views.Common as Common
@@ -162,12 +162,28 @@ ending world =
 
         reopen era =
             button [ type_ "button", class "btn", onClick (ReopenDiary era) ] [ text ("Reopen " ++ eraYear era) ]
+
+        -- The saved ending: Ruth, Lucy and Lucy's daughter coming in out of
+        -- the snow, beside the words.
+        ( sheetClass, body ) =
+            case world.fate of
+                Just (ShopClosed _) ->
+                    ( "sheet", List.concatMap section_ documents )
+
+                _ ->
+                    ( "sheet sheet--saved"
+                    , [ div [ class "ending" ]
+                            [ img [ class "ending__picture", src "assets/ending-visitors.svg", alt "" ] []
+                            , div [ class "ending__text" ] (List.concatMap section_ documents)
+                            ]
+                      ]
+                    )
     in
     [ Art.room
     , div [ class "overlay" ]
-        [ section [ class "sheet", attribute "role" "dialog", attribute "aria-modal" "true" ]
+        [ section [ class sheetClass, attribute "role" "dialog", attribute "aria-modal" "true" ]
             [ header [ class "sheet__head" ] [ h2 [ class "sheet__title" ] [ text title ] ]
-            , div [ class "sheet__body" ] (List.concatMap section_ documents)
+            , div [ class "sheet__body" ] body
             , footer [ class "sheet__foot sheet__foot--ending" ]
                 (List.map reopen Timeline.eras
                     ++ [ button [ type_ "button", class "btn", onClick StartAgain ] [ text "Start again" ] ]

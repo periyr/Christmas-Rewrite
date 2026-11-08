@@ -18,11 +18,11 @@ import Rules.Shelf
 import Views.Common as Common
 
 
-view : World -> Placement RecoverableBook ShelfSlot -> Maybe Notice -> List (Html Msg)
-view world placement notice =
+view : World -> List RecoverableBook -> Placement RecoverableBook ShelfSlot -> Maybe Notice -> List (Html Msg)
+view world books placement notice =
     let
         config =
-            placementConfig placement
+            placementConfig books placement
 
         matched =
             Rules.Shelf.matchedOrder placement
@@ -76,12 +76,12 @@ hint placement =
                 "Click a book, then click a space on the shelf."
 
 
-placementConfig : Placement RecoverableBook ShelfSlot -> PlacementUI.Config RecoverableBook ShelfSlot Msg
-placementConfig placement =
+placementConfig : List RecoverableBook -> Placement RecoverableBook ShelfSlot -> PlacementUI.Config RecoverableBook ShelfSlot Msg
+placementConfig books placement =
     { toMsg = ShelfMove
     , enabled = True
     , placement = placement
-    , items = startingOrder
+    , items = books
     , name = \book -> (Content.Books.book (Recoverable book)).title
     , cardClass = \_ -> "book--art"
     , cardBody = bookBody
@@ -100,16 +100,6 @@ bookBody book =
         , span [ class "book__damage" ] [ text (colourName (Rules.Books.colour book)) ]
         ]
     ]
-
-
-{-| The order the books wait in before they go on the shelf. It's mixed up on
-purpose: it matches none of the four accepted orders, forwards or backwards,
-so lining the books up as they start never solves the shelf.
-Height 5 3 2 6 4 1 · colours orange green violet red blue yellow · L P G W A B.
--}
-startingOrder : List RecoverableBook
-startingOrder =
-    [ LettersFromTheSea, PocketOfWonders, GardensInWinter, WinterTales, AtlasOfSmallPlaces, BirdsongForBeginners ]
 
 
 colourName : CoverColour -> String

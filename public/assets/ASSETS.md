@@ -196,9 +196,22 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
 | File | Clue | Size | Notes |
 |---|---|---|---|
 | `clue-family-photographs.svg` | `FamilyPhotograph` | 600 × 470 | One photo in a wooden frame, outside the shop: Grandad Walter with his walking stick, Henry, and little Edwin (about five) squinting into the sun, with "Grandad Walter, Dad and me" written underneath. Built from the player sprites by `docs/asset-sources/family-photo.mjs`. |
-| `clue-family-photographs-taped.svg` | `FamilyPhotograph` after 1973 | 600 × 470 | The same photograph, its glass cracked along the nine pieces of the 1973 puzzle and held with short strips of tape. Same generator. |
-| `frame-photo-1973.svg` | (the 1973 broken-frame puzzle) | 480 × 330 | The photo in the frame in 1973, without frame or caption: Walter with Henry as a boy outside the shop. `Views.Frame` draws the glass pieces over it. Same generator. |
+| `clue-family-photographs-taped.svg` | `FamilyPhotograph` after 1973 | 600 × 470 | The same photograph, its glass cracked along the nine pieces of the 1973 puzzle, with a strip of tape along every crack. Same generator. |
+| `frame-photo-1973.svg` | (the 1973 broken-frame puzzle) | 480 × 330 | The same family photograph without frame or caption, so the puzzle shows exactly the picture in the shop. `Views.Frame` draws the glass pieces over it. Same generator. |
 | `clue-closure-notice.svg` | `ClosureNotice` | 480 × 440 | Edwin's handwritten notice, taped up, with the words of `Content.Clues ClosureNotice`. Handwriting is the Caveat font (SIL OFL 1.1) as outlines, built by `docs/asset-sources/closure-note.mjs`. |
+| `clue-repair-notes.svg` | `RubbleAndShelvesNote` | 480 × 300 | Walter's pencil sketch: new shelves drawn in dashes over the rubble ("rubble out first"), books waiting in a crate. |
+| `clue-walter-diary.svg` | `WalterDiaryPage` | 480 × ~400 | The entry itself, handwritten on Walter's ruled diary page with a margin and ribbon. Shown as the whole page (`sheet--picture`); the words stay for screen readers. Built by `docs/asset-sources/handwritten-clues.mjs` (Caveat, SIL OFL 1.1). |
+| `clue-budget.svg` | `BudgetAllocation` | 480 × 300 | Four wood planks and a ten-pound note. |
+| `clue-glass-slip.svg` | `GlassDeliverySlip` | 460 × 330 | The supplier's handwritten delivery slip on a buff pad page, with the words of the clue. Shown as the whole page; the words stay for screen readers. Built by `docs/asset-sources/handwritten-clues.mjs`. |
+| `clue-cutout-box.svg` | `CutoutBox` | 480 × 300 | The six cut-outs (the real `shadow-*.svg` and `prop-*.svg` drawn inside it) standing in their cardboard box. |
+| `clue-script-original.svg`, `clue-script-retelling.svg` | `ShadowScript` (from `world.scriptVariant`) | 480 × ~260 | The parts, handwritten in the clue's order and not numbered: Walter's on aged paper, the neighbours' in blue ink on notebook paper. The first line of the clue stays as words above it (`sheet--script`). |
+| `clue-sketch-original.svg`, `clue-sketch-retelling.svg` | `StageSketch` (from `world.scriptVariant`) | 480 × 268 | Three pencil panels, numbered, each with a little drawing of its setting and "Scene n: setting" underneath. |
+| `clue-ruth-lucy-photo.svg` | (source for the next file) | 528 × 408 | The 1973 photo of Ruth and Lucy in the front row, exactly the one on the tradition board, on its own. Built by `docs/asset-sources/hub-props.mjs`. |
+| `clue-archive-photo.svg` | `InscriptionClue` from the shop archive (`FamilyArchive`) | ~1100 × 408 | That photo's front and its back, with Henry's note "Ruth writes 'For Lucy, love Mum' in every book she gives her." in his hand, signed "– Henry", and "1973" in pencil. Shown as the whole clue (`sheet--picture`); the words stay for screen readers. The follow-up-email version has no picture. Built by `docs/asset-sources/archive-photo.mjs` (Caveat, SIL OFL 1.1). |
+| `ending-visitors.svg` | the saved ending (`Views.Shop.ending`) | 420 × 380 | Ruth (grey hair, glasses, a stick, the blue coat and red scarf from 1973), Lucy, and Lucy's daughter (bobble hat, plaits, holding a fox-and-lantern book) in the open doorway out of the snow, the door's sign turned to OPEN. Drawn on the player-sprite body by `docs/asset-sources/ending-visitors.mjs`; shown beside the ending's words. |
+| `clue-wall-<state>.svg` | `HubProp CommunityWall` (from `world.tradition`) | `original`, `missing`: 332 × 202; `established`: 480 × 300 | Only the cork board, no room or furniture. `original`: bare, with old pin holes. `missing`: one faded "Christmas Reading 1973" poster. `established`: the whole board full: three Shadow Story posters (1974, 1986, 2019) with the real fox and lantern cut-outs on a lit sheet, three children's crayon drawings of the fox carrying its lantern at night, and the photo of Ruth and Lucy in the front row with the fox's shadow on the sheet behind them. |
+
+`<state>` is `original` (NotRevisited), `missing` or `established`. The repair notes and budget pictures are built by `docs/asset-sources/repair-clues.mjs` (each shows only what its words say, never how to plan the week). The roof and shelves and the order desk have no picture. The community wall's pictures are built by `docs/asset-sources/hub-props.mjs` and shown above their words (`sheet--scene`).
 
 The room overlays for the frame (bare wall and glass on the floor in 1973, tape on the glass afterwards) are drawn in `public/index.html` (`r-frame-gone`, `r-frame-tape`) and switched by `data-frame` on the stage.
 
@@ -230,3 +243,13 @@ B owns where these go and when they show. "Player scale" means the same 1 unit �
 | `room-book-stacks.svg` | 80 × 48 | Player scale, rests on y = 42.5, centred on x = 42 | 1998: the four books at `BookTableSpot` (x 820): a stack of two, one on its own, and one leaning. Plain covers and no titles, so none stands out. Layout from Gemini's design, redrawn with help from Claude so the books read at game size. Fits on the floor, or on a small table if B adds one. |
 
 None of these contains text. Any label, address or screen text belongs in the interface.
+
+## Fonts
+
+| File | Font | Licence | Used for |
+|---|---|---|---|
+| `font-alegreya-*.woff2` | Alegreya by Juan Pablo del Peral (Huerta Tipográfica), Latin subset from Fontsource | SIL Open Font License 1.1 | All game text |
+| `font-fraunces-semibold.woff2` | Fraunces by Undercase Type, Latin subset from Fontsource | SIL Open Font License 1.1 | The game title on the title screen |
+| `font-courier-prime-*.woff2` | Courier Prime by Alan Dague-Greene, Latin subset from Fontsource | SIL Open Font License 1.1 | Typed forms (the delivery slip) |
+
+The handwritten closure notice is a drawing, so it keeps its own lettering.

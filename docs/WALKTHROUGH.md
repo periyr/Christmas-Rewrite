@@ -7,6 +7,7 @@
 - **Walking:**
   - Hold **A**/**D** or **← →** to walk.
   - Press **E** to use whatever is nearby when its prompt appears, or **click** an object's label to walk there and use it.
+  - In the narration and slides, press **Enter** to go on (the same as the button).
   - Walking never costs anything and never changes an answer. Every solution below stays the same.
 - **Where things are** (left to right in the room):
 
@@ -25,7 +26,8 @@
   - Click a crate or the "Not this week" box to drop it into the first free space.
   - Click a placed object to move it again. Click the same object again to put it down.
 - **Clues:** reading documents and objects never costs anything.
-- **Main puzzles** (1950 planning board, 1973 shadow story, 1998 forgotten book) give **two attempts**.
+- **Shuffled every game:** the 1950 salvage books, shelf books and task cards, and the 1998 candidate books, lie in a new order each new game (the same order when a save is continued).
+- **Main puzzles:** the 1950 planning board and the 1973 shadow story give **two attempts**. The 1998 forgotten book gives **one**: sending the wrong book loses that chapter straight away.
   - An incomplete submission is refused and costs nothing.
   - A first wrong answer shows which rules were broken, and you keep your arrangement to fix it.
   - A second wrong answer fails the chapter, and the story carries on.
@@ -158,7 +160,7 @@ Check each book's picture, text and dedication tabs:
 
 **Answer: A.** It's the only book that matches all three facts. Each of the others fails exactly one, so you need every clue.
 
-Press **Send this book**.
+Press **Send this book**. There is only one try, so check all three details first. The four books lie in a different order every game.
 - **On success,** the shop starts an online book-finding service.
 - **On failure,** the wrong copy is sent and the idea goes no further.
 
@@ -176,6 +178,6 @@ A failed chapter stays failed for that run. Succeeding later doesn't undo it.
 **Closed endings:** submit a wrong answer twice in any chapter you want to fail.
 
 **Replaying:**
-- After either ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** replays that chapter and every later one, each with two fresh attempts. Earlier chapters keep their results. Reopening 1950 starts again from the book sorting.
+- After either ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** replays that chapter and every later one, with fresh attempts (two in 1950 and 1973, one in 1998). Earlier chapters keep their results. Reopening 1950 starts again from the book sorting.
 - **Start again** begins a new run.
 - Reopening 1950 can switch the 1973 script version. Reopening 1973 can switch where the 1998 inscription clue comes from.

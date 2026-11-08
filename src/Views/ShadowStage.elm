@@ -89,7 +89,7 @@ placementConfig puzzle isReviewing =
     { toMsg = StageMove
     , enabled = not isReviewing
     , placement = puzzle.arrangement
-    , items = Rules.Shadow.allCutouts
+    , items = trayOrder
     , name = Content.Shadow.cutoutName
     , cardClass = \_ -> "cutout"
     , cardBody = cutoutBody
@@ -168,3 +168,19 @@ hint puzzle isReviewing =
 
                 else
                     String.fromInt unplaced ++ " in the tray. Click a cut-out, then click a space in a scene."
+
+
+{-| The tray's cut-outs, mixed up once and kept. Not characters-then-props,
+and no scene's character sits next to its prop in either script (Fox and
+Lantern, Owl and Key, Child and Book, Child and Key, Owl and Book), so the tray
+never hints at an answer.
+-}
+trayOrder : List Cutout
+trayOrder =
+    [ PropCutout Lantern
+    , CharacterCutout Child
+    , CharacterCutout Owl
+    , CharacterCutout Fox
+    , PropCutout Key
+    , PropCutout Book
+    ]

@@ -1,38 +1,191 @@
-module Main exposing (main)
+port module Main exposing (main)
 
-{-| Entry point. Pure core: Update.update does all the work; there are no
-commands yet (audio ports, if any, get added here later by agreement).
+{-| Entry point. Pure core: Update.update does all the work.
+
+The page opens on the title screen (Views.TitleScreen) with "New game" and
+"Continue", which works once there is a save. The save arrives in the flags
+and is written back through the `saveGame` port whenever the History or the
+player's place changes (see Save), so leaving early is safe. "New game" and
+"Start again" at the ending replace it with the new game's first page.
+
+Sound effects: after each game step, Sounds.forStep compares the model before
+and after and the names go out through the `playSound` port to
+public/audio.js, which also plays the quiet background music.
 
 Subscriptions (contract v1.3) only turn browser events into room messages:
 the walk keys and E, animation frames while the player is moving or a diary
-trip is playing, and the page being hidden.
+trip is playing, and the page being hidden. Enter also moves the story on in
+the narration and slides (v1.9, Rules.Room.enterContinues).
 
 -}
 
 import Browser
 import Browser.Events exposing (Visibility(..))
 import Domain exposing (..)
+import Html exposing (Html)
 import Json.Decode as Decode exposing (Decoder)
+import Json.Encode as Encode
+import Random
 import Rules.Room
 import Rules.Travel
+import Save exposing (Saved)
+import Sounds
 import Update
 import View
+import Views.TitleScreen as TitleScreen
 
 
-main : Program () Model Msg
+{-| Writes the save to localStorage (public/index.html). -}
+port saveGame : Encode.Value -> Cmd msg
+
+
+{-| Plays one sound effect by name (public/audio.js; names from Sounds). -}
+port playSound : String -> Cmd msg
+
+
+{-| The title screen or game, its last checkpoint and the seed stream supplied
+by the browser. Only starting a new run consumes that stream.
+-}
+type alias App =
+    { screen : Screen
+    , saved : Maybe Saved
+    , nextSeed : Random.Seed
+    }
+
+
+type Screen
+    = Title
+    | Playing Model
+
+
+type AppMsg
+    = NewGame
+    | Continue
+    | Game Msg
+
+
+main : Program Decode.Value App AppMsg
 main =
     Browser.element
-        { init = \_ -> ( Update.init, Cmd.none )
-        , update = \msg model -> ( Update.update msg model, Cmd.none )
-        , view = View.view
-        , subscriptions = subscriptions
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = appSubscriptions
         }
+
+
+init : Decode.Value -> ( App, Cmd AppMsg )
+init flags =
+    ( { screen = Title
+      , saved = Decode.decodeValue (Decode.field "saved" Decode.value) flags |> Result.toMaybe |> Maybe.andThen Save.decode
+      , nextSeed = Decode.decodeValue (Decode.field "seed" Decode.int) flags |> Result.withDefault 0 |> Random.initialSeed
+      }
+    , Cmd.none
+    )
+
+
+freshRun : App -> ( Model, App )
+freshRun app =
+    let
+        ( runSeed, nextSeed ) =
+            Random.step (Random.int Random.minInt Random.maxInt) app.nextSeed
+    in
+    ( Update.newRun runSeed, { app | nextSeed = nextSeed } )
+
+
+update : AppMsg -> App -> ( App, Cmd AppMsg )
+update msg app =
+    case ( msg, app.screen ) of
+        ( NewGame, Title ) ->
+            -- The old save is replaced straight away by the new game's first page.
+            let
+                ( model, seededApp ) =
+                    freshRun app
+            in
+            checkpoint { seededApp | screen = Playing model }
+
+        ( Continue, Title ) ->
+            case app.saved of
+                Just saved ->
+                    ( { app | screen = Playing (Save.resume saved) }, Cmd.none )
+
+                Nothing ->
+                    ( app, Cmd.none )
+
+        ( Game gameMsg, Playing model ) ->
+            let
+                ( next, seededApp ) =
+                    if gameMsg == StartAgain && model.phase == Ending then
+                        freshRun app
+
+                    else
+                        ( Update.update gameMsg model, app )
+
+                ( saved, saveCmd ) =
+                    checkpoint { seededApp | screen = Playing next }
+            in
+            ( saved
+            , Cmd.batch (saveCmd :: List.map playSound (Sounds.forStep gameMsg model next))
+            )
+
+        _ ->
+            ( app, Cmd.none )
+
+
+{-| Saves when the run seed, History or the player's place changes.
+Walking, panels and puzzle moves write nothing.
+-}
+checkpoint : App -> ( App, Cmd AppMsg )
+checkpoint app =
+    case app.screen of
+        Playing model ->
+            let
+                current =
+                    { history = model.history, place = Save.placeOf model, runSeed = model.runSeed }
+            in
+            if app.saved /= Just current then
+                ( { app | saved = Just current }, saveGame (Save.encode current) )
+
+            else
+                ( app, Cmd.none )
+
+        Title ->
+            ( app, Cmd.none )
+
+
+view : App -> Html AppMsg
+view app =
+    case app.screen of
+        Title ->
+            TitleScreen.view
+                { onNewGame = NewGame
+                , onContinue = Maybe.map (\_ -> Continue) app.saved
+                }
+
+        Playing model ->
+            Html.map Game (View.view model)
+
+
+{-| No game keys or frames on the title screen. -}
+appSubscriptions : App -> Sub AppMsg
+appSubscriptions app =
+    case app.screen of
+        Title ->
+            Sub.none
+
+        Playing model ->
+            Sub.map Game (subscriptions model)
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Browser.Events.onKeyDown (keyDown Rules.Room.keyDown)
+        , if Rules.Room.enterContinues model then
+            Browser.Events.onKeyDown enterToContinue
+
+          else
+            Sub.none
         , Browser.Events.onKeyUp (keyUp Rules.Room.keyUp)
         , Browser.Events.onVisibilityChange (\visibility -> PageVisibilityChanged (visibility == Visible))
         , if Rules.Travel.wantsFrames model then
@@ -64,6 +217,28 @@ keyDown toMsg =
         (Decode.field "metaKey" Decode.bool)
         (Decode.field "altKey" Decode.bool)
         (Decode.oneOf [ Decode.field "repeat" Decode.bool, Decode.succeed False ])
+        |> Decode.andThen orIgnore
+
+
+{-| Enter moves the story on in narration and slides (Rules.Room.enterContinues).
+Not when a button, link or text field has the focus: the browser already
+presses a focused button on Enter, so the story never skips twice. Held-down
+repeats and modified keys are ignored.
+-}
+enterToContinue : Decoder Msg
+enterToContinue =
+    Decode.map4
+        (\key modified repeat target ->
+            if key == "Enter" && not modified && not repeat && not (List.member target [ "BUTTON", "A", "INPUT", "TEXTAREA", "SELECT" ]) then
+                Just Advance
+
+            else
+                Nothing
+        )
+        (Decode.field "key" Decode.string)
+        (Decode.map3 (\ctrl meta alt -> ctrl || meta || alt) (Decode.field "ctrlKey" Decode.bool) (Decode.field "metaKey" Decode.bool) (Decode.field "altKey" Decode.bool))
+        (Decode.oneOf [ Decode.field "repeat" Decode.bool, Decode.succeed False ])
+        (Decode.oneOf [ Decode.at [ "target", "tagName" ] Decode.string, Decode.succeed "" ])
         |> Decode.andThen orIgnore
 
 

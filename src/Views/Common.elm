@@ -1,4 +1,4 @@
-module Views.Common exposing (attemptsDisplay, closePanel, clueNote, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar, yearBadge)
+module Views.Common exposing (attemptsDisplay, attemptsDisplayOf, closePanel, clueNote, customSheet, documentSheet, feedback, helpButton, lastTryNotes, narration, numbered, popoverSheet, popoverToggle, primaryButton, reviewedViolations, roomNote, statusLine, topbar, yearBadge)
 
 {-| Pieces shared by several screens. -}
 
@@ -21,13 +21,16 @@ topbar era title extras =
 
 
 attemptsDisplay : Attempts -> Html msg
-attemptsDisplay attempts =
+attemptsDisplay =
+    attemptsDisplayOf Rules.Attempts.maxAttempts
+
+
+{-| The attempts tokens for a puzzle with `total` attempts. -}
+attemptsDisplayOf : Int -> Attempts -> Html msg
+attemptsDisplayOf total attempts =
     let
         used =
             Rules.Attempts.attemptsUsed attempts
-
-        total =
-            Rules.Attempts.maxAttempts
 
         figure =
             String.fromInt (total - used) ++ " of " ++ String.fromInt total
@@ -80,6 +83,22 @@ documentSheet { variant, document, picture, buttonLabel, onPress } =
                  )
                     ++ List.map (\paragraph -> p [] [ text paragraph ]) document.paragraphs
                 )
+            , footer [ class "sheet__foot" ]
+                [ button [ type_ "button", class "btn", onClick onPress ] [ text buttonLabel ] ]
+            ]
+        ]
+
+
+{-| A document sheet whose body is drawn by the caller (the email, the end of
+a book), with the same frame, title and button as documentSheet.
+-}
+customSheet : { variant : String, title : String, body : List (Html msg), buttonLabel : String, onPress : msg } -> Html msg
+customSheet { variant, title, body, buttonLabel, onPress } =
+    div [ class "overlay" ]
+        [ section [ class ("sheet " ++ variant), attribute "role" "dialog", attribute "aria-modal" "true", attribute "aria-labelledby" "sheet-title" ]
+            [ header [ class "sheet__head" ]
+                [ h2 [ class "sheet__title", id "sheet-title" ] [ text title ] ]
+            , div [ class "sheet__body" ] body
             , footer [ class "sheet__foot" ]
                 [ button [ type_ "button", class "btn", onClick onPress ] [ text buttonLabel ] ]
             ]

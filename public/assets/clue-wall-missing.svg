@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="39 25 332 202" width="332" height="202">
+  <!-- clue-wall-missing: the 1973 story failed: one faded poster, Christmas Reading 1973, on the board. Built by docs/asset-sources/hub-props.mjs -->
+  <g stroke="#291e1a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="0" y="0" width="480" height="250" fill="#f2e4c9" />
+    <rect x="0" y="250" width="480" height="50" fill="#5a3428" />
+    <!-- The children's corner: rug and a little chair -->
+    <ellipse cx="370" cy="282" rx="90" ry="14" fill="#496669" />
+    <path d="M 410 232 L 446 232 L 446 270 M 410 232 L 410 270 M 410 252 L 446 252" fill="none" stroke="#a6652b" stroke-width="5" />
+    <path d="M 410 232 L 446 232 L 446 270 M 410 232 L 410 270 M 410 252 L 446 252" fill="none" stroke-width="1.5" />
+    <!-- The wall board -->
+    <rect x="40" y="26" width="330" height="200" rx="3" fill="#c79a62" />
+    <g fill="#291e1a" stroke="none"><circle cx="82" cy="52" r="1.8" /><circle cx="300" cy="66" r="1.8" /><circle cx="110" cy="190" r="1.8" /><circle cx="318" cy="204" r="1.8" /></g>
+    <!-- One faded poster -->
+    <g transform="rotate(-4 205 126)" opacity="0.7">
+      <rect x="150" y="50" width="110" height="150" fill="#ece0c4" />
+      <path d="M 170 160 C 176 146 190 142 200 150 L 214 140 L 212 156 C 220 162 220 172 210 176 L 176 176 C 168 174 166 166 170 160 Z" fill="#d4d3d1" stroke-width="1.5" />
+      <text x="205" y="84" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-weight="bold" fill="#5a3428" stroke="none">Christmas</text>
+      <text x="205" y="102" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-weight="bold" fill="#5a3428" stroke="none">Reading</text>
+      <text x="205" y="128" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#5a3428" stroke="none">1973</text>
+      <circle cx="205" cy="56" r="3.5" fill="#c95937" />
+    </g>
+
+  </g>
+</svg>

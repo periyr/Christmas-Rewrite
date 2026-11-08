@@ -37,7 +37,8 @@ view world history era index =
                     "Next day"
 
                 _ ->
-                    if isLast then
+                    -- 1973 isn't over after its last slide: the frame falls in the dark (v1.7).
+                    if isLast && era /= Shadows1973 then
                         "Return to the present"
 
                     else
@@ -49,7 +50,7 @@ view world history era index =
                 |> Maybe.withDefault { title = "", paragraphs = [] }
     in
     Art.room
-        :: (current |> Maybe.map Props.forSlide |> Maybe.withDefault [])
+        :: (current |> Maybe.map (Props.forSlide Props.Animated world.scriptVariant) |> Maybe.withDefault [])
         ++ [ Common.yearBadge (eraYear era)
            , Common.narration document (button [ type_ "button", class "btn", onClick Advance ] [ text label ])
            ]

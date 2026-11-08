@@ -18,6 +18,7 @@ import Domain exposing (..)
 import Html exposing (Html, aside, button, div, node, p, section, span, text)
 import Html.Attributes exposing (attribute, class, classList, style, type_)
 import Html.Events exposing (onClick)
+import Components.Placement as PlacementUI
 import Rules.Frame
 import Rules.Placement as Placement
 import Views.Common as Common
@@ -95,7 +96,8 @@ frame placement =
                             :: class "frame__gap"
                             :: attribute "aria-label" ("Gap " ++ String.fromInt n ++ " in the frame")
                             :: onClick (FrameMove (PlaceSelected (FrameGap n)))
-                            :: shapeStyle percentOfPhoto points
+                            :: PlacementUI.dropTarget True (FrameMove (PlaceSelected (FrameGap n)))
+                            ++ shapeStyle percentOfPhoto points
                         )
                         []
                     )
@@ -137,8 +139,8 @@ benchPiece placement shard =
             in
             Just
                 (button
-                    [ type_ "button"
-                    , classList [ ( "frame__piece", True ), ( "is-held", isHeld ) ]
+                    ([ type_ "button"
+                     , classList [ ( "frame__piece", True ), ( "is-held", isHeld ) ]
                     , attribute "aria-label" (Content.Frame.pieceName shard)
                     , attribute "aria-pressed"
                         (if isHeld then
@@ -151,9 +153,17 @@ benchPiece placement shard =
                     , style "top" (rem top)
                     , style "width" (rem ((box.width + 6) * scale))
                     , style "height" (rem ((box.height + 6) * scale))
-                    , style "clip-path" (clipTo { box | minX = box.minX - 3, minY = box.minY - 3, width = box.width + 6, height = box.height + 6 } points)
-                    , onClick (FrameMove (SelectItem shard))
-                    ]
+                     , style "clip-path" (clipTo { box | minX = box.minX - 3, minY = box.minY - 3, width = box.width + 6, height = box.height + 6 } points)
+                     , onClick (FrameMove (SelectItem shard))
+                     ]
+                        ++ PlacementUI.dragSource True
+                            (if isHeld then
+                                Nothing
+
+                             else
+                                Just (FrameMove (SelectItem shard))
+                            )
+                    )
                     [ svgArt drawing ]
                 )
 
@@ -196,20 +206,22 @@ pieces =
     ]
 
 
-{-| Where each loose piece lies on the bench (top left, in rem), mixed up so
-neighbours in the frame are not neighbours here.
+{-| Where each loose piece lies on the bench (top left, in rem). Mixed up once
+and kept: no piece lies on its own side of the photo, and neighbours in the
+frame are not neighbours here. Every piece stays on the bench, clear of the
+frame, and pieces overlap no more than their cut shapes allow.
 -}
 benchSpots : List ( Int, ( Float, Float ) )
 benchSpots =
-    [ ( 1, ( 2, 1 ) )
-    , ( 9, ( 18, 1.5 ) )
-    , ( 5, ( 6, 31.8 ) )
-    , ( 6, ( 32, 0.8 ) )
-    , ( 8, ( 32, 11.5 ) )
-    , ( 7, ( 32.5, 21.5 ) )
-    , ( 3, ( 49.5, 1.5 ) )
-    , ( 4, ( 47.5, 15.5 ) )
-    , ( 2, ( 45, 30 ) )
+    [ ( 5, ( 2, 1 ) )
+    , ( 8, ( 18, 1.5 ) )
+    , ( 2, ( 6, 31.8 ) )
+    , ( 7, ( 32, 0.8 ) )
+    , ( 4, ( 32, 11.5 ) )
+    , ( 6, ( 32.5, 21.5 ) )
+    , ( 9, ( 49.5, 1.5 ) )
+    , ( 3, ( 47.5, 15.5 ) )
+    , ( 1, ( 45, 30 ) )
     ]
 
 

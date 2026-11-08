@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300">
+  <!-- clue-budget: four wood planks and a ten-pound note for the whole week. Built by docs/asset-sources/repair-clues.mjs -->
+  <g stroke="#291e1a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="0" y="0" width="480" height="300" fill="#5a3428" />
+    <rect x="0" y="0" width="480" height="300" fill="#a6652b" fill-opacity="0.25" stroke="none" />
+    <!-- Four wood planks -->
+    <g transform="rotate(-1 180 150)">
+      <rect x="40" y="150" width="290" height="22" fill="#c49a68" />
+      <path d="M 70 158 C 120 154 170 162 230 158 M 120 165 C 170 162 230 168 300 164" fill="none" stroke="#a6652b" stroke-width="1.5" />
+      <ellipse cx="96" cy="161" rx="5" ry="3" fill="none" stroke="#a6652b" stroke-width="1.5" />
+    </g>
+    <g transform="rotate(0.5 180 176)">
+      <rect x="40" y="176" width="290" height="22" fill="#c49a68" />
+      <path d="M 70 184 C 120 180 170 188 230 184 M 120 191 C 170 188 230 194 300 190" fill="none" stroke="#a6652b" stroke-width="1.5" />
+      <ellipse cx="96" cy="187" rx="5" ry="3" fill="none" stroke="#a6652b" stroke-width="1.5" />
+    </g>
+    <g transform="rotate(-0.5 180 202)">
+      <rect x="40" y="202" width="290" height="22" fill="#c49a68" />
+      <path d="M 70 210 C 120 206 170 214 230 210 M 120 217 C 170 214 230 220 300 216" fill="none" stroke="#a6652b" stroke-width="1.5" />
+      <ellipse cx="96" cy="213" rx="5" ry="3" fill="none" stroke="#a6652b" stroke-width="1.5" />
+    </g>
+    <g transform="rotate(1 180 228)">
+      <rect x="40" y="228" width="290" height="22" fill="#c49a68" />
+      <path d="M 70 236 C 120 232 170 240 230 236 M 120 243 C 170 240 230 246 300 242" fill="none" stroke="#a6652b" stroke-width="1.5" />
+      <ellipse cx="96" cy="239" rx="5" ry="3" fill="none" stroke="#a6652b" stroke-width="1.5" />
+    </g>
+
+    <text x="186" y="276" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="16" font-weight="bold" fill="#f2e4c9" stroke="none">4 planks</text>
+    <!-- A ten-pound note -->
+    <g transform="rotate(-8 360 96)">
+      <rect x="276" y="44" width="176" height="96" rx="4" fill="#b7c9b0" />
+      <rect x="286" y="54" width="156" height="76" rx="2" fill="none" stroke="#31542f" stroke-width="1.5" />
+      <circle cx="400" cy="92" r="24" fill="#cfdcc7" stroke="#31542f" stroke-width="1.5" />
+      <text x="400" y="101" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="bold" fill="#31542f" stroke="none">10</text>
+      <text x="300" y="80" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-weight="bold" fill="#31542f" stroke="none">£10</text>
+      <text x="300" y="104" font-family="Georgia, 'Times New Roman', serif" font-size="10" fill="#31542f" stroke="none">TEN POUNDS</text>
+    </g>
+    <text x="364" y="276" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="16" font-weight="bold" fill="#f2e4c9" stroke="none">£10</text>
+
+  </g>
+</svg>

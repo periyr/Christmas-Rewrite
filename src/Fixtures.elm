@@ -20,7 +20,7 @@ module Fixtures exposing
     , shadowsFailed
     , mysteryFamilyArchive
     , mysteryFollowUpEmail
-    , mysteryFirstAttemptFailed
+    , mysteryWrongBookSent
     )
 
 {-| Development fixtures for building views and tests against the contract.
@@ -50,6 +50,7 @@ Rules.Repair.spent gives 3 timber and £6; remaining 1 timber and £4.
 repairBoardInProgress : Model
 repairBoardInProgress =
     { history = []
+    , runSeed = initialModel.runSeed
     , phase =
         RepairBoard
             { arrangement =
@@ -122,6 +123,7 @@ boardFor week =
 repairBoard : Placement TaskId RepairSlot -> Attempts -> Model
 repairBoard arrangement attempts =
     { history = []
+    , runSeed = initialModel.runSeed
     , phase =
         RepairBoard
             { arrangement = arrangement
@@ -176,6 +178,7 @@ repairsFailed =
 hubAfterRepairs : Model
 hubAfterRepairs =
     { history = [ repairsSucceeded ]
+    , runSeed = initialModel.runSeed
     , phase = PresentHub
     , inspecting = Nothing
     , notice = Nothing
@@ -189,6 +192,7 @@ mid-walk to the crates after clicking them (contract v1.3).
 salvageWalking : Model
 salvageWalking =
     { history = []
+    , runSeed = initialModel.runSeed
     , phase = Salvage { placed = [], selected = Nothing }
     , inspecting = Nothing
     , notice = Nothing
@@ -229,6 +233,7 @@ atStation station history phase =
             Rules.Room.initialPlayer
     in
     { history = history
+    , runSeed = initialModel.runSeed
     , phase = phase
     , inspecting = Nothing
     , notice = Nothing
@@ -324,12 +329,12 @@ mysteryFollowUpEmail =
     atStation BookTableSpot [ repairsSucceeded, shadowsFailed ] (Update.startChapter Search1998)
 
 
-{-| mysteryFamilyArchive after sending candidate B (the school edition):
-first-attempt feedback is open (the inscription does not match), the choice
-is kept, and only Retry is possible. Produced by the real Submit.
+{-| mysteryFamilyArchive after sending candidate B (the school edition). The
+1998 book has one attempt, so the chapter is lost at once: the failed record is
+in History and the consequence slide is showing. Produced by the real Submit.
 -}
-mysteryFirstAttemptFailed : Model
-mysteryFirstAttemptFailed =
+mysteryWrongBookSent : Model
+mysteryWrongBookSent =
     mysteryFamilyArchive
         |> Update.update (ChooseCandidate CandidateB)
         |> Update.update Submit
