@@ -1749,6 +1749,27 @@ svg-art { display: contents; }
   background: #fff;
 }
 
+/* A clue that is only a picture (family photographs, the handwritten closure
+   notice): the picture fills the sheet, and the words stay for screen readers. */
+.sheet--picture .sheet__picture {
+  max-height: 28rem;
+  margin: 0 auto;
+  border: 0;
+  background: none;
+}
+
+.sheet--picture .sheet__body p {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sheet--note { width: 36rem; }
+.sheet--note .sheet__picture { filter: drop-shadow(0.25rem 0.3rem 0.2rem rgba(0, 0, 0, 0.3)); }
+
 /* ---------- Chapter props in the room ---------- */
 
 /* Placed by Components.Props in logical px / 16, from A's hotspot anchors. */

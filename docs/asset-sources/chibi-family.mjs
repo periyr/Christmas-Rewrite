@@ -19,7 +19,7 @@
 // then with its fill and the ink outline (stroke 3).
 
 import { writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "public", "assets");
@@ -208,8 +208,9 @@ const attrs = (o, overrides = {}) =>
 const el = (o, overrides) => `<${o.tag} ${attrs(o, overrides)} />`;
 const solid = (s) => s.fill !== "none"; // only filled shapes get a cut-out border
 
-function frame(who, name) {
-  const person = PEOPLE[who];
+// The figure's two groups (cut-out border, then the drawing), in the sprite's
+// own 96 x 160 units. Also used by family-photo.mjs.
+export function figure(person, name) {
   const { arms, legs } = FRAMES[name];
   const arm = (key) => {
     const [upper, lower, [hx, hy]] = ARMS[key];
@@ -242,9 +243,7 @@ function frame(who, name) {
     .map((s) => "    " + el(s, { fill: CREAM, stroke: undefined, "stroke-width": undefined }))
     .join("\n");
   const body = layers.map(([label, s]) => `    <!-- ${label} -->\n` + s.map((x) => "    " + el(x)).join("\n")).join("\n");
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 160" width="96" height="160">
-  <!-- player-${who}-${name}: facing right, soles on y = 152, feet centred near x = 48. Body drawn with Google Gemini, built by docs/asset-sources/chibi-family.mjs -->
-  <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
+  return `  <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
   <g fill="${CREAM}" stroke="${CREAM}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
 ${border}
   </g>
@@ -254,17 +253,28 @@ ${body}
 ${person.face.map((x) => "    " + el(x)).join("\n")}
     <!-- ${person.topLabel} -->
 ${person.top.map((x) => "    " + el(x)).join("\n")}
-  </g>
+  </g>`;
+}
+
+function frame(who, name) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 160" width="96" height="160">
+  <!-- player-${who}-${name}: facing right, soles on y = 152, feet centred near x = 48. Body drawn with Google Gemini, built by docs/asset-sources/chibi-family.mjs -->
+${figure(PEOPLE[who], name)}
 </svg>
 `;
 }
 
-const wanted = process.argv.slice(2);
-for (const who of wanted.length ? wanted : Object.keys(PEOPLE)) {
-  if (!PEOPLE[who]) throw new Error(`unknown person: ${who}`);
-  for (const name of Object.keys(FRAMES)) {
-    const file = join(OUT, `player-${who}-${name}.svg`);
-    writeFileSync(file, frame(who, name));
-    console.log("wrote", file);
+export { PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, rect, eyes, el };
+
+// Only writes the sprites when run directly, not when imported.
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  const wanted = process.argv.slice(2);
+  for (const who of wanted.length ? wanted : Object.keys(PEOPLE)) {
+    if (!PEOPLE[who]) throw new Error(`unknown person: ${who}`);
+    for (const name of Object.keys(FRAMES)) {
+      const file = join(OUT, `player-${who}-${name}.svg`);
+      writeFileSync(file, frame(who, name));
+      console.log("wrote", file);
+    }
   }
 }
