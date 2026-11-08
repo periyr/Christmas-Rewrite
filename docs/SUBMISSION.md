@@ -59,7 +59,7 @@ Christmas Rewrite is written in [Elm](https://elm-lang.org), with HTML, CSS and 
 | Content, assets and player clarity (Person C) | Peri Yarci |
 | Debugging and small implementation details | Ata Karasoy |
 
-- **Writing:** the team. Text drafted with help from Claude (Anthropic), then edited by the team.
+- **Writing:** the team. Claude Code was only used to polish the wording.
 - **Art:** all made for this project and free to use in this game. See `public/assets/ASSETS.md` for the full list.
   - The room pictures, book and diary covers, damage marks, shadow puppets and mystery books were generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand.
   - The four walking characters share one body drawn with Google Gemini from the team's prompt. Each person's look follows Gemini's designs, rebuilt with help from Claude so all four match (`docs/asset-sources/chibi-family.mjs`).

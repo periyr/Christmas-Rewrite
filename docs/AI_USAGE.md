@@ -21,7 +21,7 @@ A full record of where AI was and wasn't used in **Christmas Rewrite**, for the 
 | Learning Elm and functional programming | The team | Claude explained concepts and our own code |
 | Code | The team, with Claude Code | Claude Code wrote and edited much of the code from our instructions; we reviewed, tested and playtested it |
 | Debugging | The team, with Claude | Claude helped find and fix bugs |
-| Game text (clues, diaries, slides, endings) | The team | Drafted with Claude's help, then edited by us |
+| Game text (clues, diaries, slides, endings) | The team | Minimal: written by us; Claude Code only polished the wording |
 | Room backgrounds, book covers, diaries, damage marks, puppets, mystery books | Google Gemini, from our prompts | Generated, then checked and edited by us |
 | Walking characters | Google Gemini designs, rebuilt in code | Gemini drew the designs; a script written with Claude rebuilds all four on one shared body |
 | Room props, family photograph, closure notice | Claude | SVG made with Claude's help from our descriptions |
@@ -72,8 +72,8 @@ We used Claude to learn:
 
 ## 5. Writing
 
-- All game text lives in `src/Content/`. It was drafted with Claude's help and then edited by the team (also stated in `docs/SUBMISSION.md`).
-- Docs such as the walkthrough, the playtest log and the submission copy were also written with Claude's help.
+- All game text (clues, diary passages, slides, endings, labels) lives in `src/Content/`. We wrote it ourselves. AI involvement was minimal: we only used Claude Code to polish it, such as tightening wording, fixing grammar and keeping names and terms consistent.
+- Docs such as the walkthrough, the playtest log and the submission copy were written with Claude's help.
 
 ## 6. Art and assets
 
