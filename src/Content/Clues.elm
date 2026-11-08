@@ -29,9 +29,10 @@ clue world clueId =
             }
 
         FamilyPhotograph ->
-            { title = "Family photographs"
+            { title = "Family photograph"
             , paragraphs =
-                [ "Four photographs in one frame, each taken outside the shop: the founder in his apron, Walter with a hammer, Henry with an armful of books, and a young Edwin squinting into the sun."
+                [ "One photograph in a wooden frame, taken outside the shop: Grandad Walter with his walking stick, Henry beside him, and little Edwin in front, squinting into the sun."
+                , "Written underneath: “Grandad Walter, Dad and me.”"
                 ]
             }
 

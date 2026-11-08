@@ -12,7 +12,7 @@
 
   | Scene | Objects |
   |---|---|
-  | Introduction | closure notice (door), box beneath the counter, family photographs (right wall) |
+  | Introduction | closure notice (door), box beneath the counter, family photograph (right wall) |
   | Present-day shop | order desk (till), glowing diary (counter), community wall (cork board), roof and shelves (right bookcase) |
   | 1950 sorting | book crates |
   | 1950 planning | glass slip (door), wood planks and cash (till), Walter's diary page (counter), planning board (cork board), repair notes (by the rubble) |
@@ -33,7 +33,7 @@
 
 ## Introduction (present day, Christmas Eve)
 
-1. Read the closure notice and the family photographs, then open the box under the counter.
+1. Read the closure notice and the family photograph, then open the box under the counter.
 2. Edwin finds three diaries, and the clock stops just before midnight.
 3. In the shop, the 1950 diary glows. Open it.
 
