@@ -6,12 +6,12 @@ Bookshop at Christmas.
   - A garland of Christmas lights hangs across the top. Each bulb lights up
     when the pointer passes over it and slowly fades again, so sweeping across
     the garland leaves a trail of light.
-  - Bookcases stand on both sides. Every book slides up out of its shelf on
-    hover. The three family diaries (Walter 1950, Henry 1973, Edwin 1998) sit
-    among them, the generations who ran the shop.
-  - In the middle: the wall clock at a minute to midnight, the logo (an open
-    book with a clock face and holly), and the menu as a stack of books lying
-    on the counter. Hovering a menu book pulls it out of the stack.
+  - In the middle, like a usual game title screen: the logo (an open book
+    with a clock face and holly), the title, and the menu as a short stack of
+    books. Hovering a menu book pulls it out of the stack.
+  - One shelf runs along the bottom. Every book slides up out of it on hover.
+    The three family diaries (Walter 1950, Henry 1973, Edwin 1998) sit among
+    them, the generations who ran the shop.
 
 "Continue" only appears when there is a save. The messages come from Main,
 which owns the menu, so this view knows nothing about saving. All drawing is
@@ -19,7 +19,6 @@ fixed markup built from numbers here, shown through <svg-art>.
 
 -}
 
-import Components.Clock as Clock
 import Html exposing (Html, button, div, h1, node, p, span, text)
 import Html.Attributes exposing (attribute, class, style, type_)
 import Html.Events exposing (onClick)
@@ -36,11 +35,8 @@ view config =
     div [ class "app" ]
         [ div [ class "stage title-screen" ]
             [ div [ class "title-screen__wall" ] []
-            , bookcase "title-case title-case--left" leftShelves
-            , bookcase "title-case title-case--right" rightShelves
-            , Clock.view { hour = 23, minute = 59, ticking = True }
-            , logo
-            , menu config
+            , div [ class "title-screen__centre" ] [ logo, menu config ]
+            , shelf
             , garland
             ]
         ]
@@ -114,17 +110,7 @@ menu config =
                     []
     in
     div [ class "title-menu" ]
-        [ div [ class "title-menu__stack" ]
-            (continueBook
-                ++ [ menuBook "title-book--new"
-                        (onClick config.onNewGame :: newGameNote)
-                        "New Game"
-                   , span [ class "title-book title-book--base", attribute "aria-hidden" "true" ]
-                        [ span [ class "title-book__label" ] [ text "Hale’s Bookshop" ] ]
-                   ]
-            )
-        , div [ class "title-menu__counter" ] []
-        ]
+        (continueBook ++ [ menuBook "title-book--new" (onClick config.onNewGame :: newGameNote) "New Game" ])
 
 
 menuBook : String -> List (Html.Attribute msg) -> String -> Html msg
@@ -145,31 +131,27 @@ type Spine
     | Gap Int
 
 
-{-| Colour, height and width (both in tenths of a rem) of each book. The
-colours are the book colours already used in the room art.
+{-| One shelf along the bottom of the screen, with a cluster of books at
+each end and the middle left clear under the menu. Colour, height and width
+(both in tenths of a rem); the colours are the book colours already used in
+the room art. The family diaries sit in the left cluster.
 -}
-leftShelves : List (List Spine)
-leftShelves =
-    [ [ Book "#893f43" 62 16, Book "#496669" 70 13, Book "#d9a443" 56 18, Book "#31542f" 66 15, Gap 6, Book "#7687ab" 60 14, Book "#5a3428" 72 17, Book "#a6652b" 58 12, Book "#c95937" 64 15, Book "#748b2c" 68 14 ]
-    , [ Book "#5a3428" 66 14, Diary "1950" "Walter Hale, 1950", Diary "1973" "Henry Hale, 1973", Diary "1998" "Edwin Hale, 1998", Gap 5, Book "#d9a443" 60 15, Book "#496669" 68 12, Book "#893f43" 56 17, Book "#7687ab" 64 13 ]
-    , [ Book "#748b2c" 58 15, Book "#c95937" 70 13, Book "#31542f" 64 18, Book "#a6652b" 60 12, Book "#893f43" 68 16, Gap 8, Book "#496669" 62 14, Book "#d9a443" 72 15, Book "#5a3428" 56 13 ]
-    , [ Book "#7687ab" 66 17, Book "#5a3428" 60 13, Book "#d9a443" 70 14, Book "#496669" 58 16, Book "#893f43" 64 12, Book "#748b2c" 68 15, Gap 6, Book "#c95937" 62 14, Book "#31542f" 56 15 ]
-    ]
+leftBooks : List Spine
+leftBooks =
+    [ Book "#893f43" 52 14, Book "#496669" 60 11, Book "#d9a443" 48 15, Diary "1950" "Walter Hale, 1950", Diary "1973" "Henry Hale, 1973", Diary "1998" "Edwin Hale, 1998", Book "#31542f" 56 13, Book "#7687ab" 50 12, Book "#c95937" 58 14 ]
 
 
-rightShelves : List (List Spine)
-rightShelves =
-    [ [ Book "#31542f" 68 15, Book "#a6652b" 58 13, Book "#893f43" 66 17, Book "#7687ab" 72 12, Book "#d9a443" 60 16, Gap 7, Book "#496669" 64 14, Book "#5a3428" 56 15, Book "#c95937" 70 13 ]
-    , [ Book "#d9a443" 62 14, Book "#5a3428" 70 16, Book "#748b2c" 58 12, Gap 6, Book "#893f43" 66 15, Book "#496669" 60 17, Book "#c95937" 72 13, Book "#31542f" 56 14, Book "#7687ab" 64 15 ]
-    , [ Book "#c95937" 60 16, Book "#496669" 68 13, Book "#5a3428" 64 15, Book "#d9a443" 56 14, Gap 7, Book "#893f43" 70 12, Book "#748b2c" 62 17, Book "#7687ab" 58 13, Book "#a6652b" 66 15 ]
-    , [ Book "#893f43" 64 14, Book "#31542f" 58 16, Book "#a6652b" 70 13, Book "#7687ab" 62 15, Book "#5a3428" 66 12, Gap 5, Book "#d9a443" 60 17, Book "#496669" 72 14, Book "#c95937" 56 15 ]
-    ]
+rightBooks : List Spine
+rightBooks =
+    [ Book "#748b2c" 54 13, Book "#5a3428" 60 15, Book "#a6652b" 48 11, Book "#893f43" 56 14, Book "#496669" 50 12, Book "#d9a443" 60 15, Book "#31542f" 52 13, Book "#7687ab" 58 11, Book "#c95937" 48 14 ]
 
 
-bookcase : String -> List (List Spine) -> Html msg
-bookcase kind shelves =
-    div [ class kind, attribute "aria-hidden" "true" ]
-        (List.map (\books -> div [ class "title-shelf" ] (List.map spine books)) shelves)
+shelf : Html msg
+shelf =
+    div [ class "title-shelf", attribute "aria-hidden" "true" ]
+        [ div [ class "title-shelf__books" ] (List.map spine leftBooks)
+        , div [ class "title-shelf__books" ] (List.map spine rightBooks)
+        ]
 
 
 spine : Spine -> Html msg

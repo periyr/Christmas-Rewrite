@@ -2258,10 +2258,11 @@ svg-art { display: contents; }
 
 /* ---------- Title screen: the start/load menu (Views.TitleScreen) ----------
 
-   Inside Hale's Bookshop at Christmas, in the room art's style: flat fills,
-   dark #291e1a outlines, shadows down and to the right. Bulbs light on hover
-   and fade slowly after, so a sweep leaves a trail. Books slide up out of the
-   shelf on hover; menu books slide out of the stack. */
+   A usual game title screen inside Hale's Bookshop at Christmas: logo, title
+   and menu in the middle; a garland along the top and one shelf along the
+   bottom. Room-art style: flat fills, dark #291e1a outlines, shadows down and
+   to the right. Bulbs light on hover and fade slowly after, so a sweep leaves
+   a trail. Shelf books slide up on hover; menu books slide out of the stack. */
 
 .title-screen {
   --outline: #291e1a;
@@ -2269,44 +2270,159 @@ svg-art { display: contents; }
   font-family: var(--font-book);
 }
 
+/* Dark panelled wall with a warm pool of light behind the logo. */
 .title-screen__wall {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(ellipse 34rem 24rem at 50% 44%, rgba(233, 197, 106, 0.16), transparent 70%),
     repeating-linear-gradient(90deg, transparent 0 9.6rem, rgba(41, 30, 26, 0.35) 9.6rem 9.8rem),
     linear-gradient(180deg, #3f2c1c, #2e211a 70%, #241912);
 }
 
-/* Bookcases */
-
-.title-case {
+.title-screen__centre {
   position: absolute;
-  top: 6.4rem;
-  bottom: 0;
-  width: 25rem;
+  left: 50%;
+  top: 9.6rem;
+  width: 34rem;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
-  gap: 0;
-  padding: 0.9rem 1rem 0;
-  background: var(--case-back);
-  border: 0.18rem solid var(--outline);
-  border-bottom: none;
-  box-shadow: inset 0 0 0 0.9rem var(--case), inset 0 0 0 1.08rem var(--outline);
+  align-items: center;
+  gap: 2.2rem;
 }
 
-.title-case--left { left: 1rem; }
-.title-case--right { right: 1rem; }
+/* Logo */
+
+.title-logo { text-align: center; }
+
+.title-logo__art { width: 12rem; margin: 0 auto; filter: drop-shadow(0.2rem 0.3rem 0 rgba(0, 0, 0, 0.35)); }
+.title-logo__art svg { display: block; width: 100%; }
+
+.title-logo__name {
+  margin: 0.6rem 0 0;
+  color: var(--paper);
+  font-size: 3.6rem;
+  line-height: 1;
+  letter-spacing: 0.05rem;
+  text-shadow: 0.2rem 0.25rem 0 var(--outline);
+}
+
+.title-logo__tagline {
+  margin: 0.55rem 0 0;
+  color: #e9c56a;
+  font-size: 1.25rem;
+  font-style: italic;
+  letter-spacing: 0.04rem;
+}
+
+/* Menu: a short stack of books */
+
+.title-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-book {
+  position: relative;
+  display: block;
+  width: 17rem;
+  height: 3.3rem;
+  padding: 0;
+  border: 0.16rem solid var(--outline);
+  border-radius: 0.35rem 0.15rem 0.15rem 0.35rem;
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.06rem;
+  box-shadow: 0.14rem 0.18rem 0 var(--cast);
+  transition: transform 0.22s ease-out, box-shadow 0.22s ease-out;
+}
+
+/* Gold bands at both ends of each spine. */
+.title-book::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0.8rem, #d9a443 0.8rem 1.1rem, transparent 1.1rem calc(100% - 1.1rem), #d9a443 calc(100% - 1.1rem) calc(100% - 0.8rem), transparent calc(100% - 0.8rem));
+  pointer-events: none;
+}
+
+.title-book__label { position: relative; }
+
+.title-book--continue { background: #893f43; }
+.title-book--new { background: #31542f; }
+
+.title-book:hover,
+.title-book:focus-visible {
+  transform: translateX(1.2rem);
+  box-shadow: 0.3rem 0.35rem 0 var(--cast);
+}
+
+.title-book:active { transform: translateX(0.9rem) translateY(0.08rem); }
+
+.title-book[data-note]::after {
+  content: attr(data-note);
+  position: absolute;
+  left: calc(100% + 0.7rem);
+  top: 50%;
+  width: 11rem;
+  padding: 0.3rem 0.55rem;
+  background: var(--paper);
+  border: 0.12rem solid var(--outline);
+  border-radius: 0.2rem;
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.title-book[data-note]:is(:hover, :focus-visible)::after { opacity: 1; }
+
+/* The shelf along the bottom */
 
 .title-shelf {
-  position: relative;
-  flex: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 7.4rem;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  border-top: 0.18rem solid var(--outline);
+  background: linear-gradient(180deg, var(--case-back), #241912);
+}
+
+/* The plank the books stand on. */
+.title-shelf::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1rem;
+  background: var(--case);
+  border-top: 0.18rem solid var(--outline);
+}
+
+.title-shelf__books {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
   gap: 0.12rem;
-  padding: 0 0.3rem;
-  border-bottom: 0.9rem solid var(--case);
-  box-shadow: 0 0.18rem 0 var(--outline), inset 0 -0.18rem 0 var(--outline);
+  margin-bottom: 1rem;
 }
 
 .title-spine {
@@ -2314,6 +2430,7 @@ svg-art { display: contents; }
   flex: none;
   background: var(--spine);
   border: 0.12rem solid var(--outline);
+  border-bottom: none;
   border-radius: 0.12rem 0.12rem 0 0;
   /* Two thin bands, like the painted spines in the room. */
   background-image:
@@ -2322,7 +2439,7 @@ svg-art { display: contents; }
 }
 
 .title-spine:hover {
-  transform: translateY(-1.1rem);
+  transform: translateY(-1rem);
   box-shadow: 0.2rem 0.3rem 0 var(--cast);
 }
 
@@ -2331,8 +2448,8 @@ svg-art { display: contents; }
 /* The family diaries: the generations who kept the shop. */
 .title-spine--diary {
   --spine: #5a3428;
-  width: 2.6rem;
-  height: 6.8rem;
+  width: 2.4rem;
+  height: 6rem;
   background-image:
     linear-gradient(180deg, transparent 10%, #d9a443 10% 13%, transparent 13% 87%, #d9a443 87% 90%, transparent 90%);
 }
@@ -2345,7 +2462,7 @@ svg-art { display: contents; }
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   color: #e9c56a;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.08rem;
 }
@@ -2372,145 +2489,6 @@ svg-art { display: contents; }
 }
 
 .title-spine--diary:hover::after { opacity: 1; transform: translate(-50%, 0); }
-
-/* The wall clock, a minute to midnight, between the cases. */
-.title-screen .clock {
-  left: 46.25%;
-  top: 7.4rem;
-  width: 7.5%;
-  transform: none;
-}
-
-/* Logo */
-
-.title-logo {
-  position: absolute;
-  left: 27rem;
-  width: 26rem;
-  top: 14.2rem;
-  padding: 1rem 1.2rem 1.1rem;
-  text-align: center;
-  background: var(--paper);
-  border: 0.18rem solid var(--outline);
-  border-radius: 0.3rem;
-  box-shadow: inset 0 0 0 0.4rem var(--paper-deep), inset 0 0 0 0.52rem var(--paper-edge), 0.25rem 0.35rem 0 var(--cast);
-}
-
-.title-logo__art { width: 13rem; margin: 0 auto; }
-.title-logo__art svg { display: block; width: 100%; }
-
-.title-logo__name {
-  margin: 0.3rem 0 0;
-  color: #893f43;
-  font-size: 2.6rem;
-  line-height: 1;
-  letter-spacing: 0.04rem;
-}
-
-.title-logo__tagline {
-  margin: 0.4rem 0 0;
-  color: var(--ink-soft);
-  font-size: 1.15rem;
-  font-style: italic;
-}
-
-/* Menu: a stack of books lying on the counter */
-
-.title-menu {
-  position: absolute;
-  left: 27rem;
-  width: 26rem;
-  bottom: 0;
-  height: 16rem;
-}
-
-.title-menu__stack {
-  position: absolute;
-  left: 3rem;
-  right: 3rem;
-  bottom: 4.6rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title-menu__counter {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 4.8rem;
-  background:
-    linear-gradient(180deg, #b48a5e 0 0.7rem, var(--outline) 0.7rem 0.88rem, transparent 0.88rem),
-    repeating-linear-gradient(90deg, var(--wood) 0 6.2rem, var(--outline) 6.2rem 6.36rem, var(--wood-light) 6.36rem 6.5rem);
-  border: 0.18rem solid var(--outline);
-  border-bottom: none;
-}
-
-.title-book {
-  position: relative;
-  display: block;
-  height: 3.2rem;
-  margin-top: -0.12rem;
-  padding: 0;
-  border: 0.16rem solid var(--outline);
-  border-radius: 0.35rem 0.15rem 0.15rem 0.35rem;
-  color: var(--paper);
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 0.06rem;
-  box-shadow: 0.12rem 0.14rem 0 var(--cast);
-  transition: transform 0.22s ease-out, box-shadow 0.22s ease-out;
-}
-
-/* Gold bands at both ends of each spine. */
-.title-book::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, transparent 0.8rem, #d9a443 0.8rem 1.1rem, transparent 1.1rem calc(100% - 1.1rem), #d9a443 calc(100% - 1.1rem) calc(100% - 0.8rem), transparent calc(100% - 0.8rem));
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-.title-book__label { position: relative; }
-
-.title-book--continue { width: 17rem; background: #893f43; }
-.title-book--new { width: 18.6rem; background: #31542f; }
-.title-book--base { width: 20rem; height: 2.6rem; background: var(--wood); color: #e9c56a; font-size: 0.95rem; display: grid; place-items: center; }
-
-button.title-book:hover,
-button.title-book:focus-visible {
-  transform: translateX(1.4rem);
-  box-shadow: 0.3rem 0.35rem 0 var(--cast);
-}
-
-button.title-book:active { transform: translateX(1.1rem) translateY(0.08rem); }
-
-button.title-book[data-note]::after {
-  content: attr(data-note);
-  position: absolute;
-  left: calc(100% + 0.7rem);
-  top: 50%;
-  width: 11rem;
-  padding: 0.3rem 0.55rem;
-  background: var(--paper);
-  border: 0.12rem solid var(--outline);
-  border-radius: 0.2rem;
-  color: var(--ink);
-  font-size: 0.85rem;
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0;
-  text-align: left;
-  opacity: 0;
-  transform: translateY(-50%);
-  transition: opacity 0.2s;
-  pointer-events: none;
-}
-
-button.title-book[data-note]:is(:hover, :focus-visible)::after { opacity: 1; }
 
 /* Garland and lights */
 
