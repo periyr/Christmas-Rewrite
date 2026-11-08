@@ -1,4 +1,4 @@
-# Shared contract v1.8: Person A handoff
+# Shared contract v1.9: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -515,6 +515,14 @@ Requested by the team (Peri):
 - **Book order:** `Rules.BookTrays.candidates runSeed` gives the four candidates in this game's order (seed offset so it doesn't follow the 1950 trays), and `Views.BookTable.view` takes that order. It is fixed for a run, so resuming a save shows the same table.
 - **Task cards:** `Rules.BookTrays.tasks runSeed` gives the seven 1950 task cards in this game's tray order (its own seed offset), and `Views.RepairBoard.view` takes that order, the same way.
 - **Tests:** `AttemptsTests` and `MysteryTests` cover the one-try rule; `BookTrayTests` covers both orders.
+
+## Enter to continue (added in v1.9)
+
+Requested by the team (Peri): in the story screens, Enter does what the screen's one button does.
+
+- `Rules.Room.enterContinues model` is True for `Introduction DiariesFound`, `Introduction ClockStopped`, `Transition (OpeningDiary _)`, `Transition (Slideshow _ _)` and `Transition ReturningToPresent`, and only while no clue sheet is open.
+- `Main` subscribes to an Enter keydown in those screens and sends `Advance`. It ignores Enter when a button, link or text field has the focus (the browser already presses a focused button, so nothing is skipped twice), and it ignores held-down repeats and Ctrl/Cmd/Alt.
+- Tests: `tests/EnterKeyTests.elm`.
 
 ## Release build
 

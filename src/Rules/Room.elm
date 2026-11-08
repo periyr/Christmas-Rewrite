@@ -1,7 +1,7 @@
 module Rules.Room exposing
     ( width, height, floorY, minX, maxX, startX, walkSpeed, interactionDistance, maxFrameDelta
     , position, hotspots
-    , canWalk, nearby, hasPanel
+    , canWalk, nearby, hasPanel, enterContinues
     , initialRoom, initialPlayer
     , press, release, step, stop, isMoving, keyDown, keyUp, facingTowards
     )
@@ -257,6 +257,35 @@ hasPanel phase =
 
 
 -- WALKING
+
+
+{-| Whether Enter moves the story on (the same Advance as the screen's one
+button): the narration screens, "Step into", the slides and "Back to the
+present". Never while a clue sheet is open, and never in a room or puzzle.
+-}
+enterContinues : Model -> Bool
+enterContinues model =
+    model.inspecting
+        == Nothing
+        && (case model.phase of
+                Introduction DiariesFound ->
+                    True
+
+                Introduction ClockStopped ->
+                    True
+
+                Transition (OpeningDiary _) ->
+                    True
+
+                Transition (Slideshow _ _) ->
+                    True
+
+                Transition ReturningToPresent ->
+                    True
+
+                _ ->
+                    False
+           )
 
 
 {-| The player can walk only in the room itself: a phase with hotspots, no

@@ -14,7 +14,8 @@ public/audio.js, which also plays the quiet background music.
 
 Subscriptions (contract v1.3) only turn browser events into room messages:
 the walk keys and E, animation frames while the player is moving or a diary
-trip is playing, and the page being hidden.
+trip is playing, and the page being hidden. Enter also moves the story on in
+the narration and slides (v1.9, Rules.Room.enterContinues).
 
 -}
 
@@ -180,6 +181,11 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Browser.Events.onKeyDown (keyDown Rules.Room.keyDown)
+        , if Rules.Room.enterContinues model then
+            Browser.Events.onKeyDown enterToContinue
+
+          else
+            Sub.none
         , Browser.Events.onKeyUp (keyUp Rules.Room.keyUp)
         , Browser.Events.onVisibilityChange (\visibility -> PageVisibilityChanged (visibility == Visible))
         , if Rules.Travel.wantsFrames model then
@@ -211,6 +217,28 @@ keyDown toMsg =
         (Decode.field "metaKey" Decode.bool)
         (Decode.field "altKey" Decode.bool)
         (Decode.oneOf [ Decode.field "repeat" Decode.bool, Decode.succeed False ])
+        |> Decode.andThen orIgnore
+
+
+{-| Enter moves the story on in narration and slides (Rules.Room.enterContinues).
+Not when a button, link or text field has the focus: the browser already
+presses a focused button on Enter, so the story never skips twice. Held-down
+repeats and modified keys are ignored.
+-}
+enterToContinue : Decoder Msg
+enterToContinue =
+    Decode.map4
+        (\key modified repeat target ->
+            if key == "Enter" && not modified && not repeat && not (List.member target [ "BUTTON", "A", "INPUT", "TEXTAREA", "SELECT" ]) then
+                Just Advance
+
+            else
+                Nothing
+        )
+        (Decode.field "key" Decode.string)
+        (Decode.map3 (\ctrl meta alt -> ctrl || meta || alt) (Decode.field "ctrlKey" Decode.bool) (Decode.field "metaKey" Decode.bool) (Decode.field "altKey" Decode.bool))
+        (Decode.oneOf [ Decode.field "repeat" Decode.bool, Decode.succeed False ])
+        (Decode.oneOf [ Decode.at [ "target", "tagName" ] Decode.string, Decode.succeed "" ])
         |> Decode.andThen orIgnore
 
 

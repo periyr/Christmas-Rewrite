@@ -7,6 +7,7 @@
 - **Walking:**
   - Hold **A**/**D** or **← →** to walk.
   - Press **E** to use whatever is nearby when its prompt appears, or **click** an object's label to walk there and use it.
+  - In the narration and slides, press **Enter** to go on (the same as the button).
   - Walking never costs anything and never changes an answer. Every solution below stays the same.
 - **Where things are** (left to right in the room):
 

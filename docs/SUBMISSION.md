@@ -31,6 +31,7 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10â
 - **Inspect** documents and objects to read them; this never costs anything.
 - **To move something:** click to pick it up, then click where it should go. Click a crate or the "Not this week" box to drop it into the first free space. Click the same object again to put it down.
 - **To submit a main puzzle:** use its button (**Finish week**, **Perform the story** or **Send this book**). Inspecting and rearranging are free. Each submission uses an attempt: two each in 1950 and 1973, only one in 1998.
+- **Continue the story:** in the narration and the slides, press **Enter** (or click the button) to go on.
 - **Help:** every puzzle screen has a Help button that explains its controls.
 - **Replaying:** after an ending, **Reopen 1950**, **Reopen 1973** or **Reopen 1998** to replay from that chapter, or **Start again**.
 
