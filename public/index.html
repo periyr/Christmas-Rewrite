@@ -142,6 +142,22 @@
   });
 </script>
 <script src="elm.js"></script>
-<script>Elm.Main.init({ node: document.getElementById("app") });</script>
+<script>
+  // Saved progress (Save.elm): read once at startup, written by the saveGame port.
+  // Storage can be missing or blocked (private windows, some file:// pages), so
+  // every access is guarded and the game simply starts without a save.
+  const SAVE_KEY = "one-more-christmas-save";
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (_) {}
+  const app = Elm.Main.init({ node: document.getElementById("app"), flags: saved });
+  if (app.ports && app.ports.saveGame) {
+    app.ports.saveGame.subscribe((data) => {
+      try {
+        if (data === null) localStorage.removeItem(SAVE_KEY);
+        else localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      } catch (_) {}
+    });
+  }
+</script>
 </body>
 </html>
