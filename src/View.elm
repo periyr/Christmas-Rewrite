@@ -36,39 +36,66 @@ view model =
 
 
 {-| The clock on the wall, first in the stage so it stays the same element (and
-keeps ticking smoothly) from screen to screen. CSS shows it only in rooms whose
-picture has no painted clock. Person A's model should supply the real time
-later; until then it follows the story: it runs at 11:59 while Edwin packs up,
-then stays stopped there, and the 1973 room shows that evening's 7:05.
+keeps ticking smoothly) from screen to screen. It ticks everywhere except the
+intro moment when "the clock stops a minute before midnight". CSS places it in
+each room. Person A's model should supply the real time later.
 -}
 wallClock : Phase -> Html msg
 wallClock phase =
-    if in1973 phase then
-        Clock.view { hour = 19, minute = 5, ticking = True }
-
-    else
-        Clock.view { hour = 23, minute = 59, ticking = beforeClockStops phase }
-
-
-beforeClockStops : Phase -> Bool
-beforeClockStops phase =
-    phase == Introduction PackingUp || phase == Introduction DiariesFound
+    let
+        ( hour, minute ) =
+            clockTime phase
+    in
+    Clock.view { hour = hour, minute = minute, ticking = phase /= Introduction ClockStopped }
 
 
-in1973 : Phase -> Bool
-in1973 phase =
+{-| Each era keeps the time its old painted clock showed; the ending is midnight. -}
+clockTime : Phase -> ( Int, Int )
+clockTime phase =
+    case ( phase, clockEra phase ) of
+        ( Ending, _ ) ->
+            ( 0, 0 )
+
+        ( _, Just Repairs1950 ) ->
+            ( 10, 10 )
+
+        ( _, Just Shadows1973 ) ->
+            ( 19, 5 )
+
+        ( _, Just Search1998 ) ->
+            ( 14, 20 )
+
+        ( _, Nothing ) ->
+            ( 23, 59 )
+
+
+{-| The past era a phase is set in, or Nothing for the present. -}
+clockEra : Phase -> Maybe Era
+clockEra phase =
     case phase of
+        Salvage _ ->
+            Just Repairs1950
+
+        RepairBoard _ ->
+            Just Repairs1950
+
+        ReopeningShelf _ ->
+            Just Repairs1950
+
         ShadowPuzzle _ ->
-            True
+            Just Shadows1973
 
-        Transition (OpeningDiary Shadows1973) ->
-            True
+        BookMystery _ ->
+            Just Search1998
 
-        Transition (Slideshow Shadows1973 _) ->
-            True
+        Transition (OpeningDiary era) ->
+            Just era
+
+        Transition (Slideshow era _) ->
+            Just era
 
         _ ->
-            False
+            Nothing
 
 
 screen : World -> Model -> List (Html Msg)

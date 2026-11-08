@@ -1713,8 +1713,9 @@ svg-art { display: contents; }
    this, so the clock swings flat against the wall.
 
    The 1950 picture (also used for 1998) and the saved ending have a painted
-   clock, so this one shows only where the picture has none: the present-day
-   and 1973 rooms, where the painted clock's hands overlay is switched off. */
+   clock on the back wall. There this clock hangs flat over it, a little larger
+   so the painted one doesn't show, and the painted clock's hands overlay is
+   switched off everywhere. */
 .clock {
   position: absolute;
   z-index: 1;
@@ -1728,11 +1729,15 @@ svg-art { display: contents; }
   pointer-events: none;
 }
 
-.stage:is([data-era="1950"], [data-era="1998"], [data-era="saved"]) .clock { display: none; }
+/* Over the painted clock: centre (1145, 140), radius 64 in the 1950 picture. */
+.stage:is([data-era="1950"], [data-era="1998"]) .clock { left: 83.83%; top: 9.44%; width: 11.25%; transform: none; }
+
+/* Over the saved ending's painted clock: centre (1161, 107), radius 75. */
+.stage[data-era="saved"] .clock { left: 84.47%; top: 3.78%; width: 12.47%; transform: none; }
 
 /* The hands overlay sits inside an SVG <use>, so it is switched by a variable. */
 .r-hands { opacity: var(--show-hands, 1); }
-.stage:is([data-era="present"], [data-era="closed"], [data-era="1973"]) { --show-hands: 0; }
+.stage { --show-hands: 0; }
 
 /* Recoloured exactly like the room picture behind it. */
 .stage[data-era="closed"] .clock { filter: brightness(0.5) saturate(0.6) drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33)); }
