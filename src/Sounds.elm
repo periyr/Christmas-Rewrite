@@ -9,7 +9,8 @@ there are no sound files.
 
 A step can play more than one sound (a page turn and a success chime, say);
 most play none. Walking plays a soft step each time the walk animation
-changes pose.
+changes pose. Each 1973 performance slide starts that scene's puppet sounds,
+timed in audio.js to its animation, and leaving the slide stops them.
 
 -}
 
@@ -26,6 +27,7 @@ forStep msg before after =
         , paperSounds before after
         , noticeSounds before after
         , roomSounds before after
+        , showSounds before after
         ]
 
 
@@ -335,3 +337,75 @@ roomSounds before after =
                 []
     in
     panel ++ step
+
+
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- THE 1973 SHADOW PLAY
+-- ═══════════════════════════════════════════════════════════════════════
+
+
+showSounds : Model -> Model -> List String
+showSounds before after =
+    if sameScreen before.phase after.phase then
+        []
+
+    else
+        let
+            stop =
+                case performance before of
+                    Just _ ->
+                        [ "scene-stop" ]
+
+                    Nothing ->
+                        []
+
+            start =
+                case performance after of
+                    Just name ->
+                        [ "scene-" ++ name ]
+
+                    Nothing ->
+                        []
+        in
+        stop ++ start
+
+
+{-| The scene on screen, named like its animation (Components.Props, the
+data-shadow-scene attribute), if a performance slide is showing.
+-}
+performance : Model -> Maybe String
+performance model =
+    case model.phase of
+        Transition (Slideshow era index) ->
+            case List.drop index (Timeline.slides era model.history) |> List.head of
+                Just (PerformanceSlide scene _) ->
+                    Just (setting (Timeline.deriveWorld model.history).scriptVariant scene)
+
+                _ ->
+                    Nothing
+
+        _ ->
+            Nothing
+
+
+setting : ScriptVariant -> Scene -> String
+setting variant scene =
+    case ( variant, scene ) of
+        ( OriginalScript, Scene1 ) ->
+            "bridge"
+
+        ( OriginalScript, Scene2 ) ->
+            "door"
+
+        ( OriginalScript, Scene3 ) ->
+            "reading-home"
+
+        ( NeighboursRetelling, Scene1 ) ->
+            "gate"
+
+        ( NeighboursRetelling, Scene2 ) ->
+            "fireplace"
+
+        ( NeighboursRetelling, Scene3 ) ->
+            "lantern-home"

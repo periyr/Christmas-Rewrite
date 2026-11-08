@@ -96,7 +96,7 @@
   }
 
   // Filtered noise: paper, cardboard, footsteps, whooshes.
-  function hiss({ at = 0, dur = 0.2, gain = 0.2, type = "bandpass", freq = 2000, to = null, q = 1, attack = 0.01 } = {}) {
+  function hiss({ at = 0, dur = 0.2, gain = 0.2, type = "bandpass", freq = 2000, to = null, q = 1, attack = 0.01, bus = sfxBus } = {}) {
     const t = ctx.currentTime + at;
     const src = noise(), f = ctx.createBiquadFilter(), g = ctx.createGain();
     f.type = type; f.Q.value = q;
@@ -105,7 +105,7 @@
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(gain, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(f).connect(g).connect(sfxBus);
+    src.connect(f).connect(g).connect(bus);
     src.start(t, Math.random() * 0.5); src.stop(t + dur + 0.05);
   }
 
@@ -176,6 +176,84 @@
     "click": () => { tone(wobble(660, 0.02), { dur: 0.08, gain: 0.08, type: "triangle" }); bell(note("G6"), { at: 0.04, dur: 0.5, gain: 0.04 }); },
   };
 
+  // ---------- the 1973 shadow play ----------
+  //
+  // Each performance slide plays a 3.6 s puppet animation (styles.css,
+  // "theatre-*" keyframes). Each scene's sounds are timed to its keyframes and
+  // go through their own gain, so leaving the slide early fades them out.
+
+  const SCENE = 3.6;
+  const cue = (percent) => SCENE * percent / 100;
+  let sceneBus = null;
+
+  function stopScene() {
+    if (!sceneBus) return;
+    const old = sceneBus;
+    old.gain.setTargetAtTime(0, ctx.currentTime, 0.08);
+    setTimeout(() => old.disconnect(), 600);
+    sceneBus = null;
+  }
+
+  function startScene(build) {
+    stopScene();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return; // the puppets hold still then
+    sceneBus = ctx.createGain();
+    sceneBus.connect(sfxBus);
+    build(sceneBus);
+  }
+
+  // Small pieces the scenes share. Puppets are card on sticks behind a sheet,
+  // so their steps are soft card taps and everything else is small and light.
+  const pat = (bus, at, pitch = 1) => { hiss({ bus, at, dur: 0.07, gain: 0.09, freq: 700 * pitch, q: 1.4 }); tone(wobble(180 * pitch), { bus, at, dur: 0.06, gain: 0.05, type: "triangle" }); };
+  const hop = (bus, at) => { tone(wobble(330), { bus, at, dur: 0.16, gain: 0.07, glide: 520 }); };
+  const land = (bus, at) => { hiss({ bus, at, dur: 0.08, gain: 0.1, freq: 500, q: 1.2 }); };
+  const jingle = (bus, at) => { bell(wobble(note("A6"), 0.02), { bus, at, dur: 0.3, gain: 0.035 }); bell(wobble(note("E7"), 0.02), { bus, at: at + 0.04, dur: 0.25, gain: 0.025 }); };
+  const flutter = (bus, at) => { for (let i = 0; i < 4; i++) hiss({ bus, at: at + i * 0.07, dur: 0.06, gain: 0.07, freq: 1100, q: 0.9 }); };
+  const pageFlip = (bus, at) => { hiss({ bus, at, dur: 0.3, gain: 0.1, freq: 1300, to: 3000, q: 0.8, attack: 0.06 }); };
+  const glow = (bus, at) => { ["C6", "E6", "G6"].forEach((n, i) => bell(note(n), { bus, at: at + i * 0.09, dur: 1.4, gain: 0.05 })); };
+  const keyTurn = (bus, at) => { tone(1900, { bus, at, dur: 0.03, gain: 0.08, type: "triangle" }); tone(1400, { bus, at: at + 0.09, dur: 0.04, gain: 0.08, type: "triangle" }); };
+  const creak = (bus, at) => { tone(140, { bus, at, dur: 0.55, gain: 0.06, type: "sawtooth", glide: 210 }); hiss({ bus, at, dur: 0.5, gain: 0.04, freq: 900, q: 3 }); };
+  const crackle = (bus, from, to) => { for (let t = from; t < to; t += 0.12 + Math.random() * 0.2) hiss({ bus, at: t, dur: 0.025, gain: 0.05 + Math.random() * 0.04, type: "highpass", freq: 2500 }); };
+
+  const scenes = {
+    // Original script
+    "bridge": (b) => {                    // crosses the bridge, bobbing, lantern swinging
+      [10, 30, 50, 70].forEach((p) => pat(b, cue(p)));
+      [10, 34, 58].forEach((p) => jingle(b, cue(p)));
+      bell(note("G6"), { bus: b, at: cue(92), dur: 1, gain: 0.04 });
+    },
+    "door": (b) => {                      // three hops, reaches up, turns the key, the door swings open
+      [0, 23, 45].forEach((p, i) => hop(b, cue(p) + (i ? 0 : 0.05)));
+      [23, 45, 61].forEach((p) => land(b, cue(p)));
+      keyTurn(b, cue(72));
+      creak(b, cue(76));
+      glow(b, cue(86));
+    },
+    "reading-home": (b) => {              // lifts the book, opens it, the room warms
+      hiss({ bus: b, at: cue(30), dur: 0.4, gain: 0.05, freq: 900, q: 0.8, attack: 0.15 });
+      pageFlip(b, cue(52)); pageFlip(b, cue(68));
+      glow(b, cue(56));
+    },
+    // The neighbours' retelling
+    "gate": (b) => {                      // walks to the gate, leans down, finds and lifts the key
+      [5, 17, 29, 41].forEach((p) => pat(b, cue(p)));
+      hiss({ bus: b, at: cue(48), dur: 0.35, gain: 0.06, freq: 1500, q: 0.8, attack: 0.1 });
+      jingle(b, cue(64)); jingle(b, cue(80));
+      bell(note("E6"), { bus: b, at: cue(90), dur: 1, gain: 0.04 });
+    },
+    "fireplace": (b) => {                 // flutters up to perch by the fire, opens the book
+      crackle(b, 0, SCENE);
+      flutter(b, cue(2)); flutter(b, cue(25));
+      land(b, cue(45));
+      pageFlip(b, cue(55)); pageFlip(b, cue(72));
+    },
+    "lantern-home": (b) => {              // crosses home with the lantern; the house lights up
+      [10, 30, 50, 70].forEach((p) => pat(b, cue(p)));
+      [10, 34].forEach((p) => jingle(b, cue(p)));
+      glow(b, cue(54));
+    },
+  };
+
   // ---------- music: Silent Night on a music box ----------
 
   // [note, beats] in 3/4. "-" is a rest.
@@ -226,7 +304,14 @@
   // ---------- public ----------
 
   function play(name) {
-    if (!ctx || muted || ctx.state !== "running") return;
+    if (!ctx || ctx.state !== "running") return;
+    if (name === "scene-stop") { stopScene(); return; }
+    if (muted) return;
+    if (name.startsWith("scene-")) {
+      const scene = scenes[name.slice("scene-".length)];
+      if (scene) startScene(scene);
+      return;
+    }
     const sound = sounds[name];
     if (sound) sound();
   }

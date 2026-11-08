@@ -4,6 +4,7 @@ import Domain exposing (..)
 import Expect
 import Fixtures
 import Sounds
+import Rules.Shadow
 import Test exposing (Test, describe, test)
 import Update
 
@@ -36,6 +37,27 @@ suite =
             \_ -> step (BoardMove (SelectItem PatchRoof)) Fixtures.repairBoardInProgress |> Expect.equal [ "card-pick" ]
         , test "nothing happens, nothing plays" <|
             \_ -> step Submit Fixtures.initialModel |> Expect.equal []
+        , test "the shadow play starts the first scene's puppet sounds, and the next slide swaps them" <|
+            \_ ->
+                let
+                    staged =
+                        Fixtures.shadowOriginalScript
+
+                    ready =
+                        { staged
+                            | phase =
+                                ShadowPuzzle
+                                    { arrangement = Fixtures.stageFor (Rules.Shadow.script OriginalScript)
+                                    , inspected = []
+                                    , attempts = NoAttemptUsed
+                                    }
+                        }
+
+                    performed =
+                        Update.update Submit ready
+                in
+                ( performed.phase, step Advance performed )
+                    |> Expect.equal ( Transition (Slideshow Shadows1973 0), [ "page", "scene-stop", "scene-door" ] )
         , test "the clock stopping has its own sound" <|
             \_ ->
                 step Advance { initial | phase = Introduction DiariesFound }
