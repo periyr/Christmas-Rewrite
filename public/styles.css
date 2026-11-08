@@ -1240,16 +1240,23 @@ svg-art { display: contents; }
 
 /* C's sprites at 2 logical px per unit. Left and top come from the player's model
    through Components.Actor, with the feet point on the walking line (Rules.Room.floorY,
-   the front edge of the painted floor, so the player stands in front of the furniture). */
+   the front edge of the painted floor, so the player stands in front of the furniture).
+   .actor itself has no z-index or transform, so it doesn't group its parts: the
+   figure stacks with the room (in front of the labels, behind the narration) and
+   the name tag can still come to the very front on its own. */
 .actor {
   position: absolute;
-  z-index: 2;
   width: 12rem;
   height: 20rem;
   pointer-events: none;
 }
 
-.actor.is-facing-left { transform: scaleX(-1); }
+.actor__frame,
+.actor__shadow { z-index: 2; }
+
+/* Each frame fills the figure, so mirroring the frames mirrors the figure. The
+   shadow and the hit box are centred, so they need no mirroring. */
+.actor.is-facing-left .actor__frame { transform: scaleX(-1); }
 
 .actor__frame {
   position: absolute;
@@ -1263,7 +1270,9 @@ svg-art { display: contents; }
 
 /* Name tag: hovering the head or body (sprite units x 30–66, y 14–118) shows who
    the player is. Only this box catches the pointer; the rest of the figure
-   stays click-through, so nearby labels still work. */
+   stays click-through, and room labels and the narration sit above the box,
+   so they always stay clickable. No z-index, so the tag inside can rise above
+   them. */
 .actor__hit {
   position: absolute;
   left: 3.75rem;
@@ -1290,19 +1299,16 @@ svg-art { display: contents; }
   visibility: hidden;
   opacity: 0;
   transition: opacity 120ms ease-out;
+  pointer-events: none;
 }
 
-/* The figure is mirrored when facing left; mirror the tag back so it reads. */
-.actor.is-facing-left .actor__tag { transform: translateX(-50%) scaleX(-1); }
-
+/* Only the tag comes to the front, above the room labels and the narration;
+   the figure stays where it is, behind the narration. */
 .actor__hit:hover .actor__tag {
+  z-index: 6;
   visibility: visible;
   opacity: 1;
 }
-
-/* While hovered, lift the figure (and its tag) above the room labels and the
-   narration, which normally sit in front of it. */
-.actor:has(.actor__hit:hover) { z-index: 6; }
 
 .actor__name {
   display: block;
