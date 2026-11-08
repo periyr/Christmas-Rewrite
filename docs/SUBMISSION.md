@@ -1,7 +1,5 @@
 # Christmas Rewrite: submission copy and credits
 
-Fill in the `[brackets]` before submitting.
-
 ## Title and tagline
 
 **Christmas Rewrite**
@@ -70,28 +68,4 @@ Christmas Rewrite is written in [Elm](https://elm-lang.org), with HTML, CSS and 
 - **Sound:** every sound effect and the music are generated in code with the Web Audio API (`public/audio.js`), written with Claude Code. There are no sound files. The music is "Silent Night" (Franz Gruber, 1818, public domain), played as a quiet music box.
 - **Software:** Elm 0.19.1 and the packages elm/core, elm/browser, elm/html (BSD-3-Clause); elm-test for testing; Node.js for the build scripts.
 
-**Source:** https://github.com/periyr/Christmas-Rewrite [This repository is private. Make it public, or give the judges access, before linking it in the submission.]
-
-## What is verified so far (update before submitting)
-
-Remove this section from the public copy. It keeps the claims above honest.
-
-| Feature | Status (7 November, `main` at `c9ad11f`; details in `docs/PLAYTEST.md`) |
-|---|---|
-| Rules for all three chapters (repair board, salvage, shelf, shadow story, forgotten book) | Built and tested: `npm test` passes 298 tests, including all 2,520 repair weeks, all 36 shadow stagings, the four accepted shelf orders out of 720, and whole-game journeys through all eight pass/fail combinations and rewind. The release build (`npm run build -- --optimize`) works. |
-| 1950 screens (salvage, repair board, shelf, slideshow) | Played through in the browser on both routes: a correct week (slides, shelf, Saturday, back to the shop) and two wrong weeks (feedback, retry, consequence slide). |
-| 1973 and 1998 puzzle screens | Played in the browser: both 1973 script versions (wrong try, retry, performance or failure) and both 1998 inscription sources (wrong book, retry, success or failure) |
-| Endings and replay | Played in the browser: the saved ending, closed endings with one or two missing chapters, Reopen 1998 and Reopen 1973 (earlier chapters kept, two fresh attempts), and Start again. A's journey tests cover all eight pass/fail combinations. |
-| Walking (keys, click to walk, hotspots, room labels) | Built and playable. Checked in the browser on 7 November: walking both ways, stopping at the wall, the E prompts and the click-to-walk labels. |
-| Walking characters (4 people × 3 poses) | Wired in. Checked in the browser: present-day Edwin in the intro and hub, Walter in 1950, Henry in 1973, young Edwin in 1998. Each is 192 × 320 room px standing on B's floor strip, flips when walking left, and cycles walk-1 and walk-2. |
-| Room props | Placed in 1973 (sheet, torch, beam, cut-out box, puppets) and 1998 (computer, book stacks, parcels). 1950 uses B's own inline crates, rubble and planks. |
-| All game text (`src/Content`) | Built; compiles; word counts checked; covers every 1973 and 1998 result |
-| Help button on every puzzle screen | Yes: salvage, board, shelf, shadow stage, book table (browser) |
-
-## Screenshots to take
-
-1. The present-day shop with the 1950 diary glowing.
-2. The 1950 planning board, partly filled in.
-3. A 1973 shadow-story scene during the performance.
-4. The 1998 book comparison, with a tab open.
-5. The saved ending.
+**Source:** https://github.com/periyr/Christmas-Rewrite

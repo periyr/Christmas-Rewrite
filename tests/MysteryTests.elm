@@ -1,7 +1,7 @@
 module MysteryTests exposing (suite)
 
 {-| 1998 forgotten book: Rules.Mystery.validate for all four candidates (C's
-examples in docs/test-examples-for-A.md), and the two-attempt flow through
+expected examples), and the two-attempt flow through
 Update into the ending.
 -}
 

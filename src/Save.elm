@@ -2,7 +2,7 @@ module Save exposing (Place, Saved, decode, encode, placeOf, resume, storageVers
 
 {-| Saving and loading progress (start/load menu).
 
-History is the only stored progress (see CONTRACT.md). A save includes that
+History is the only stored progress. A save includes that
 History, the Place the player had reached and the run's tray seed. Main writes it to the
 browser's localStorage through a port whenever either changes, and reads it
 back as a flag when the page opens, so a player who leaves early comes back to
