@@ -3006,29 +3006,6 @@ svg-art { display: contents; }
   text-wrap: balance;
 }
 
-/* The saved ending: its photograph beside its words (Views.Shop.ending). */
-.sheet--ending-photo { width: 66rem; max-width: 74rem; }
-
-.sheet--ending-photo .sheet__body {
-  display: grid;
-  grid-template-columns: 26rem 1fr;
-  gap: 2rem;
-  align-items: center;
-}
-
-.ending-photo {
-  display: block;
-  width: 100%;
-  max-height: none;
-  margin: 0;
-  border: 0;
-  background: none;
-  transform: rotate(-2deg);
-  filter: drop-shadow(0.2rem 0.3rem 0 rgba(41, 30, 26, 0.3));
-}
-
-.ending-words { min-width: 0; }
-
 /* Pieces can be dragged as well as clicked (Components.Placement). */
 [draggable="true"] { cursor: grab; }
 [draggable="true"]:active { cursor: grabbing; }
