@@ -1,10 +1,10 @@
-# One More Christmas: submission copy and credits
+# Christmas Rewrite: submission copy and credits
 
 Fill in the `[brackets]` before submitting.
 
 ## Title and tagline
 
-**One More Christmas**
+**Christmas Rewrite**
 
 *Every decade has its mistakes. Every diary remembers them.*
 
@@ -37,7 +37,7 @@ A cosy, bittersweet point-and-click puzzle game for the browser. Takes about 10�
 
 ## How it's built
 
-One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and SVG for presentation. It needs no server, database or network connection while playing.
+Christmas Rewrite is written in [Elm](https://elm-lang.org), with HTML, CSS and SVG for presentation. It needs no server, database or network connection while playing.
 
 - **State never changes in place.** Every action produces a new game state from the old one, through a single pure update function. Clicking during feedback, or double-clicking, can't spend an extra attempt or record a chapter twice.
 - **The puzzle checks are pure functions.** Each puzzle has its own validator, separate from the interface. The validator takes a finished arrangement and returns a list of broken rules. The repair board's validator was tested against all 2,520 possible weeks, and it accepts exactly the six valid ones.
@@ -58,15 +58,16 @@ One More Christmas is written in [Elm](https://elm-lang.org), with HTML, CSS and
 | Core logic, rules and integration (Person A) | Avissa Rasoulinia |
 | Presentation and interaction (Person B) | Defne Göçken |
 | Content, assets and player clarity (Person C) | Peri Yarci |
+| Debugging and small implementation details | Ata Karasoy |
 
-- **Writing:** the team. Text drafted with help from Claude (Anthropic), then edited by the team.
+- **Writing:** the team. Claude Code was only used to polish the wording.
 - **Art:** all made for this project and free to use in this game. See `public/assets/ASSETS.md` for the full list.
   - The room pictures, book and diary covers, damage marks, shadow puppets and mystery books were generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand.
   - The four walking characters share one body drawn with Google Gemini from the team's prompt. Each person's look follows Gemini's designs, rebuilt with help from Claude so all four match (`docs/asset-sources/chibi-family.mjs`).
   - The room props are flat SVG made for the team with help from Claude.
   - The family photograph and the handwritten closure notice are SVG made with help from Claude. The photograph reuses the walking characters (`docs/asset-sources/family-photo.mjs`).
 - **Fonts:** none bundled. The game uses fonts already installed on the player's system (Palatino or Georgia, and Courier). The handwriting on the closure notice, Walter's diary page, the glass delivery slip, the 1973 shadow-story scripts and stage sketches, and Henry's note on the back of the 1973 photograph is the Caveat font (SIL Open Font License 1.1, The Caveat Project Authors), turned into drawn outlines (`docs/asset-sources/closure-note.mjs`, `docs/asset-sources/handwritten-clues.mjs`, `docs/asset-sources/shadow-clues.mjs`, `docs/asset-sources/archive-photo.mjs`).
-- **Sound:** none.
+- **Sound:** every sound effect and the music are generated in code with the Web Audio API (`public/audio.js`), written with Claude Code. There are no sound files. The music is "Silent Night" (Franz Gruber, 1818, public domain), played as a quiet music box.
 - **Software:** Elm 0.19.1 and the packages elm/core, elm/browser, elm/html (BSD-3-Clause); elm-test for testing; Node.js for the build scripts.
 
 **Source:** https://github.com/periyr/Christmas-Rewrite [This repository is private. Make it public, or give the judges access, before linking it in the submission.]

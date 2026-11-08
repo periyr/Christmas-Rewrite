@@ -1,4 +1,4 @@
-# One More Christmas: walkthrough
+# Christmas Rewrite: walkthrough
 
 **Spoilers:** every solution is below. Playtesters should play once without this guide first.
 

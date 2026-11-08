@@ -1,4 +1,4 @@
-// Sound for One More Christmas: every effect and the music are made in code
+// Sound for Christmas Rewrite: every effect and the music are made in code
 // with the Web Audio API, so there are no sound files to load or license.
 //
 //   GameAudio.play("page")   one effect (names come from src/Sounds.elm)

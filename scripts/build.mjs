@@ -34,7 +34,7 @@ const fallbackIndex = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>One More Christmas</title>
+  <title>Christmas Rewrite</title>
 </head>
 <body>
   <!-- Temporary page written by scripts/build.mjs. Person B's public/index.html replaces it. -->
