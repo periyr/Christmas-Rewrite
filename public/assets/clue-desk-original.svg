@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300">
+  <!-- clue-desk-original: 1998 not revisited: an empty desk and an old computer, no parcels. Built by docs/asset-sources/hub-props.mjs -->
+  <g stroke="#291e1a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="0" y="0" width="480" height="232" fill="#f2e4c9" />
+    <rect x="0" y="232" width="480" height="68" fill="#5a3428" />
+    <!-- The desk -->
+    <rect x="30" y="170" width="420" height="20" fill="#a6652b" />
+    <rect x="44" y="190" width="160" height="80" fill="#5a3428" />
+    <rect x="390" y="190" width="40" height="80" fill="#5a3428" />
+    <rect x="54" y="200" width="140" height="26" fill="#5a3428" /><rect x="110" y="210" width="28" height="6" fill="#d9a443" stroke-width="1" />
+    <rect x="54" y="234" width="140" height="26" fill="#5a3428" /><rect x="110" y="244" width="28" height="6" fill="#d9a443" stroke-width="1" />
+    <!-- The computer -->
+    <rect x="80" y="70" width="130" height="100" rx="6" fill="#d4d3d1" />
+    <rect x="94" y="82" width="102" height="72" rx="4" fill="#2f3533" />
+    <rect x="70" y="160" width="150" height="12" fill="#d4d3d1" />
+    <path d="M 108 92 L 126 92" fill="none" stroke="#4a5150" stroke-width="3" />
+
+  </g>
+</svg>
