@@ -1,7 +1,7 @@
 module Views.ClueSheets exposing (custom)
 
 {-| Clues drawn as the thing they are, rather than as plain text: Ruth's email
-as an email on the 1998 computer, and the remembered line as the last page of
+as an email on the 1998 computer, and the remembered line as a page of
 a book. The words all come from Content.Clues, so the facts never differ from
 the plain-text version.
 -}
@@ -88,9 +88,9 @@ signOff paragraphs =
 -- ═══════════════════════════════════════════════════════════════════════
 
 
-{-| Ruth's lead-in above, then an open book at its last page: the left page
-and the top of the right one are faded lines of story, and the remembered
-sentence closes it above "The End".
+{-| Ruth's lead-in above, then an open book somewhere in the middle: faded
+lines of story fill both pages, and the remembered sentence stands out
+partway down the right one.
 -}
 bookEnding : Document -> List (Html msg)
 bookEnding document =
@@ -113,11 +113,7 @@ bookEnding document =
         ++ [ div [ class "book-end" ]
                 [ div [ class "book-end__page book-end__page--left", attribute "aria-hidden" "true" ] (faded 11)
                 , div [ class "book-end__page book-end__page--right" ]
-                    (faded 3
-                        ++ [ p [ class "book-end__line" ] [ text line ]
-                           , p [ class "book-end__the-end" ] [ text "The End" ]
-                           ]
-                    )
+                    (faded 4 ++ [ p [ class "book-end__line" ] [ text line ] ] ++ faded 5)
                 ]
            ]
 
