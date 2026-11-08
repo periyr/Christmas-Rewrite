@@ -1,4 +1,4 @@
-# Shared contract v1.6: Person A handoff
+# Shared contract v1.7: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -478,6 +478,24 @@ Made by A for this feature, in B's files; B is free to restyle it.
 - **Reduced motion:** a plain crossfade from the finished room to the present, with no tear, tint or glow.
 
 `tests/ReturnTests.elm` covers the start from the last slide for every era and outcome, the timing and clamp, Skip matching a finished tear, repeated clicks, ignored input, unchanged history, and the hub, unlocking and endings that follow.
+
+## The broken frame after the 1973 show (added in v1.7)
+
+Requested by the team (Peri): after the 1973 performance, in the dark, Henry bumps the wall and the family photograph falls. Its glass breaks into nine pieces, which the player fits back before going home. A warm-up like the 1950 shelf: unlimited moves, no attempts, no history.
+
+```elm
+type Shard = Shard Int        -- 1..9
+type FrameGap = FrameGap Int  -- 1..9; Shard n fits only FrameGap n
+Phase: | MendingFrame (Placement Shard FrameGap)
+Msg:   | FrameMove (PlacementAction Shard FrameGap)
+Hotspot: | BrokenGlassSpot    -- x 1150, the glass on the floor; opens the panel
+```
+
+- **Flow:** the last 1973 slide (success or failure) `--Advance-->` `MendingFrame Placement.empty`. `Advance` there goes to `TearToPresent Shadows1973 0` once `Rules.Frame.isSolved`, otherwise it sets `NotSolvedYet` and stays. 1950 and 1998 still tear home straight from their last slide.
+- **Rules:** `Rules.Frame.accepts (Shard a) (FrameGap b)` is `a == b`, so a wrong gap gives `DoesNotFitThere` and keeps the piece selected. A placed piece is always in its own gap.
+- **Views:** `Views.Frame` (panel), `Content.Frame` (words). The room is the 1973 room with the lights down, Henry walking, and `data-frame="fallen"` (bare wall, glass on the floor).
+- **Afterwards:** whenever 1973 is resolved (`world.tradition /= NotRevisited`), the rooms of 1998, the present and the ending get `data-frame="taped"` (tape on the frame's glass), and `FamilyPhotograph` shows the taped picture and mentions the tape. The present-day hub now also has `ClueSpot FamilyPhotograph` (x 1200).
+- **Tests:** `tests/FrameTests.elm`. The journey, return and shadow tests mend the frame where they used to go straight home from 1973.
 
 ## Release build
 

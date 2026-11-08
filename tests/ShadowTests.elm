@@ -81,6 +81,12 @@ send msgs model =
     List.foldl Update.update model msgs
 
 
+{-| Every piece of glass into its own gap: the broken frame after the show (v1.7). -}
+mendFrame : List Msg
+mendFrame =
+    List.concatMap (\n -> [ FrameMove (SelectItem (Shard n)), FrameMove (PlaceSelected (FrameGap n)) ]) (List.range 1 9)
+
+
 {-| The actions that put a staging on the stage. -}
 perform : Staging -> List Msg
 perform staging =
@@ -411,7 +417,7 @@ flow =
                         )
         , test "after 1973 resolves, the story returns to the present with the 1998 journal next" <|
             \_ ->
-                send (perform retelling ++ [ Submit, Retry, Submit, Advance, SkipTravel, Advance, Advance ]) (shadowAfter Fixtures.repairsSucceeded)
+                send (perform retelling ++ [ Submit, Retry, Submit, Advance ] ++ mendFrame ++ [ Advance, SkipTravel, Advance, Advance ]) (shadowAfter Fixtures.repairsSucceeded)
                     |> (\m -> ( m.phase, (Timeline.deriveWorld m.history).nextDiary ))
                     |> Expect.equal ( PresentHub, Just Search1998 )
         ]

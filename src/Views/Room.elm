@@ -67,6 +67,9 @@ yearLabel phase =
         ShadowPuzzle _ ->
             eraYear Shadows1973
 
+        MendingFrame _ ->
+            eraYear Shadows1973
+
         BookMystery _ ->
             eraYear Search1998
 
@@ -87,6 +90,9 @@ person phase =
             Actor.Walter
 
         ShadowPuzzle _ ->
+            Actor.Henry
+
+        MendingFrame _ ->
             Actor.Henry
 
         BookMystery _ ->

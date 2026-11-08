@@ -34,6 +34,12 @@ clue world clueId =
                 [ "One photograph in a wooden frame, taken outside the shop: Grandad Walter with his walking stick, Henry beside him, and little Edwin in front, squinting into the sun."
                 , "Written underneath: “Grandad Walter, Dad and me.”"
                 ]
+                    ++ (if world.tradition /= NotRevisited then
+                            [ "The glass is cracked and held together with old tape, ever since the night it fell after the 1973 shadow story." ]
+
+                        else
+                            []
+                       )
             }
 
         -- Present hub

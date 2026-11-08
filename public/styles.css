@@ -1121,6 +1121,12 @@ button:disabled { cursor: not-allowed; }
 .r-crates { opacity: var(--show-crates, 0); }
 .r-timber { opacity: var(--show-timber, 0); }
 .r-bucket { opacity: var(--show-bucket, 0); }
+.r-frame-gone { opacity: var(--show-frame-gone, 0); }
+.r-frame-tape { opacity: var(--show-frame-tape, 0); }
+
+/* The family photograph: fallen after the 1973 show, taped up ever after. */
+.stage[data-frame="fallen"] { --show-frame-gone: 1; }
+.stage[data-frame="taped"] { --show-frame-tape: 1; }
 
 .stage[data-era="1950"] {
   --show-bare: 1;
@@ -1518,6 +1524,73 @@ svg-art { display: contents; }
 
 .sheet__body ul { margin: 0; padding-left: 1.25rem; }
 .sheet__body li + li { margin-top: 0.4rem; }
+
+/* ---------- 1973 broken frame (Views.Frame) ---------- */
+
+.frame-scene { grid-template-rows: 3.75rem 40.25rem; }
+.frame-scene .side { grid-column: 2; grid-row: 2; }
+
+/* The workbench: the frame on the left, the loose glass on the right. */
+.frame-bench {
+  position: relative;
+  grid-column: 1;
+  grid-row: 2;
+  border-radius: 0.25rem;
+  background: repeating-linear-gradient(0deg, var(--wood) 0 1.6rem, var(--wood-light) 1.6rem 1.68rem);
+  box-shadow: 0.2rem 0.25rem 0 var(--cast);
+}
+
+.frame {
+  position: absolute;
+  left: 1rem;
+  top: 9rem;
+  padding: 1.4rem;
+  border: 0.15rem solid var(--ink);
+  border-radius: 0.3rem;
+  background: #5a3428;
+  box-shadow: inset 0 0 0 0.5rem #6e4430, 0.3rem 0.4rem 0 var(--cast);
+}
+
+.frame__photo {
+  position: relative;
+  width: 27rem;
+  height: 18.5625rem;
+  border: 0.12rem solid var(--ink);
+  background: url("assets/frame-photo-1973.svg") center / 100% 100% no-repeat;
+}
+
+.frame__photo svg-art svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Glass: loose pieces on the bench, gaps in the frame, and pieces put back. */
+.glass { stroke: var(--ink); stroke-linejoin: round; }
+.glass--gap { fill: rgba(31, 23, 18, 0.55); stroke: #f6eedb; stroke-width: 2; stroke-dasharray: 6 4; }
+.glass--placed { fill: rgba(232, 240, 245, 0.18); stroke-width: 1.4; }
+.glass--loose { fill: rgba(214, 230, 238, 0.82); stroke-width: 2.5; }
+.glass__shine { fill: none; stroke: #ffffff; stroke-width: 3; stroke-linecap: round; opacity: 0.8; }
+
+.frame__gap,
+.frame__piece {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.frame__gap:hover,
+.frame__gap:focus-visible { background: rgba(223, 233, 239, 0.35); outline: none; }
+
+.frame__piece svg-art svg { display: block; width: 100%; height: 100%; }
+.frame__piece:hover { filter: brightness(1.1) drop-shadow(0 0 0.2rem #fff); }
+.frame__piece:focus-visible { outline: none; filter: brightness(1.15); }
+.frame__piece.is-held { filter: drop-shadow(0 0 0.25rem var(--interact)) brightness(1.1); }
+.frame__piece.is-held .glass--loose { stroke: var(--interact); stroke-width: 5; fill: rgba(223, 233, 239, 0.95); }
 
 /* ---------- Reopening shelf ---------- */
 

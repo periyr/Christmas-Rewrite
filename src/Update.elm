@@ -13,6 +13,7 @@ never touches history, attempts or arrangements.
 
 import Domain exposing (..)
 import Rules.Attempts as Attempts exposing (SubmitResult(..))
+import Rules.Frame
 import Rules.Mystery
 import Rules.Placement as Placement
 import Rules.Repair
@@ -212,6 +213,14 @@ play msg model =
             case model.phase of
                 ShadowPuzzle puzzle ->
                     movePuzzle ShadowPuzzle Rules.Shadow.accepts action puzzle model
+
+                _ ->
+                    model
+
+        FrameMove action ->
+            case model.phase of
+                MendingFrame placement ->
+                    withPlacement MendingFrame (Placement.apply Rules.Frame.accepts action placement) model
 
                 _ ->
                     model
@@ -615,9 +624,21 @@ advance model =
                     if index + 1 < List.length all then
                         goTo (Transition (Slideshow era (index + 1))) model
 
+                    else if era == Shadows1973 then
+                        -- After the show, in the dark, the family photograph falls:
+                        -- mend its glass before going home (contract v1.7).
+                        goTo (MendingFrame Placement.empty) model
+
                     else
                         -- The last slide: tear back through the page to the present.
                         goTo (Transition (TearToPresent era 0)) model
+
+        MendingFrame placement ->
+            if Rules.Frame.isSolved placement then
+                goTo (Transition (TearToPresent Shadows1973 0)) model
+
+            else
+                { model | notice = Just NotSolvedYet }
 
         Transition ReturningToPresent ->
             if Timeline.fate model.history == Nothing then

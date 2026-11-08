@@ -3,28 +3,29 @@
   <!-- Wooden frame and cream mat -->
   <rect x="2" y="2" width="596" height="466" rx="8" fill="#5a3428" stroke="#291e1a" stroke-width="3" />
   <rect x="22" y="22" width="556" height="426" rx="2" fill="#f2e4c9" stroke="#291e1a" stroke-width="2" />
-  <clipPath id="photo"><rect x="60" y="56" width="480" height="330" /></clipPath>
-  <g clip-path="url(#photo)">
+  <clipPath id="photo"><rect x="0" y="0" width="480" height="330" /></clipPath>
+  <g transform="translate(60 56)">
+    <g clip-path="url(#photo)">
     <!-- Sky and sun -->
-    <rect x="60" y="56" width="480" height="330" fill="#7687ab" />
-    <circle cx="510" cy="82" r="22" fill="#d9a443" stroke="#291e1a" stroke-width="2" />
+    <rect x="0" y="0" width="480" height="330" fill="#7687ab" />
+    <circle cx="450" cy="26" r="22" fill="#d9a443" stroke="#291e1a" stroke-width="2" />
     <!-- Shop front: wall, sign, two windows and the door -->
-    <rect x="60" y="102" width="410" height="284" fill="#31542f" stroke="#291e1a" stroke-width="2" />
-    <rect x="90" y="114" width="350" height="34" fill="#f2e4c9" stroke="#291e1a" stroke-width="2.5" />
-    <text x="265" y="140" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="bold" fill="#291e1a" letter-spacing="3">HALE’S BOOKSHOP</text>
+    <rect x="0" y="46" width="410" height="284" fill="#31542f" stroke="#291e1a" stroke-width="2" />
+    <rect x="30" y="58" width="350" height="34" fill="#f2e4c9" stroke="#291e1a" stroke-width="2.5" />
+    <text x="205" y="84" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="bold" fill="#291e1a" letter-spacing="3">HALE’S BOOKSHOP</text>
     <g stroke="#f2e4c9" stroke-width="5">
-      <rect x="82" y="164" width="120" height="150" fill="#d4d3d1" />
-      <rect x="328" y="164" width="120" height="150" fill="#d4d3d1" />
-      <path d="M 142 164 L 142 314 M 82 239 L 202 239 M 388 164 L 388 314 M 328 239 L 448 239" />
+      <rect x="22" y="108" width="120" height="150" fill="#d4d3d1" />
+      <rect x="268" y="108" width="120" height="150" fill="#d4d3d1" />
+      <path d="M 82 108 L 82 258 M 22 183 L 142 183 M 328 108 L 328 258 M 268 183 L 388 183" />
     </g>
-    <rect x="228" y="168" width="74" height="192" fill="#893f43" stroke="#291e1a" stroke-width="2.5" />
-    <rect x="240" y="182" width="50" height="60" fill="#d4d3d1" stroke="#291e1a" stroke-width="2" />
-    <circle cx="290" cy="278" r="3.5" fill="#d9a443" stroke="#291e1a" stroke-width="1.5" />
+    <rect x="168" y="112" width="74" height="192" fill="#893f43" stroke="#291e1a" stroke-width="2.5" />
+    <rect x="180" y="126" width="50" height="60" fill="#d4d3d1" stroke="#291e1a" stroke-width="2" />
+    <circle cx="230" cy="222" r="3.5" fill="#d9a443" stroke="#291e1a" stroke-width="1.5" />
     <!-- Pavement -->
-    <rect x="60" y="356" width="480" height="330" fill="#5a3428" />
-    <path d="M 60 356 L 540 356" stroke="#291e1a" stroke-width="2" />
+    <rect x="0" y="300" width="480" height="330" fill="#5a3428" />
+    <path d="M 0 300 L 480 300" stroke="#291e1a" stroke-width="2" />
     <!-- Grandad Walter, facing in -->
-      <g transform="translate(128.64 159.35999999999999) scale(1.32 1.32)">
+      <g transform="translate(68.64 103.35999999999999) scale(1.32 1.32)">
   <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
   <g fill="#f2e4c9" stroke="#f2e4c9" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
     <path d="M 40,76 C 34,86 32,96 24,94 C 28,84 36,74 40,76 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
@@ -93,7 +94,7 @@
   </g>
       </g>
     <!-- Dad Henry, facing in -->
-      <g transform="translate(465.28 153.27999999999997) scale(-1.36 1.36)">
+      <g transform="translate(405.28 97.27999999999997) scale(-1.36 1.36)">
   <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
   <g fill="#f2e4c9" stroke="#f2e4c9" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
     <path d="M 40,76 C 34,86 32,96 24,94 C 28,84 36,74 40,76 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
@@ -162,7 +163,7 @@
 
       </g>
     <!-- Little Edwin, in front -->
-      <g transform="translate(256.72 229.28) scale(0.86 0.86)">
+      <g transform="translate(196.72 173.28) scale(0.86 0.86)">
   <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
   <g fill="#f2e4c9" stroke="#f2e4c9" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
     <path d="M 40,76 C 34,86 32,96 24,94 C 28,84 36,74 40,76 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
@@ -213,8 +214,10 @@
 
       </g>
     <!-- Faded with age -->
-    <rect x="60" y="56" width="480" height="330" fill="#d9a443" opacity="0.18" />
+    <rect x="0" y="0" width="480" height="330" fill="#d9a443" opacity="0.18" />
+
+    </g>
+    <rect x="0" y="0" width="480" height="330" fill="none" stroke="#291e1a" stroke-width="2" />
   </g>
-  <rect x="60" y="56" width="480" height="330" fill="none" stroke="#291e1a" stroke-width="2" />
   <text x="300" y="426" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="20" fill="#291e1a">Grandad Walter, Dad and me</text>
 </svg>

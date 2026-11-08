@@ -4,6 +4,7 @@ module Domain exposing
     , BookId(..), RecoverableBook(..), RuinedBook(..), Condition(..), CoverColour(..), Damage(..), SalvageSlot(..)
     , ShelfSlot(..), ShelfOrder(..)
     , Character(..), Prop(..), Cutout(..), Scene(..), ShadowSlot(..), SceneCast, Staging
+    , Shard(..), FrameGap(..)
     , CandidateId(..), BookTab(..), RememberedDetail(..)
     , ClueId(..), HubProp(..)
     , Placement, PlacementAction(..), Notice(..)
@@ -260,6 +261,24 @@ type alias Staging =
 
 
 -- ═══════════════════════════════════════════════════════════════════════
+-- 1973 · BROKEN FRAME (after the performance, added in contract v1.7)
+-- ═══════════════════════════════════════════════════════════════════════
+
+
+{-| A piece of the photograph's broken glass: Shard 1 … Shard 9. -}
+type Shard
+    = Shard Int
+
+
+{-| The gap in the frame that each piece fills: FrameGap 1 … FrameGap 9.
+Shard n only fits FrameGap n.
+-}
+type FrameGap
+    = FrameGap Int
+
+
+
+-- ═══════════════════════════════════════════════════════════════════════
 -- 1998 · FORGOTTEN BOOK (main puzzle)
 -- ═══════════════════════════════════════════════════════════════════════
 
@@ -367,8 +386,9 @@ never reveal correctness.
   - IncompleteSubmission: Submit on a main puzzle with cards/cut-outs/choice missing.
   - TargetFull: the clicked group (crate, "Not this week") has no free space.
   - DoesNotFitThere: that kind of item cannot go in that slot.
-  - NotSolvedYet: Advance in a warm-up (salvage or reopening shelf) before it
-    is solved. The player stays and keeps correcting. (Added in contract v1.2.)
+  - NotSolvedYet: Advance in a warm-up (salvage, reopening shelf or the broken
+    frame) before it is solved. The player stays and keeps correcting. (Added in
+    contract v1.2.)
 
 -}
 type Notice
@@ -531,6 +551,8 @@ type Phase
     | RepairBoard (MainPuzzle (Placement TaskId RepairSlot))
     | ReopeningShelf (Placement RecoverableBook ShelfSlot)
     | ShadowPuzzle (MainPuzzle (Placement Cutout ShadowSlot))
+      -- After the 1973 performance, in the dark (contract v1.7).
+    | MendingFrame (Placement Shard FrameGap)
     | BookMystery (MainPuzzle (Maybe CandidateId))
     | Transition Transition
     | Ending
@@ -571,9 +593,9 @@ action does, so the rules and the chapter flow are unchanged:
   - ClueSpot clue: same as `Inspect clue`.
   - BoxSpot: the box beneath the counter (introduction). Same as `Advance`.
   - DiarySpot: the glowing diary on the counter (present). Same as `OpenNextDiary`.
-  - CratesSpot, BoardSpot, ShelfSpot, StageSpot, BookTableSpot: open the
-    current phase's puzzle panel (salvage, repair board, reopening shelf,
-    shadow stage, candidate books).
+  - CratesSpot, BoardSpot, ShelfSpot, StageSpot, BookTableSpot, BrokenGlassSpot:
+    open the current phase's puzzle panel (salvage, repair board, reopening
+    shelf, shadow stage, candidate books, broken frame).
 
 -}
 type Hotspot
@@ -585,6 +607,7 @@ type Hotspot
     | ShelfSpot
     | StageSpot
     | BookTableSpot
+    | BrokenGlassSpot
 
 
 {-| The human the player walks around: Edwin, or the ancestor whose diary is
@@ -630,6 +653,7 @@ type Msg
     | BoardMove (PlacementAction TaskId RepairSlot)
     | ShelfMove (PlacementAction RecoverableBook ShelfSlot)
     | StageMove (PlacementAction Cutout ShadowSlot)
+    | FrameMove (PlacementAction Shard FrameGap)
     | ChooseCandidate CandidateId
     | Submit
     | Retry

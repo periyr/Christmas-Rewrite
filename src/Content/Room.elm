@@ -40,6 +40,9 @@ label hotspot =
         BookTableSpot ->
             "Compare the four books"
 
+        BrokenGlassSpot ->
+            "Pick up the broken glass"
+
 
 clueLabel : ClueId -> String
 clueLabel clue =

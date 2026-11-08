@@ -5,11 +5,15 @@ Update.update: it starts only from the last slide, runs on clamped animation
 frames to the existing "Back to the present" narration, Skip lands in the same
 state, everything else is ignored, and the hub, unlocking and endings that
 follow are unchanged.
+
+From contract v1.7, 1973 mends the broken frame after its last slide, so its
+tear starts from the mended frame instead (see FrameTests).
 -}
 
 import Domain exposing (..)
 import Expect
 import Fixtures
+import Rules.Frame
 import Rules.Travel as Travel
 import Test exposing (Test, describe, test)
 import Timeline
@@ -60,14 +64,20 @@ resolved =
     ]
 
 
-{-| The chapter's last slide, with its "Return to the present" button. -}
+{-| Where the tear home starts: the chapter's last slide, with its "Return to
+the present" button, or for 1973 the mended frame with "Hang it back up" (v1.7).
+-}
 lastSlide : Era -> History -> Model
 lastSlide era history =
     let
         model =
             Fixtures.initialModel
     in
-    { model | history = history, phase = Transition (Slideshow era (List.length (Timeline.slides era history) - 1)) }
+    if era == Shadows1973 then
+        { model | history = history, phase = MendingFrame { placed = List.map2 Tuple.pair Rules.Frame.shards Rules.Frame.gaps, selected = Nothing } }
+
+    else
+        { model | history = history, phase = Transition (Slideshow era (List.length (Timeline.slides era history) - 1)) }
 
 
 slideAt : Era -> History -> Int -> Model
