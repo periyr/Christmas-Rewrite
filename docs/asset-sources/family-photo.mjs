@@ -2,16 +2,16 @@
 //
 //   clue-family-photographs.svg        the photograph in the shop (Content.Clues FamilyPhotograph)
 //   clue-family-photographs-taped.svg  the same after 1973, its broken glass held with tape
-//   frame-photo-1973.svg               the photo in the frame in 1973, under the broken glass
-//                                      (Views.Frame), without frame or caption
+//   frame-photo-1973.svg               the same photo without frame or caption, under the
+//                                      broken glass of the 1973 puzzle (Views.Frame)
 //
 //   node docs/asset-sources/family-photo.mjs
 //
-// Each is a photo outside the shop, with the same bodies as the player sprites
-// (chibi-family.mjs). The family photograph (around 1990): grandad Walter with
-// his walking stick, dad Henry, and little Edwin in front, squinting into the
-// sun. The 1973 photo: Walter with Henry as a boy. The cracks and tape follow
-// the nine glass pieces of the 1973 puzzle (Views.Frame.pieces, same numbers).
+// A photo outside the shop, with the same bodies as the player sprites
+// (chibi-family.mjs): grandad Walter with his walking stick, dad Henry, and
+// little Edwin in front, squinting into the sun. The cracks follow the nine
+// glass pieces of the 1973 puzzle (Views.Frame.pieces, same numbers), and every
+// crack has a strip of tape.
 
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -43,24 +43,6 @@ const littleEdwin = {
   face: squint,
   topLabel: "Bowl haircut",
   top: [p("M 17,48 C 13,24 30,12 50,12 C 71,12 83,25 81,44 C 72,40 62,37 52,37 C 40,37 28,41 22,46 C 20,48 18,49 17,48 Z", HAIR.brown)],
-};
-
-// Henry as a boy, in the 1950s: side-parted hair like the grown-up Henry, a
-// teal jumper with a collar, short trousers, brown shoes, a big smile.
-const boyHenry = {
-  sleeve: CLOTH.teal, forearm: CLOTH.teal, trousers: CLOTH.olive, shoes: HAIR.brown,
-  torso: [
-    p(TORSO, CLOTH.teal),
-    p("M 38,74 L 48,82 L 58,74 L 56,80 L 48,86 L 40,80 Z", CREAM, { "stroke-width": 2 }),
-  ],
-  torsoLabel: "Torso (jumper and shirt collar)",
-  behindHead: [],
-  face: [
-    ...PEOPLE.walter.face.slice(0, 7),
-    p("M 52.6,59.4 Q 57.6,66 62.6,59.4 Z", INK, { "stroke-width": 1.6 }),
-  ],
-  topLabel: "Side-parted hair",
-  top: [p("M 18,44 C 16,22 30,13 48,13 C 66,13 80,22 79,33 C 71,27 59,25 49,27 C 40,29 32,34 28,40 C 24,43 21,44 18,44 Z", HAIR.brown)],
 };
 
 // Walter's walking stick in his front hand, in sprite units, drawn with the
@@ -120,14 +102,6 @@ ${place(littleEdwin, 238, 0.86)}`,
   { wall: CLOTH.green, fade: 0.18 },
 );
 
-const in1950s = shopPhoto(
-  `    <!-- Walter -->
-${place(PEOPLE.walter, 170, 1.34)}
-    <!-- Henry as a boy, facing his dad -->
-${place(boyHenry, 300, 0.9, { flip: true })}`,
-  { wall: CLOTH.olive, fade: 0.32 },
-);
-
 // ── the broken glass: the nine pieces of the 1973 puzzle ──────────────────
 // Same numbers as Views.Frame.pieces (photo units, 480 x 330).
 const PIECES = [
@@ -141,17 +115,24 @@ const PIECES = [
   [[219, 126], [0, 60], [0, 0], [90, 0], [237, 105]],
   [[237, 105], [291, 117], [350, 133], [336, 176], [309, 204], [255, 195], [246, 168], [219, 126]],
 ];
-// Short strips of tape over four of the long cracks, from the edge part of the
-// way in, so they never cover a face.
-const TAPE = [
-  [[90, 0], [237, 105], 0.55],
-  [[480, 90], [350, 133], 0.6],
-  [[120, 330], [255, 195], 0.45],
-  [[0, 250], [246, 168], 0.4],
-];
-function tapeStrip([[x1, y1], [xEnd, yEnd], reach]) {
-  const x2 = x1 + (xEnd - x1) * reach, y2 = y1 + (yEnd - y1) * reach;
-  const len = Math.hypot(x2 - x1, y2 - y1), w = 5;
+// Every crack: each edge between two pieces, once. Edges along the photo's
+// border are the frame, not cracks.
+const onBorder = ([x, y]) => x === 0 || x === PW || y === 0 || y === PH;
+const sameSide = ([ax, ay], [bx, by]) => (ax === bx && (ax === 0 || ax === PW)) || (ay === by && (ay === 0 || ay === PH));
+const CRACKS = [];
+for (const piece of PIECES) {
+  piece.forEach((a, i) => {
+    const b = piece[(i + 1) % piece.length];
+    const along = onBorder(a) && onBorder(b) && sameSide(a, b);
+    const seen = CRACKS.some(([c1, c2]) => (c1 === a && c2 === b) || (c1.join() === b.join() && c2.join() === a.join()));
+    if (!along && !seen) CRACKS.push([a, b]);
+  });
+}
+// A strip of tape along a whole crack, a little past each end.
+function tapeStrip([[xa, ya], [xb, yb]]) {
+  const full = Math.hypot(xb - xa, yb - ya), ux = (xb - xa) / full, uy = (yb - ya) / full;
+  const x1 = xa - ux * 3, y1 = ya - uy * 3, x2 = xb + ux * 3, y2 = yb + uy * 3;
+  const len = Math.hypot(x2 - x1, y2 - y1), w = 4.5;
   const nx = (-(y2 - y1) / len) * w, ny = ((x2 - x1) / len) * w;
   const f = (n) => Math.round(n * 10) / 10;
   return `<path d="M ${f(x1 + nx)},${f(y1 + ny)} L ${f(x2 + nx)},${f(y2 + ny)} L ${f(x2 - nx)},${f(y2 - ny)} L ${f(x1 - nx)},${f(y1 - ny)} Z" />`;
@@ -160,9 +141,9 @@ const taped = `    <!-- Cracks in the mended glass -->
     <g fill="none" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round" opacity="0.75">
 ${PIECES.map((piece) => `      <path d="M ${piece.map((q) => q.join(",")).join(" L ")} Z" />`).join("\n")}
     </g>
-    <!-- Strips of tape over the long cracks -->
+    <!-- A strip of tape along every crack -->
     <g fill="${CREAM}" fill-opacity="0.7" stroke="${INK}" stroke-width="1" stroke-linejoin="round">
-${TAPE.map((t) => "      " + tapeStrip(t)).join("\n")}
+${CRACKS.map((t) => "      " + tapeStrip(t)).join("\n")}
     </g>`;
 
 // ── the files ──────────────────────────────────────────────────────────────
@@ -188,10 +169,10 @@ const files = {
   "clue-family-photographs.svg": framed(family, "", "clue-family-photographs: Walter, Henry and little Edwin outside the shop"),
   "clue-family-photographs-taped.svg": framed(family, taped, "clue-family-photographs-taped: the same photograph, its glass mended with tape in 1973"),
   "frame-photo-1973.svg": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${PW} ${PH}" width="${PW}" height="${PH}">
-  <!-- frame-photo-1973: Walter and Henry as a boy outside the shop, the photo under the 1973 glass puzzle. Built by docs/asset-sources/family-photo.mjs -->
+  <!-- frame-photo-1973: the family photograph without frame or caption, under the 1973 glass puzzle. Built by docs/asset-sources/family-photo.mjs -->
   <clipPath id="photo"><rect x="0" y="0" width="${PW}" height="${PH}" /></clipPath>
   <g clip-path="url(#photo)">
-${in1950s}
+${family}
   </g>
 </svg>
 `,

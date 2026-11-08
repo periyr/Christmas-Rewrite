@@ -196,8 +196,8 @@ Worked out against `Rules.Room` (room 1280 × 720 logical px, 1rem = 16 px, feet
 | File | Clue | Size | Notes |
 |---|---|---|---|
 | `clue-family-photographs.svg` | `FamilyPhotograph` | 600 × 470 | One photo in a wooden frame, outside the shop: Grandad Walter with his walking stick, Henry, and little Edwin (about five) squinting into the sun, with "Grandad Walter, Dad and me" written underneath. Built from the player sprites by `docs/asset-sources/family-photo.mjs`. |
-| `clue-family-photographs-taped.svg` | `FamilyPhotograph` after 1973 | 600 × 470 | The same photograph, its glass cracked along the nine pieces of the 1973 puzzle and held with short strips of tape. Same generator. |
-| `frame-photo-1973.svg` | (the 1973 broken-frame puzzle) | 480 × 330 | The photo in the frame in 1973, without frame or caption: Walter with Henry as a boy outside the shop. `Views.Frame` draws the glass pieces over it. Same generator. |
+| `clue-family-photographs-taped.svg` | `FamilyPhotograph` after 1973 | 600 × 470 | The same photograph, its glass cracked along the nine pieces of the 1973 puzzle, with a strip of tape along every crack. Same generator. |
+| `frame-photo-1973.svg` | (the 1973 broken-frame puzzle) | 480 × 330 | The same family photograph without frame or caption, so the puzzle shows exactly the picture in the shop. `Views.Frame` draws the glass pieces over it. Same generator. |
 | `clue-closure-notice.svg` | `ClosureNotice` | 480 × 440 | Edwin's handwritten notice, taped up, with the words of `Content.Clues ClosureNotice`. Handwriting is the Caveat font (SIL OFL 1.1) as outlines, built by `docs/asset-sources/closure-note.mjs`. |
 
 The room overlays for the frame (bare wall and glass on the floor in 1973, tape on the glass afterwards) are drawn in `public/index.html` (`r-frame-gone`, `r-frame-tape`) and switched by `data-frame` on the stage.
