@@ -25,6 +25,7 @@
   - Click a crate or the "Not this week" box to drop it into the first free space.
   - Click a placed object to move it again. Click the same object again to put it down.
 - **Clues:** reading documents and objects never costs anything.
+- **Shuffled every game:** the 1950 salvage books, shelf books and task cards, and the 1998 candidate books, lie in a new order each new game (the same order when a save is continued).
 - **Main puzzles:** the 1950 planning board and the 1973 shadow story give **two attempts**. The 1998 forgotten book gives **one**: sending the wrong book loses that chapter straight away.
   - An incomplete submission is refused and costs nothing.
   - A first wrong answer shows which rules were broken, and you keep your arrangement to fix it.

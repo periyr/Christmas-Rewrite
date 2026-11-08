@@ -1,14 +1,16 @@
-module Rules.BookTrays exposing (candidates, salvage, shelf)
+module Rules.BookTrays exposing (candidates, salvage, shelf, tasks)
 
 {-| Tray orders are derived from the run seed. Placement only tracks where
 each book is, so taking a book out never changes its reserved tray position.
-The 1998 candidate books are laid out in a seeded order too.
+The 1950 task cards and the 1998 candidate books are laid out in a seeded
+order too.
 -}
 
-import Domain exposing (BookId, CandidateId, RecoverableBook(..))
+import Domain exposing (BookId, CandidateId, RecoverableBook(..), TaskId)
 import Random
 import Rules.Books as Books
 import Rules.Mystery as Mystery
+import Rules.Repair as Repair
 import Rules.Shelf as Shelf
 
 
@@ -31,6 +33,14 @@ shelf seed =
             -- The original tray order is a known unsolved fallback.
             -- No retry loop is needed, even if a seed produces a solution.
             [ LettersFromTheSea, PocketOfWonders, GardensInWinter, WinterTales, AtlasOfSmallPlaces, BirdsongForBeginners ]
+
+
+{-| The seven 1950 task cards in this game's tray order. The seed is offset so
+this order doesn't follow the salvage tray.
+-}
+tasks : Int -> List TaskId
+tasks seed =
+    shuffle (seed + 1950) Repair.allTasks
 
 
 {-| The four 1998 books in this game's order on the table. The seed is offset

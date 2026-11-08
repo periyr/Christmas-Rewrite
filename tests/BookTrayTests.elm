@@ -8,6 +8,7 @@ import Fuzz
 import Html.Attributes exposing (attribute)
 import Rules.BookTrays as Trays
 import Rules.Books as Books
+import Rules.Repair as Repair
 import Rules.Placement as Placement
 import Rules.Room as Room
 import Rules.Shelf as Shelf
@@ -36,6 +37,16 @@ suite =
                     , \_ -> Expect.equal (Trays.candidates seed) (Trays.candidates seed)
                     ]
                     ()
+        , fuzz Fuzz.int "the 1950 task cards: each seed lays out all seven, once each, and the same seed gives the same order" <|
+            \seed ->
+                Expect.all
+                    [ \_ -> expectInventory Repair.allTasks (Trays.tasks seed)
+                    , \_ -> Expect.equal (Trays.tasks seed) (Trays.tasks seed)
+                    ]
+                    ()
+        , test "the 1950 task cards come in a different order across seeds" <|
+            \_ ->
+                varied (List.map Trays.tasks (List.range 0 20))
         , test "the 1998 books come in a different order across seeds" <|
             \_ ->
                 varied (List.map Trays.candidates (List.range 0 20))

@@ -513,7 +513,8 @@ Requested by the team (Peri):
 
 - **Attempts per chapter:** `Rules.Attempts.maxAttemptsFor : Era -> Int` is 2 for 1950 and 1973 and **1 for 1998**. `submit` uses it, so a wrong book is resolved as `Failed` with `attemptsUsed = 1` and no `ReviewingFirstMistake`. `maxAttempts` (2) stays for the other two. `Views.Common.attemptsDisplayOf total` draws the tokens for any total, and the book table shows one.
 - **Book order:** `Rules.BookTrays.candidates runSeed` gives the four candidates in this game's order (seed offset so it doesn't follow the 1950 trays), and `Views.BookTable.view` takes that order. It is fixed for a run, so resuming a save shows the same table.
-- **Tests:** `AttemptsTests` and `MysteryTests` cover the one-try rule; `BookTrayTests` covers the order.
+- **Task cards:** `Rules.BookTrays.tasks runSeed` gives the seven 1950 task cards in this game's tray order (its own seed offset), and `Views.RepairBoard.view` takes that order, the same way.
+- **Tests:** `AttemptsTests` and `MysteryTests` cover the one-try rule; `BookTrayTests` covers both orders.
 
 ## Release build
 
