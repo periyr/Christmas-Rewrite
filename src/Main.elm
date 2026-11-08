@@ -9,6 +9,10 @@ and is written back through the `saveGame` port whenever the History or the
 player's place changes (see Save), so leaving early is safe. "New game" and
 "Start again" at the ending replace it with the new game's first page.
 
+Sound effects: after each game step, Sounds.forStep compares the model before
+and after and the names go out through the `playSound` port to
+public/audio.js, which also plays the quiet background music.
+
 Subscriptions (contract v1.3) only turn browser events into room messages:
 the walk keys and E, animation frames while the player is moving or a diary
 trip is playing, and the page being hidden.
@@ -24,6 +28,7 @@ import Json.Encode as Encode
 import Rules.Room
 import Rules.Travel
 import Save exposing (Saved)
+import Sounds
 import Update
 import View
 import Views.TitleScreen as TitleScreen
@@ -31,6 +36,10 @@ import Views.TitleScreen as TitleScreen
 
 {-| Writes the save to localStorage (public/index.html). -}
 port saveGame : Encode.Value -> Cmd msg
+
+
+{-| Plays one sound effect by name (public/audio.js; names from Sounds). -}
+port playSound : String -> Cmd msg
 
 
 {-| The title screen or the game, plus the save as it is stored right now,
@@ -79,7 +88,16 @@ update msg app =
                     ( app, Cmd.none )
 
         ( Game gameMsg, Playing model ) ->
-            checkpoint { app | screen = Playing (Update.update gameMsg model) }
+            let
+                next =
+                    Update.update gameMsg model
+
+                ( saved, saveCmd ) =
+                    checkpoint { app | screen = Playing next }
+            in
+            ( saved
+            , Cmd.batch (saveCmd :: List.map playSound (Sounds.forStep gameMsg model next))
+            )
 
         _ ->
             ( app, Cmd.none )

@@ -141,6 +141,7 @@
     attributeChangedCallback(_name, _old, markup) { this.innerHTML = markup; }
   });
 </script>
+<script src="audio.js"></script>
 <script src="elm.js"></script>
 <script>
   // Saved progress (Save.elm): read once at startup, written by the saveGame port.
@@ -150,6 +151,9 @@
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (_) {}
   const app = Elm.Main.init({ node: document.getElementById("app"), flags: saved });
+  if (app.ports && app.ports.playSound) {
+    app.ports.playSound.subscribe((name) => window.GameAudio && window.GameAudio.play(name));
+  }
   if (app.ports && app.ports.saveGame) {
     app.ports.saveGame.subscribe((data) => {
       try {
