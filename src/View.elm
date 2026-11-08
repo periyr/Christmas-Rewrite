@@ -427,15 +427,12 @@ cluePicture world clue =
         HubProp CommunityWall ->
             Just ("assets/clue-wall-" ++ foundationFile world.tradition ++ ".svg")
 
-        HubProp OrderDesk ->
-            Just ("assets/clue-desk-" ++ foundationFile world.onlineService ++ ".svg")
-
         _ ->
             Nothing
 
 
-{-| The community wall and order desk have a picture per state of the
-foundation they show. The roof and shelves are words only.
+{-| The community wall has a picture per state of the 1973 tradition. The
+roof and shelves and the order desk are words only.
 -}
 foundationFile : Foundation -> String
 foundationFile foundation =
