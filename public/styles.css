@@ -9,6 +9,17 @@
    .feedback, .goal.is-unmet) and in the forgiving salvage warm-up, whose live
    feedback the brief allows. Nothing on the main puzzles uses it before submission. */
 
+/* Fonts, bundled so the game needs no network (SIL Open Font License; see
+   public/assets/ASSETS.md). Alegreya is the book face for all game text,
+   Fraunces is only for the game's title, and Courier Prime is the typed form. */
+@font-face { font-family: "Alegreya"; src: url("assets/font-alegreya-regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("assets/font-alegreya-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("assets/font-alegreya-bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("assets/font-alegreya-bold-italic.woff2") format("woff2"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("assets/font-fraunces-semibold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("assets/font-courier-prime-regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("assets/font-courier-prime-bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
 :root {
   font-size: min(1.25vw, 2.2222vh);
 
@@ -28,8 +39,9 @@
   --warn: #99301f;
   --cast: rgba(43, 33, 25, 0.38);
 
-  --font-book: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  --font-form: "Courier New", Courier, monospace;
+  --font-book: "Alegreya", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --font-title: "Fraunces", "Alegreya", Georgia, serif;
+  --font-form: "Courier Prime", "Courier New", Courier, monospace;
 
   /* 1950 is the fallback room treatment. */
   --wall: #d9cfae;
@@ -2296,6 +2308,8 @@ svg-art { display: contents; }
 
 .title-screen__name {
   margin: 0;
+  font-family: var(--font-title);
+  font-weight: 600;
   color: var(--paper);
   font-size: 4.6rem;
   line-height: 0.95;
@@ -2342,10 +2356,13 @@ svg-art { display: contents; }
   transition: background 0.15s, box-shadow 0.15s;
 }
 
-.title-menu__item:hover,
+.title-menu__item:disabled { color: #6f6252; cursor: default; }
+.title-menu__item:disabled::before { background: #4a4035; }
+
+.title-menu__item:not(:disabled):hover,
 .title-menu__item:focus-visible { color: var(--paper); }
 
-.title-menu__item:hover::before,
+.title-menu__item:not(:disabled):hover::before,
 .title-menu__item:focus-visible::before {
   background: #ffd46b;
   box-shadow: 0 0 0.5rem 0.15rem rgba(255, 212, 107, 0.7);

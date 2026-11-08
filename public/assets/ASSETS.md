@@ -230,3 +230,13 @@ B owns where these go and when they show. "Player scale" means the same 1 unit �
 | `room-book-stacks.svg` | 80 × 48 | Player scale, rests on y = 42.5, centred on x = 42 | 1998: the four books at `BookTableSpot` (x 820): a stack of two, one on its own, and one leaning. Plain covers and no titles, so none stands out. Layout from Gemini's design, redrawn with help from Claude so the books read at game size. Fits on the floor, or on a small table if B adds one. |
 
 None of these contains text. Any label, address or screen text belongs in the interface.
+
+## Fonts
+
+| File | Font | Licence | Used for |
+|---|---|---|---|
+| `font-alegreya-*.woff2` | Alegreya by Juan Pablo del Peral (Huerta Tipográfica), Latin subset from Fontsource | SIL Open Font License 1.1 | All game text |
+| `font-fraunces-semibold.woff2` | Fraunces by Undercase Type, Latin subset from Fontsource | SIL Open Font License 1.1 | The game title on the title screen |
+| `font-courier-prime-*.woff2` | Courier Prime by Alan Dague-Greene, Latin subset from Fontsource | SIL Open Font License 1.1 | Typed forms (the delivery slip) |
+
+The handwritten closure notice is a drawing, so it keeps its own lettering.

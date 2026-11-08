@@ -7,13 +7,13 @@ menu sit on the left. A garland of Christmas lights hangs across the top: each
 bulb lights up when the pointer passes over it and slowly fades again, so
 sweeping across it leaves a trail of light.
 
-"Continue" only appears when there is a save. The messages come from Main,
+"Continue" is always there and works once there is a save. The messages come from Main,
 which owns the menu, so this view knows nothing about saving.
 
 -}
 
 import Html exposing (Html, button, div, h1, nav, node, p, span, text)
-import Html.Attributes exposing (attribute, class, style, type_)
+import Html.Attributes exposing (attribute, class, disabled, style, type_)
 import Html.Events exposing (onClick)
 
 
@@ -45,13 +45,14 @@ view config =
 menu : Config msg -> Html msg
 menu config =
     let
+        -- Always shown, so the menu keeps its shape; it only works with a save.
         continue =
             case config.onContinue of
                 Just msg ->
-                    [ item msg "Continue" [] ]
+                    item msg "Continue" []
 
                 Nothing ->
-                    []
+                    button [ type_ "button", class "title-menu__item", disabled True ] [ text "Continue" ]
 
         note =
             case config.onContinue of
@@ -62,7 +63,7 @@ menu config =
                     []
     in
     nav [ class "title-menu", attribute "aria-label" "Menu" ]
-        (continue ++ [ item config.onNewGame "New Game" note ])
+        [ continue, item config.onNewGame "New Game" note ]
 
 
 item : msg -> String -> List (Html.Attribute msg) -> Html msg

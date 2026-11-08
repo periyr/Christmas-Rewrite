@@ -4,10 +4,10 @@ port module Main exposing (main)
 
 The start/load menu wraps the game here, so Domain and Update stay unchanged:
 the page opens on the title screen (Views.TitleScreen) with "New game" and,
-when a save exists, "Continue". The saved History arrives as the flag and is
-written back through the `saveGame` port whenever the player reaches a
-checkpoint, the present-day shop or the ending (see Save). "New game" and
-"Start again" at the ending clear it (the port is sent null).
+"Continue", which works once there is a save. The save arrives as the flag
+and is written back through the `saveGame` port whenever the History or the
+player's place changes (see Save), so leaving early is safe. "New game" and
+"Start again" at the ending replace it with the new game's first page.
 
 Subscriptions (contract v1.3) only turn browser events into room messages:
 the walk keys and E, animation frames while the player is moving or a diary
@@ -29,7 +29,7 @@ import View
 import Views.TitleScreen as TitleScreen
 
 
-{-| Writes the save to localStorage (public/index.html). null clears it. -}
+{-| Writes the save to localStorage (public/index.html). -}
 port saveGame : Encode.Value -> Cmd msg
 
 
@@ -67,23 +67,16 @@ update : AppMsg -> App -> ( App, Cmd AppMsg )
 update msg app =
     case ( msg, app.screen ) of
         ( NewGame, Title ) ->
-            ( { screen = Playing Update.init, saved = Nothing }, clearSave app )
+            -- The old save is replaced straight away by the new game's first page.
+            checkpoint { screen = Playing Update.init, saved = Nothing }
 
         ( Continue, Title ) ->
             case app.saved of
-                Just history ->
-                    ( { app | screen = Playing (Save.resume history) }, Cmd.none )
+                Just saved ->
+                    ( { app | screen = Playing (Save.resume saved) }, Cmd.none )
 
                 Nothing ->
                     ( app, Cmd.none )
-
-        ( Game StartAgain, Playing model ) ->
-            -- Starting again from the ending is a new game: the old save goes.
-            if model.phase == Ending then
-                ( { screen = Playing (Update.update StartAgain model), saved = Nothing }, clearSave app )
-
-            else
-                ( app, Cmd.none )
 
         ( Game gameMsg, Playing model ) ->
             checkpoint { app | screen = Playing (Update.update gameMsg model) }
@@ -92,36 +85,25 @@ update msg app =
             ( app, Cmd.none )
 
 
-{-| Saves when the game stands in the present-day shop or at the ending with
-a History that is not the stored one. Mid-chapter progress is never saved:
-Continue always resumes from the last checkpoint.
+{-| Saves whenever the History or the player's place differs from the stored
+save. Walking, panels and puzzle moves change neither, so they write nothing.
 -}
 checkpoint : App -> ( App, Cmd AppMsg )
 checkpoint app =
     case app.screen of
         Playing model ->
-            if isCheckpoint model.phase && app.saved /= Just model.history then
-                ( { app | saved = Just model.history }, saveGame (Save.encode model.history) )
+            let
+                current =
+                    { history = model.history, place = Save.placeOf model }
+            in
+            if app.saved /= Just current then
+                ( { app | saved = Just current }, saveGame (Save.encode current) )
 
             else
                 ( app, Cmd.none )
 
         Title ->
             ( app, Cmd.none )
-
-
-isCheckpoint : Phase -> Bool
-isCheckpoint phase =
-    phase == PresentHub || phase == Ending
-
-
-clearSave : App -> Cmd msg
-clearSave app =
-    if app.saved == Nothing then
-        Cmd.none
-
-    else
-        saveGame Encode.null
 
 
 view : App -> Html AppMsg

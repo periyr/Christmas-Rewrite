@@ -1,11 +1,14 @@
-module Save exposing (Saved, decode, encode, resume, storageVersion)
+module Save exposing (Place, Saved, decode, encode, placeOf, resume, storageVersion)
 
 {-| Saving and loading progress (start/load menu).
 
-History is the only stored progress (see CONTRACT.md), so a save is just the
-History, turned into JSON. Main writes it to the browser's localStorage through
-a port whenever the player reaches a checkpoint (the present-day shop or the
-ending), and reads it back as a flag when the page opens.
+History is the only stored progress (see CONTRACT.md). A save is that History
+plus the Place the player had reached, turned into JSON. Main writes it to the
+browser's localStorage through a port whenever either changes, and reads it
+back as a flag when the page opens, so a player who leaves early comes back to
+the same screen: the same introduction page, the shop, the ending, or the
+chapter they were in. A chapter restarts from its beginning, because puzzle
+arrangements are working state and never stored.
 
 Every custom type is written as a plain string tag. Each type has one table
 below that both the encoder and the decoder use, so the two cannot drift
@@ -22,9 +25,68 @@ import Timeline
 import Update
 
 
-{-| A readable save: the History it holds. -}
+{-| A readable save. -}
 type alias Saved =
-    History
+    { history : History
+    , place : Place
+    }
+
+
+{-| Where to come back to. -}
+type Place
+    = InIntroduction IntroStep
+    | InShop
+    | InChapter Era
+    | AtEnding
+
+
+{-| The place for the screen the player is on. A chapter counts only until it
+is recorded in History; after that (its slides, the way home) the player comes
+back to the shop, where the next diary is waiting.
+-}
+placeOf : Model -> Place
+placeOf model =
+    let
+        chapter era =
+            if List.any (\record -> record.era == era) model.history then
+                InShop
+
+            else
+                InChapter era
+    in
+    case model.phase of
+        Introduction step ->
+            InIntroduction step
+
+        PresentHub ->
+            InShop
+
+        Salvage _ ->
+            chapter Repairs1950
+
+        RepairBoard _ ->
+            chapter Repairs1950
+
+        ReopeningShelf _ ->
+            chapter Repairs1950
+
+        ShadowPuzzle _ ->
+            chapter Shadows1973
+
+        BookMystery _ ->
+            chapter Search1998
+
+        Transition (OpeningDiary era) ->
+            chapter era
+
+        Transition (TimeTravel era _) ->
+            chapter era
+
+        Transition _ ->
+            InShop
+
+        Ending ->
+            AtEnding
 
 
 {-| Bumped if the format ever changes, so old saves are ignored, not misread. -}
@@ -39,24 +101,32 @@ storageVersion =
 -- ═══════════════════════════════════════════════════════════════════════
 
 
-{-| The model to continue from: the saved History, back in the present-day
-shop, or at the ending once every diary has been resolved.
--}
+{-| The model to continue from: the saved History, on the saved Place. -}
 resume : Saved -> Model
-resume history =
+resume { history, place } =
     let
         start =
             Update.init
+
+        finished =
+            (Timeline.deriveWorld history).nextDiary == Nothing
     in
     { start
         | history = history
         , phase =
-            case (Timeline.deriveWorld history).nextDiary of
-                Just _ ->
-                    PresentHub
+            case place of
+                InIntroduction step ->
+                    Introduction step
 
-                Nothing ->
-                    Ending
+                InChapter era ->
+                    Update.startChapter era
+
+                _ ->
+                    if finished then
+                        Ending
+
+                    else
+                        PresentHub
         , room = Rules.Room.initialRoom
     }
 
@@ -68,10 +138,11 @@ resume history =
 
 
 encode : Saved -> E.Value
-encode history =
+encode { history, place } =
     E.object
         [ ( "version", E.int storageVersion )
         , ( "history", E.list encodeRecord history )
+        , ( "place", encodePlace place )
         ]
 
 
@@ -89,10 +160,52 @@ decoder =
         |> D.andThen
             (\version ->
                 if version == storageVersion then
-                    D.field "history" (D.list recordDecoder)
+                    D.map2 Saved
+                        (D.field "history" (D.list recordDecoder))
+                        (D.field "place" placeDecoder)
 
                 else
                     D.fail "unknown save version"
+            )
+
+
+
+encodePlace : Place -> E.Value
+encodePlace place =
+    case place of
+        InIntroduction step ->
+            E.object [ ( "kind", E.string "Introduction" ), ( "step", encodeTag introSteps step ) ]
+
+        InShop ->
+            E.object [ ( "kind", E.string "Shop" ) ]
+
+        InChapter era ->
+            E.object [ ( "kind", E.string "Chapter" ), ( "era", encodeTag eras era ) ]
+
+        AtEnding ->
+            E.object [ ( "kind", E.string "Ending" ) ]
+
+
+placeDecoder : Decoder Place
+placeDecoder =
+    D.field "kind" D.string
+        |> D.andThen
+            (\kind ->
+                case kind of
+                    "Introduction" ->
+                        D.map InIntroduction (D.field "step" (tagDecoder introSteps))
+
+                    "Shop" ->
+                        D.succeed InShop
+
+                    "Chapter" ->
+                        D.map InChapter (D.field "era" (tagDecoder eras))
+
+                    "Ending" ->
+                        D.succeed AtEnding
+
+                    _ ->
+                        D.fail ("unknown place " ++ kind)
             )
 
 
@@ -304,6 +417,11 @@ tagDecoder table =
 eras : List ( Era, String )
 eras =
     [ ( Repairs1950, "Repairs1950" ), ( Shadows1973, "Shadows1973" ), ( Search1998, "Search1998" ) ]
+
+
+introSteps : List ( IntroStep, String )
+introSteps =
+    [ ( PackingUp, "PackingUp" ), ( DiariesFound, "DiariesFound" ), ( ClockStopped, "ClockStopped" ) ]
 
 
 outcomes : List ( Outcome, String )

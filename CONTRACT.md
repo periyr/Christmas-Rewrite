@@ -497,6 +497,16 @@ Hotspot: | BrokenGlassSpot    -- x 1150, the glass on the floor; opens the panel
 - **Afterwards:** whenever 1973 is resolved (`world.tradition /= NotRevisited`), the rooms of 1998, the present and the ending get `data-frame="taped"` (tape on the frame's glass), and `FamilyPhotograph` shows the taped picture and mentions the tape. The present-day hub now also has `ClueSpot FamilyPhotograph` (x 1200).
 - **Tests:** `tests/FrameTests.elm`. The journey, return and shadow tests mend the frame where they used to go straight home from 1973.
 
+## Title screen and saving (added on feature/start-load-menu)
+
+The page opens on a title screen (`Views.TitleScreen`) with Continue and New Game. `Domain.elm` and `Update.elm` are unchanged: `Main.elm` wraps the game in a small `App` model (title or playing) and owns the menu.
+
+- **What is saved:** `Save.elm` stores the History plus the player's place (`InIntroduction step`, `InShop`, `InChapter era`, `AtEnding`) as JSON in `localStorage`, through the `saveGame` port. Main writes it whenever either changes, so walking and puzzle moves write nothing. A chapter in progress resumes from its start, because arrangements are working state.
+- **Loading:** `public/index.html` passes the stored save as the flag. A missing, blocked or unreadable save is treated as no save, and Continue is greyed out.
+- **New Game / Start again** replace the save with the new game's first page.
+- **Fonts:** all game text uses Alegreya, the title uses Fraunces, the typed slip uses Courier Prime. The files are bundled in `public/assets/` (credits in `ASSETS.md`), so nothing loads from the network.
+- Tests: `tests/SaveTests.elm`.
+
 ## Release build
 
 There are no `Debug.todo` stubs left, so the optimized build works. For the submission, run:
