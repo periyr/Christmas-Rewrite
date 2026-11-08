@@ -2258,237 +2258,138 @@ svg-art { display: contents; }
 
 /* ---------- Title screen: the start/load menu (Views.TitleScreen) ----------
 
-   A usual game title screen inside Hale's Bookshop at Christmas: logo, title
-   and menu in the middle; a garland along the top and one shelf along the
-   bottom. Room-art style: flat fills, dark #291e1a outlines, shadows down and
-   to the right. Bulbs light on hover and fade slowly after, so a sweep leaves
-   a trail. Shelf books slide up on hover; menu books slide out of the stack. */
+   The present-day shop, dimmed, with snow falling in front. Title and menu on
+   the left; the garland across the top. Bulbs light on hover and fade slowly
+   after, so a sweep leaves a trail. */
 
 .title-screen {
   --outline: #291e1a;
-  background: var(--wood-dark);
+  background: #1a130e;
   font-family: var(--font-book);
 }
 
-/* Dark panelled wall with a warm pool of light behind the logo. */
-.title-screen__wall {
+.title-screen__room {
+  position: absolute;
+  inset: -1%;
+  background: url("assets/room-present.jpg") center / cover no-repeat;
+  filter: blur(0.12rem) brightness(0.42) sepia(0.25);
+}
+
+/* Darker on the left so the title and menu read clearly. */
+.title-screen__shade {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 34rem 24rem at 50% 44%, rgba(233, 197, 106, 0.16), transparent 70%),
-    repeating-linear-gradient(90deg, transparent 0 9.6rem, rgba(41, 30, 26, 0.35) 9.6rem 9.8rem),
-    linear-gradient(180deg, #3f2c1c, #2e211a 70%, #241912);
+  background: linear-gradient(90deg, rgba(26, 19, 14, 0.94) 0 32%, rgba(26, 19, 14, 0.55) 55%, rgba(26, 19, 14, 0.35));
 }
 
-.title-screen__centre {
+.title-screen__panel {
   position: absolute;
-  left: 50%;
-  top: 9.6rem;
-  width: 34rem;
-  transform: translateX(-50%);
+  left: 6rem;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2.2rem;
+  justify-content: center;
+  gap: 2.8rem;
 }
 
-/* Logo */
-
-.title-logo { text-align: center; }
-
-.title-logo__art { width: 12rem; margin: 0 auto; filter: drop-shadow(0.2rem 0.3rem 0 rgba(0, 0, 0, 0.35)); }
-.title-logo__art svg { display: block; width: 100%; }
-
-.title-logo__name {
-  margin: 0.6rem 0 0;
+.title-screen__name {
+  margin: 0;
   color: var(--paper);
-  font-size: 3.6rem;
-  line-height: 1;
-  letter-spacing: 0.05rem;
-  text-shadow: 0.2rem 0.25rem 0 var(--outline);
+  font-size: 4.6rem;
+  line-height: 0.95;
+  text-shadow: 0.23rem 0.28rem 0 var(--outline);
 }
 
-.title-logo__tagline {
-  margin: 0.55rem 0 0;
-  color: #e9c56a;
-  font-size: 1.25rem;
+.title-screen__tagline {
+  margin: 0.7rem 0 0;
+  color: #cdbf9f;
+  font-size: 1.3rem;
   font-style: italic;
-  letter-spacing: 0.04rem;
 }
 
-/* Menu: a short stack of books */
+/* Menu: plain lines, each with a small bulb that lights on hover. */
 
 .title-menu {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.4rem;
 }
 
-.title-book {
+.title-menu__item {
   position: relative;
-  display: block;
-  width: 17rem;
-  height: 3.3rem;
-  padding: 0;
-  border: 0.16rem solid var(--outline);
-  border-radius: 0.35rem 0.15rem 0.15rem 0.35rem;
-  color: var(--paper);
-  font-weight: 700;
-  font-size: 1.35rem;
-  letter-spacing: 0.06rem;
-  box-shadow: 0.14rem 0.18rem 0 var(--cast);
-  transition: transform 0.22s ease-out, box-shadow 0.22s ease-out;
+  padding: 0.3rem 0 0.3rem 2rem;
+  background: none;
+  border: 0;
+  color: #cdbf9f;
+  font-size: 1.7rem;
+  transition: color 0.15s;
 }
 
-/* Gold bands at both ends of each spine. */
-.title-book::before {
+.title-menu__item::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, transparent 0.8rem, #d9a443 0.8rem 1.1rem, transparent 1.1rem calc(100% - 1.1rem), #d9a443 calc(100% - 1.1rem) calc(100% - 0.8rem), transparent calc(100% - 0.8rem));
-  pointer-events: none;
+  left: 0.35rem;
+  top: 50%;
+  width: 0.62rem;
+  height: 0.86rem;
+  margin-top: -0.43rem;
+  border: 0.09rem solid var(--outline);
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  background: #7d6a3c;
+  transition: background 0.15s, box-shadow 0.15s;
 }
 
-.title-book__label { position: relative; }
+.title-menu__item:hover,
+.title-menu__item:focus-visible { color: var(--paper); }
 
-.title-book--continue { background: #893f43; }
-.title-book--new { background: #31542f; }
-
-.title-book:hover,
-.title-book:focus-visible {
-  transform: translateX(1.2rem);
-  box-shadow: 0.3rem 0.35rem 0 var(--cast);
+.title-menu__item:hover::before,
+.title-menu__item:focus-visible::before {
+  background: #ffd46b;
+  box-shadow: 0 0 0.5rem 0.15rem rgba(255, 212, 107, 0.7);
 }
 
-.title-book:active { transform: translateX(0.9rem) translateY(0.08rem); }
-
-.title-book[data-note]::after {
+.title-menu__item[data-note]::after {
   content: attr(data-note);
   position: absolute;
-  left: calc(100% + 0.7rem);
+  left: calc(100% + 1rem);
   top: 50%;
-  width: 11rem;
-  padding: 0.3rem 0.55rem;
-  background: var(--paper);
-  border: 0.12rem solid var(--outline);
-  border-radius: 0.2rem;
-  color: var(--ink);
-  font-size: 0.85rem;
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0;
-  text-align: left;
-  opacity: 0;
   transform: translateY(-50%);
-  transition: opacity 0.2s;
-  pointer-events: none;
+  white-space: nowrap;
+  color: #9c8d70;
+  font-size: 0.95rem;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
-.title-book[data-note]:is(:hover, :focus-visible)::after { opacity: 1; }
+.title-menu__item[data-note]:is(:hover, :focus-visible)::after { opacity: 1; }
 
-/* The shelf along the bottom */
+/* Snow */
 
-.title-shelf {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 7.4rem;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 0 3rem;
-  border-top: 0.18rem solid var(--outline);
-  background: linear-gradient(180deg, var(--case-back), #241912);
-}
-
-/* The plank the books stand on. */
-.title-shelf::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1rem;
-  background: var(--case);
-  border-top: 0.18rem solid var(--outline);
-}
-
-.title-shelf__books {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: flex-end;
-  gap: 0.12rem;
-  margin-bottom: 1rem;
-}
-
-.title-spine {
-  position: relative;
-  flex: none;
-  background: var(--spine);
-  border: 0.12rem solid var(--outline);
-  border-bottom: none;
-  border-radius: 0.12rem 0.12rem 0 0;
-  /* Two thin bands, like the painted spines in the room. */
-  background-image:
-    linear-gradient(180deg, transparent 12%, rgba(246, 238, 219, 0.35) 12% 16%, transparent 16% 80%, rgba(246, 238, 219, 0.35) 80% 84%, transparent 84%);
-  transition: transform 0.22s ease-out, box-shadow 0.22s ease-out;
-}
-
-.title-spine:hover {
-  transform: translateY(-1rem);
-  box-shadow: 0.2rem 0.3rem 0 var(--cast);
-}
-
-.title-gap { flex: none; }
-
-/* The family diaries: the generations who kept the shop. */
-.title-spine--diary {
-  --spine: #5a3428;
-  width: 2.4rem;
-  height: 6rem;
-  background-image:
-    linear-gradient(180deg, transparent 10%, #d9a443 10% 13%, transparent 13% 87%, #d9a443 87% 90%, transparent 90%);
-}
-
-.title-spine__year {
+.title-snow {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  color: #e9c56a;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08rem;
-}
-
-.title-spine--diary::after {
-  content: attr(data-owner);
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 0.5rem);
-  z-index: 3;
-  padding: 0.2rem 0.6rem;
-  white-space: nowrap;
-  background: var(--paper);
-  border: 0.12rem solid var(--outline);
-  border-radius: 0.2rem;
-  box-shadow: 0.12rem 0.16rem 0 var(--cast);
-  color: var(--ink);
-  font-size: 0.9rem;
-  font-style: italic;
-  opacity: 0;
-  transform: translate(-50%, 0.4rem);
-  transition: opacity 0.2s, transform 0.2s;
+  z-index: 1;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.title-spine--diary:hover::after { opacity: 1; transform: translate(-50%, 0); }
+.title-snow__flake {
+  position: absolute;
+  top: -1rem;
+  border-radius: 50%;
+  background: rgba(246, 238, 219, 0.75);
+  animation: title-snow linear infinite;
+}
+
+@keyframes title-snow {
+  from { transform: translate(0, 0); }
+  50% { transform: translate(1.2rem, 23rem); }
+  to { transform: translate(0, 47rem); }
+}
 
 /* Garland and lights */
 
@@ -2549,5 +2450,5 @@ svg-art { display: contents; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .title-spine, .title-book { transition: none; }
+  .title-snow { display: none; }
 }
