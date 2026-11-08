@@ -196,20 +196,22 @@ pieces =
     ]
 
 
-{-| Where each loose piece lies on the bench (top left, in rem), mixed up so
-neighbours in the frame are not neighbours here.
+{-| Where each loose piece lies on the bench (top left, in rem). Mixed up once
+and kept: no piece lies on its own side of the photo, and neighbours in the
+frame are not neighbours here. Every piece stays on the bench, clear of the
+frame, and pieces overlap no more than their cut shapes allow.
 -}
 benchSpots : List ( Int, ( Float, Float ) )
 benchSpots =
-    [ ( 1, ( 2, 1 ) )
-    , ( 9, ( 18, 1.5 ) )
-    , ( 5, ( 6, 31.8 ) )
-    , ( 6, ( 32, 0.8 ) )
-    , ( 8, ( 32, 11.5 ) )
-    , ( 7, ( 32.5, 21.5 ) )
-    , ( 3, ( 49.5, 1.5 ) )
-    , ( 4, ( 47.5, 15.5 ) )
-    , ( 2, ( 45, 30 ) )
+    [ ( 5, ( 2, 1 ) )
+    , ( 8, ( 18, 1.5 ) )
+    , ( 2, ( 6, 31.8 ) )
+    , ( 7, ( 32, 0.8 ) )
+    , ( 4, ( 32, 11.5 ) )
+    , ( 6, ( 32.5, 21.5 ) )
+    , ( 9, ( 49.5, 1.5 ) )
+    , ( 3, ( 47.5, 15.5 ) )
+    , ( 1, ( 45, 30 ) )
     ]
 
 
