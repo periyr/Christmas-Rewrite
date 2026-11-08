@@ -26,7 +26,7 @@ A full record of where AI was and wasn't used in **Christmas Rewrite**, for the 
 | Walking characters | Google Gemini designs, rebuilt in code | Gemini drew the designs; a script written with Claude rebuilds all four on one shared body |
 | Room props, family photograph, closure notice | Claude | SVG made with Claude's help from our descriptions |
 | Shadow fox puppet | The team | Redrawn by hand |
-| Music and sound | — | The game has none |
+| Music and sound | Claude Code | Entirely generated in code by Claude Code: every effect and the music are synthesised with the Web Audio API (`public/audio.js`, `src/Sounds.elm`). There are no sound files. |
 
 ---
 
@@ -99,6 +99,16 @@ The full list of files is in `public/assets/ASSETS.md`.
 - One shared palette, listed in `ASSETS.md`.
 - Ruined and good books share colour families, so colour never gives away a book's condition.
 - The three matching mystery books use the identical illustration, so the picture alone never gives the answer.
+
+### Music and sound
+
+All of the game's audio was generated entirely in code by Claude Code. There are no recorded or downloaded sound files.
+
+- **How it works:** `public/audio.js` builds every sound at runtime with the browser's Web Audio API (oscillators, noise, filters and a short generated reverb). `src/Sounds.elm` decides which sounds each game step plays by comparing the game state before and after it, and sends their names to `audio.js` through a port.
+- **Sound effects:** page turns, opening and closing clues and panels, picking up and placing books, cards, cut-outs and glass, success and mistake sounds, footsteps, the diary opening, the trip back in time, the tear home, the clock stopping, both endings, and the fox, owl and child voices and scene sounds of the 1973 shadow-puppet show.
+- **Music:** "Silent Night" (Franz Gruber, 1818, public domain), played as a quiet looping music box.
+- **Mute:** a toggle, remembered in the browser.
+- **Our part:** we asked for each sound and for changes until it fit (for example quieter music, and fixing the shadow-play sounds being cut off).
 
 ## 7. Example prompts **[team to fill in]**
 

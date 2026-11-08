@@ -67,7 +67,7 @@ Christmas Rewrite is written in [Elm](https://elm-lang.org), with HTML, CSS and 
   - The room props are flat SVG made for the team with help from Claude.
   - The family photograph and the handwritten closure notice are SVG made with help from Claude. The photograph reuses the walking characters (`docs/asset-sources/family-photo.mjs`).
 - **Fonts:** none bundled. The game uses fonts already installed on the player's system (Palatino or Georgia, and Courier). The handwriting on the closure notice, Walter's diary page, the glass delivery slip, the 1973 shadow-story scripts and stage sketches, and Henry's note on the back of the 1973 photograph is the Caveat font (SIL Open Font License 1.1, The Caveat Project Authors), turned into drawn outlines (`docs/asset-sources/closure-note.mjs`, `docs/asset-sources/handwritten-clues.mjs`, `docs/asset-sources/shadow-clues.mjs`, `docs/asset-sources/archive-photo.mjs`).
-- **Sound:** none.
+- **Sound:** every sound effect and the music are generated in code with the Web Audio API (`public/audio.js`), written with Claude Code. There are no sound files. The music is "Silent Night" (Franz Gruber, 1818, public domain), played as a quiet music box.
 - **Software:** Elm 0.19.1 and the packages elm/core, elm/browser, elm/html (BSD-3-Clause); elm-test for testing; Node.js for the build scripts.
 
 **Source:** https://github.com/periyr/Christmas-Rewrite [This repository is private. Make it public, or give the judges access, before linking it in the submission.]
