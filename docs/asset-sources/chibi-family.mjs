@@ -205,6 +205,10 @@ const attrs = (o, overrides = {}) =>
     .filter(([k, v]) => k !== "tag" && v !== undefined)
     .map(([k, v]) => `${k}="${v}"`)
     .join(" ");
+// The torso and arms are drawn mirrored about the body's centre line (x = 48),
+// so the chest faces right along with the face and feet.
+const MIRROR = "translate(96 0) scale(-1 1)";
+const mirrored = (shapes) => shapes.map((s) => ({ ...s, transform: MIRROR }));
 const el = (o, overrides) => `<${o.tag} ${attrs(o, overrides)} />`;
 const solid = (s) => s.fill !== "none"; // only filled shapes get a cut-out border
 
@@ -231,11 +235,11 @@ export function figure(person, name) {
     return [trouser, ...extra, p(shoe, person.shoes), ...sole];
   };
   const layers = [
-    ["Far arm", arm(arms[0])],
+    ["Far arm", mirrored(arm(arms[0]))],
     ["Far leg", leg(legs[0])],
     ["Near leg", leg(legs[1])],
-    [person.torsoLabel, person.torso],
-    ["Near arm", arm(arms[1])],
+    [person.torsoLabel, mirrored(person.torso)],
+    ["Near arm", mirrored(arm(arms[1]))],
     ["Hair and head", [...person.behindHead, p(HEAD_PATH, SKIN)]],
   ];
   const border = [...layers.flatMap(([, s]) => s), ...person.top]
@@ -264,7 +268,7 @@ ${figure(PEOPLE[who], name)}
 `;
 }
 
-export { PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, rect, eyes, el };
+export { MIRROR, PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, rect, eyes, el };
 
 // Only writes the sprites when run directly, not when imported.
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {

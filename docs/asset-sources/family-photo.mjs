@@ -11,7 +11,7 @@
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, rect, eyes, el, figure } from "./chibi-family.mjs";
+import { MIRROR, PEOPLE, CREAM, INK, SKIN, CHEEK, HAIR, CLOTH, p, c, rect, eyes, el, figure } from "./chibi-family.mjs";
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "public", "assets", "clue-family-photographs.svg");
 
@@ -54,7 +54,7 @@ const squinting = {
   ],
 };
 
-// Things held, in sprite units, drawn over the figure.
+// Things held, in sprite units, drawn over the figure and mirrored with the arms.
 const hammer = [
   p("M 49,124 L 53,124 L 63,90 L 59,89 Z", HAIR.brown, { "stroke-width": 2.4 }),
   p("M 52,84 L 70,89 L 68,95 L 50,90 Z", HAIR.grey, { "stroke-width": 2.4 }),
@@ -67,7 +67,7 @@ const books = [
   c(31, 103, 4, SKIN),
   c(62, 108, 4, SKIN),
 ].map((s) => ({ ...s, "stroke-width": s.tag === "rect" ? 2.4 : 3 }));
-const holding = (items) => `  <g stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+const holding = (items) => `  <g transform="${MIRROR}" stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
 ${items.map((x) => "    " + el(x)).join("\n")}
   </g>`;
 

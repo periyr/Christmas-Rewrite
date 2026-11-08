@@ -2,31 +2,31 @@
   <!-- player-edwin-young-walk-1: facing right, soles on y = 152, feet centred near x = 48. Body drawn with Google Gemini, built by docs/asset-sources/chibi-family.mjs -->
   <!-- Cut-out border: every outer shape again in cream, 2 units wider than the outline -->
   <g fill="#f2e4c9" stroke="#f2e4c9" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M 40,76 C 30,82 24,94 18,90 C 28,80 36,74 40,76 Z" fill="#f2e4c9" />
-    <path d="M 24,94 C 18,104 14,110 8,106 C 14,98 18,90 24,94 Z" fill="#f2e4c9" />
-    <ellipse cx="25" cy="95" rx="5" ry="3.6" fill="#f2e4c9" />
-    <circle cx="11" cy="108" r="4" fill="#f2e4c9" />
+    <path d="M 40,76 C 30,82 24,94 18,90 C 28,80 36,74 40,76 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 24,94 C 18,104 14,110 8,106 C 14,98 18,90 24,94 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <ellipse cx="25" cy="95" rx="5" ry="3.6" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <circle cx="11" cy="108" r="4" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
     <path d="M 38,115 L 26,142 L 36,144 L 48,115 Z" fill="#f2e4c9" />
     <path d="M 26.7,137.7 L 24.8,142 L 37.2,144 L 39.1,139.4 Z" fill="#f2e4c9" />
     <path d="M 26,142 L 36,144 C 40,144.5 42,148 42,152 L 25,152 C 25,146 25,143 26,142 Z" fill="#f2e4c9" />
     <path d="M 48,115 L 60,142 L 72,142 L 60,115 Z" fill="#f2e4c9" />
     <path d="M 56.9,137.7 L 58.8,142 L 73.2,142 L 71.3,137.7 Z" fill="#f2e4c9" />
     <path d="M 60,142 L 72,142 C 76,142 79,146 79,152 L 59,152 C 59,146 59,142 60,142 Z" fill="#f2e4c9" />
-    <path d="M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z" fill="#f2e4c9" />
-    <path d="M 42,77 C 46,79 50,79 54,77 L 55,115 C 51,116.5 46,116.5 42,115 Z" fill="#f2e4c9" />
-    <path d="M 54,76 C 66,82 74,92 66,98 C 58,88 46,78 54,76 Z" fill="#f2e4c9" />
-    <path d="M 74,92 C 82,102 86,108 78,112 C 72,102 66,98 74,92 Z" fill="#f2e4c9" />
-    <ellipse cx="75" cy="93" rx="5" ry="3.6" fill="#f2e4c9" />
-    <circle cx="82" cy="110" r="4" fill="#f2e4c9" />
+    <path d="M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 42,77 C 46,79 50,79 54,77 L 55,115 C 51,116.5 46,116.5 42,115 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 54,76 C 66,82 74,92 66,98 C 58,88 46,78 54,76 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 74,92 C 82,102 86,108 78,112 C 72,102 66,98 74,92 Z" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <ellipse cx="75" cy="93" rx="5" ry="3.6" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
+    <circle cx="82" cy="110" r="4" fill="#f2e4c9" transform="translate(96 0) scale(-1 1)" />
     <path d="M 48,18 C 66,18 78,30 78,46 C 78,64 66,76 48,76 C 30,76 18,64 18,46 C 18,30 30,18 48,18 Z" fill="#f2e4c9" />
     <path d="M 17,52 C 13,26 30,12 50,12 C 71,12 83,25 81,46 L 80,58 C 79,61 75.5,61 74.5,58 C 74,46 68,35 55,29 C 47,34 38,40 33,48 L 31,62 C 27,65 21,64 19,60 Z" fill="#f2e4c9" />
   </g>
   <g stroke="#291e1a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
     <!-- Far arm -->
-    <path d="M 40,76 C 30,82 24,94 18,90 C 28,80 36,74 40,76 Z" fill="#31542f" />
-    <path d="M 24,94 C 18,104 14,110 8,106 C 14,98 18,90 24,94 Z" fill="#e8b98f" />
-    <ellipse cx="25" cy="95" rx="5" ry="3.6" fill="#31542f" />
-    <circle cx="11" cy="108" r="4" fill="#e8b98f" />
+    <path d="M 40,76 C 30,82 24,94 18,90 C 28,80 36,74 40,76 Z" fill="#31542f" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 24,94 C 18,104 14,110 8,106 C 14,98 18,90 24,94 Z" fill="#e8b98f" transform="translate(96 0) scale(-1 1)" />
+    <ellipse cx="25" cy="95" rx="5" ry="3.6" fill="#31542f" transform="translate(96 0) scale(-1 1)" />
+    <circle cx="11" cy="108" r="4" fill="#e8b98f" transform="translate(96 0) scale(-1 1)" />
     <!-- Far leg -->
     <path d="M 38,115 L 26,142 L 36,144 L 48,115 Z" fill="#7687ab" />
     <path d="M 26.7,137.7 L 24.8,142 L 37.2,144 L 39.1,139.4 Z" fill="#7687ab" />
@@ -38,19 +38,19 @@
     <path d="M 60,142 L 72,142 C 76,142 79,146 79,152 L 59,152 C 59,146 59,142 60,142 Z" fill="#291e1a" />
     <path d="M 61,149.4 L 77,149.4" fill="none" stroke="#d9a443" stroke-width="2" />
     <!-- Torso (open flannel shirt over a T-shirt) -->
-    <path d="M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z" fill="#31542f" />
-    <path d="M 37,84 L 37,112" fill="none" stroke="#893f43" stroke-width="1.6" />
-    <path d="M 34.5,93 L 42,93" fill="none" stroke="#893f43" stroke-width="1.6" />
-    <path d="M 34.5,104 L 42,104" fill="none" stroke="#893f43" stroke-width="1.6" />
-    <path d="M 59.5,84 L 59.5,108" fill="none" stroke="#893f43" stroke-width="1.6" />
-    <path d="M 55,93 L 62,93" fill="none" stroke="#893f43" stroke-width="1.6" />
-    <path d="M 55,104 L 62.5,104" fill="none" stroke="#893f43" stroke-width="1.6" />
-    <path d="M 42,77 C 46,79 50,79 54,77 L 55,115 C 51,116.5 46,116.5 42,115 Z" fill="#d9a443" />
+    <path d="M 32,74 C 48,82 64,74 66,114 C 48,122 30,114 32,74 Z" fill="#31542f" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 37,84 L 37,112" fill="none" stroke="#893f43" stroke-width="1.6" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 34.5,93 L 42,93" fill="none" stroke="#893f43" stroke-width="1.6" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 34.5,104 L 42,104" fill="none" stroke="#893f43" stroke-width="1.6" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 59.5,84 L 59.5,108" fill="none" stroke="#893f43" stroke-width="1.6" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 55,93 L 62,93" fill="none" stroke="#893f43" stroke-width="1.6" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 55,104 L 62.5,104" fill="none" stroke="#893f43" stroke-width="1.6" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 42,77 C 46,79 50,79 54,77 L 55,115 C 51,116.5 46,116.5 42,115 Z" fill="#d9a443" transform="translate(96 0) scale(-1 1)" />
     <!-- Near arm -->
-    <path d="M 54,76 C 66,82 74,92 66,98 C 58,88 46,78 54,76 Z" fill="#31542f" />
-    <path d="M 74,92 C 82,102 86,108 78,112 C 72,102 66,98 74,92 Z" fill="#e8b98f" />
-    <ellipse cx="75" cy="93" rx="5" ry="3.6" fill="#31542f" />
-    <circle cx="82" cy="110" r="4" fill="#e8b98f" />
+    <path d="M 54,76 C 66,82 74,92 66,98 C 58,88 46,78 54,76 Z" fill="#31542f" transform="translate(96 0) scale(-1 1)" />
+    <path d="M 74,92 C 82,102 86,108 78,112 C 72,102 66,98 74,92 Z" fill="#e8b98f" transform="translate(96 0) scale(-1 1)" />
+    <ellipse cx="75" cy="93" rx="5" ry="3.6" fill="#31542f" transform="translate(96 0) scale(-1 1)" />
+    <circle cx="82" cy="110" r="4" fill="#e8b98f" transform="translate(96 0) scale(-1 1)" />
     <!-- Hair and head -->
     <path d="M 48,18 C 66,18 78,30 78,46 C 78,64 66,76 48,76 C 30,76 18,64 18,46 C 18,30 30,18 48,18 Z" fill="#e8b98f" />
     <!-- Face -->
