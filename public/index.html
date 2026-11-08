@@ -14,11 +14,35 @@
      CSS tokens under [data-era]. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="room-overlays" viewBox="0 0 1280 720">
-    <!-- Before the shelves are built: bare wall where the right-hand bookcase will stand. Cut round the clock and chair. -->
+    <!-- 1950 and 1998: paints the bookcase corner and side wall back over the
+         picture's painted clock (centre 1145, 140), so the drawn clock can hang
+         on the side wall. Colours sampled from room-1950.jpg around it. First, so
+         it counts as part of the picture: in 1950 the bare wall and empty shelves
+         below cover its bookcase corner until the shelves are built and filled. -->
+    <g class="r-clockpatch" mask="url(#r-clockpatch-mask)">
+      <!-- A soft-edged circle, so the patch fades into the picture instead of showing a seam. -->
+      <filter id="r-clockpatch-soft"><feGaussianBlur stdDeviation="2"/></filter>
+      <mask id="r-clockpatch-mask" maskUnits="userSpaceOnUse" x="1050" y="40" width="200" height="200"><circle cx="1145" cy="140" r="74" fill="#fff" filter="url(#r-clockpatch-soft)"/></mask>
+      <linearGradient id="r-clockpatch-wall" gradientUnits="userSpaceOnUse" x1="1148" x2="1226" y1="0" y2="0"><stop offset="0" stop-color="#5a5248"/><stop offset="0.08" stop-color="#b0a58c"/><stop offset="0.18" stop-color="#bdb197"/><stop offset="1" stop-color="#ccbca3"/></linearGradient>
+      <linearGradient id="r-clockpatch-shelf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1f1611"/><stop offset="1" stop-color="#362925"/></linearGradient>
+      <rect x="1148" y="60" width="80" height="160" fill="url(#r-clockpatch-wall)"/>
+      <rect x="1070" y="61" width="78" height="40" fill="#634430"/>
+      <rect x="1070" y="101" width="62" height="72" fill="url(#r-clockpatch-shelf)"/>
+      <rect x="1070" y="173" width="62" height="10" fill="#664732"/>
+      <rect x="1070" y="183" width="62" height="40" fill="#2a201b"/>
+      <g stroke="#2b1f19" stroke-width="1.5" stroke-linejoin="round">
+        <path fill="#694c3b" d="M1062 104L1073 102L1081 151L1070 153Z"/>
+        <path fill="#5b6566" d="M1105.5 192H1117V225H1105.5Z"/>
+        <path fill="#8f734e" d="M1118.5 195H1131V225H1118.5Z"/>
+      </g>
+      <rect x="1132" y="100" width="16" height="120" fill="#5a3e2a"/>
+      <path fill="none" stroke="#2d1e16" stroke-width="2" d="M1070 100H1133M1070 173H1132M1070 183H1132M1132 100V220M1148 60V220"/>
+    </g>
+    <!-- Before the shelves are built: bare wall where the right-hand bookcase will stand. Cut round the chair. -->
     <g class="r-bare">
       <defs><linearGradient id="r-wall-shade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#d0c1a6"/><stop offset="1" stop-color="#c3b499"/></linearGradient></defs>
       <path fill="#b7a88d" d="M748 36H1156V52H748Z"/>
-      <path fill="url(#r-wall-shade)" d="M748 50H1156V72H1148C1118 74 1090 96 1082 126 1076 156 1092 192 1122 202 1132 206 1142 206 1152 206V432L1125 428C1090 428 1045 430 1024 436 1018 440 1016 444 1016 446H748Z"/>
+      <path fill="url(#r-wall-shade)" d="M748 50H1156V432L1125 428C1090 428 1045 430 1024 436 1018 440 1016 444 1016 446H748Z"/>
       <path fill="#9d8d72" d="M748 444H1016V459H748Z"/>
       <path fill="#736048" d="M748 459H1015C1014 490 1016 520 1020 538L945 545 932 556 930 604 748 604Z"/>
       <path fill="#493b2b" d="M748 604H930V618H748Z"/>
@@ -28,8 +52,8 @@
     <g class="r-empty" fill="#2e231d">
       <rect x="777" y="104" width="205" height="69"/><rect x="777" y="184" width="205" height="75"/><rect x="777" y="271" width="205" height="76"/><rect x="777" y="359" width="205" height="74"/><rect x="777" y="446" width="205" height="73"/>
       <path d="M777 532H982V538L945 545 932 556 930 603H777Z"/>
-      <path d="M1000 104H1090L1080 140 1088 173H1000Z"/>
-      <path d="M1000 184H1096L1115 198 1131 204V259H1000Z"/>
+      <rect x="1000" y="104" width="131" height="69"/>
+      <rect x="1000" y="184" width="131" height="75"/>
       <rect x="1000" y="271" width="131" height="76"/>
       <path d="M1000 359H1131V429L1060 432 1025 436 1000 436Z"/>
       <rect x="1000" y="446" width="15" height="73"/>

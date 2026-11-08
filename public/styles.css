@@ -1894,10 +1894,13 @@ svg-art { display: contents; }
    and its right side is about 13% taller. The swing turns .clock__body inside
    this, so the clock swings flat against the wall.
 
-   The 1950 picture (also used for 1998) and the saved ending have a painted
-   clock on the back wall. There this clock hangs flat over it, a little larger
-   so the painted one doesn't show, and the painted clock's hands overlay is
-   switched off everywhere. */
+   Where it hangs is keyed on [data-era], the same attribute that picks the room
+   picture, so the two always agree. The 1950 picture (also used for 1998) and
+   the saved ending have a painted clock on the back wall. In 1950 and 1998 it is
+   painted over by .r-clockpatch (index.html), so this clock hangs on the side
+   wall as everywhere else. In the saved ending it hangs flat over the painted
+   one, a little larger so that doesn't show. The painted hands overlay is
+   always off. */
 .clock {
   position: absolute;
   z-index: 1;
@@ -1906,24 +1909,36 @@ svg-art { display: contents; }
   width: 6.9%;
   aspect-ratio: 1;
   transform: scaleX(0.87) skewY(-9deg);
-  /* Shadows in the room fall down and to the right. */
-  filter: drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33));
+  /* An era's tone, if it has one; shadows in the room fall down and to the right. */
+  filter: var(--clock-tone,) drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33));
   pointer-events: none;
 }
-
-/* Over the painted clock: centre (1145, 140), radius 64 in the 1950 picture. */
-.stage:is([data-era="1950"], [data-era="1998"]) .clock { left: 83.83%; top: 9.44%; width: 11.25%; transform: none; }
 
 /* Over the saved ending's painted clock: centre (1161, 107), radius 75. */
 .stage[data-era="saved"] .clock { left: 84.47%; top: 3.78%; width: 12.47%; transform: none; }
 
+/* The 1950 and 1973 rooms: centred (1213, 188) above the photograph, clear of
+   the bookcase, the ceiling line, the 1973 garland and the frame's hook. It is
+   no wider than the book spines nearby are tall (63 of 1280), which also brings
+   its outlines down to the pictures' line weight, about 1.5px. */
+.stage:is([data-era="1950"], [data-era="1973"]) .clock { left: 92.32%; top: 21.76%; width: 4.9%; }
+
+/* Both past pictures are painted faded and warmer than the present one, with
+   no filter on them, and 1973's is darker too. The tone fades the whole clock
+   into its picture: each colour lands among the room's own (rim with the frame
+   wood, face with the paper, cap with the brass bell). */
+.stage[data-era="1950"] .clock { --clock-tone: sepia(0.3) contrast(0.9); }
+.stage[data-era="1973"] .clock { --clock-tone: sepia(0.3) contrast(0.9) brightness(0.85); }
+
 /* The hands overlay sits inside an SVG <use>, so it is switched by a variable. */
 .r-hands { opacity: var(--show-hands, 1); }
+.r-clockpatch { opacity: var(--show-clockpatch, 0); }
+.stage:is([data-era="1950"], [data-era="1998"]) { --show-clockpatch: 1; }
 .stage { --show-hands: 0; }
 
 /* Recoloured exactly like the room picture behind it. */
 .stage[data-era="closed"] .clock { filter: brightness(0.5) saturate(0.6) drop-shadow(0.12rem 0.18rem 0.12rem rgba(41, 30, 26, 0.33)); }
-.stage[data-lights="down"] .clock { filter: brightness(0.4) saturate(0.75); }
+.stage[data-lights="down"] .clock { filter: var(--clock-tone,) brightness(0.4) saturate(0.75); }
 
 .clock__body {
   position: absolute;
