@@ -76,6 +76,10 @@ placeOf model =
         BookMystery _ ->
             chapter Search1998
 
+        -- The broken frame comes after 1973 is recorded, so this is the shop.
+        MendingFrame _ ->
+            chapter Shadows1973
+
         Transition (OpeningDiary era) ->
             chapter era
 
