@@ -37,7 +37,8 @@ view world history era index =
                     "Next day"
 
                 _ ->
-                    if isLast then
+                    -- 1973 isn't over after its last slide: the frame falls in the dark (v1.7).
+                    if isLast && era /= Shadows1973 then
                         "Return to the present"
 
                     else
