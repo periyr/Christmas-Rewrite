@@ -7,7 +7,7 @@ All art except the room pictures is flat SVG in the shared palette. No text is d
 - **Covers, diaries, damage, puppets, mystery books:** generated with Google Gemini from the team's prompt and palette, then checked and edited by the team (with help from Claude). `shadow-fox.svg` was redrawn by hand.
 - **Walter and Henry (`player-walter-*.svg`, `player-henry-*.svg`):** built by `docs/asset-sources/chibi-family.mjs` (written with help from Claude) on Walter's body as drawn by Google Gemini from the team's prompt. Henry's look follows Gemini's Henry design, redrawn on that body so the two match.
 - **Young Edwin (`player-edwin-young-*.svg`):** built the same way. His late-90s look follows Gemini's design, redrawn on the shared body.
-- **Present-day Edwin (`player-edwin-present-*.svg`):** built the same way. His cosy Christmas outfit follows Gemini's design; his grey hair, beard and glasses follow the team's brief.
+- **Present-day Edwin (`player-edwin-present-*.svg`):** built the same way. His cosy Christmas outfit follows Gemini's design; he is about 40, with short brown hair, no beard and thin round glasses.
 - **Room props (`room-*.svg`):** hand-written SVG for the team, with help from Claude.
 
 ## Quick mapping for B (existing assets)
@@ -174,7 +174,7 @@ Every frame (Walter's style):
 | Walter | 1950 | `player-walter-idle.svg`, `player-walter-walk-1.svg`, `player-walter-walk-2.svg` | Flat cap `#393e26`, grey hair and moustache, waistcoat `#893f43`, mustard shirt, teal trousers | **Final** |
 | Henry | 1973 | `player-henry-idle.svg`, `player-henry-walk-1.svg`, `player-henry-walk-2.svg` | Side-parted brown hair, collar-length at the back, round glasses, corduroy jacket `#c95937`, mustard turtleneck, flared trousers `#393e26` | **Final** |
 | Edwin (young) | 1998 | `player-edwin-young-idle.svg`, `player-edwin-young-walk-1.svg`, `player-edwin-young-walk-2.svg` | Late-90s look: middle-parted "curtains" hair, open plaid flannel shirt `#31542f` with rolled sleeves over a mustard T-shirt, cuffed jeans `#7687ab`, black boots with a mustard sole line | **Final** |
-| Edwin (present) | present day | `player-edwin-present-idle.svg`, `player-edwin-present-walk-1.svg`, `player-edwin-present-walk-2.svg` | Cosy Christmas Eve look: short grey hair and soft beard, thin round glasses, wine Christmas jumper `#893f43` with a cream Fair Isle star band and ribbed hem, green scarf `#31542f` with mustard stripes, dark jeans `#496669`, brown Chelsea boots | **Final** |
+| Edwin (present) | present day | `player-edwin-present-idle.svg`, `player-edwin-present-walk-1.svg`, `player-edwin-present-walk-2.svg` | Cosy Christmas Eve look, about 40: short brown hair, clean-shaven, thin round glasses, wine Christmas jumper `#893f43` with a cream Fair Isle star band and ribbed hem, green scarf `#31542f` with mustard stripes, dark jeans `#496669`, brown Chelsea boots | **Final** |
 
 #### Placing them in the walking room (contract v1.3)
 
