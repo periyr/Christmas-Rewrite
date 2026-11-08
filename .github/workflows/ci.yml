@@ -12,11 +12,6 @@ on:
 permissions:
   contents: read
 
-# One Pages deployment at a time; a newer push replaces a queued one.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   build:
     name: Test and build
@@ -71,6 +66,11 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
+    # One deployment at a time. A deployment that has started always finishes;
+    # a newer push waits for it instead of cancelling it.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
