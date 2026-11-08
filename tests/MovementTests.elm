@@ -699,7 +699,7 @@ walkableChapter =
                         send (walkTo ShelfSpot ++ shelveSmallToTall ++ [ Advance ]) atShelfPause
 
                     home =
-                        send [ Advance, Advance, Advance ] shelved
+                        send ([ Advance, Advance ] ++ frames 40 50 ++ [ Advance ]) shelved
                 in
                 Expect.all
                     [ \_ -> ( submitted.phase, submitted.room.panelOpen ) |> Expect.equal ( Transition (Slideshow Repairs1950 0), False )
@@ -721,7 +721,7 @@ walkableChapter =
                         send [ Submit, Submit ] walkedAway
 
                     home =
-                        send [ Advance, Advance ] failed
+                        send ([ Advance ] ++ frames 40 50 ++ [ Advance ]) failed
                 in
                 Expect.all
                     [ \_ -> ( Maybe.map .attempts (boardArrangement firstMistake), firstMistake.room.panelOpen ) |> Expect.equal ( Just (ReviewingFirstMistake wrongWeekViolations), True )

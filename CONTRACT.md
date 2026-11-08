@@ -1,4 +1,4 @@
-# Shared contract v1.5: Person A handoff
+# Shared contract v1.6: Person A handoff
 
 `one-more-christmas-shared-plan.md` is still the source of truth for the game, together with `visual-and-movement-update.md` (the walking character and visible room). This file records the code contract that implements it. `src/Domain.elm` is the contract itself. Any change to it needs a short message to the team first. Nobody renames shared types or constructors on their own.
 
@@ -54,7 +54,8 @@ view : Model -> Html Msg          -- in src/View.elm
 | `ReopeningShelf placement` | 6 positions, plaque, matched order when complete | `ShelfMove …`, `Inspect ShelfPlaque`, then `Advance` to continue (stays put with `NotSolvedYet` until ordered) |
 | `ShadowPuzzle puzzle` | 3 panels, each with a character slot and a prop slot | `StageMove …`, `Inspect ShadowScript / StageSketch / CutoutBox`, `Submit` ("Perform the story"), `Retry` |
 | `BookMystery puzzle` | 4 candidates, tabs | `Inspect (CandidatePage c tab)`, `Inspect RuthsEmail / RememberedSentence / InscriptionClue`, `ChooseCandidate c`, `Submit` ("Send this book"), `Retry` |
-| `Transition ReturningToPresent` | room changing back | `Advance` |
+| `Transition (TearToPresent era elapsed)` | the tear home from that era's finished room (`Views.Tear`, v1.6) | `SkipTravel`; everything else is ignored |
+| `Transition ReturningToPresent` | "Back to the present" narration over the present-day shop | `Advance` |
 | `Ending` | fate from `(deriveWorld history).fate`: `ShopSaved` or `ShopClosed failedEras` | `ReopenDiary era`, `StartAgain` |
 
 In every phase, if `model.inspecting = Just clue`, show the overlay and dispatch `CloseInspection`. If `model.notice = Just n`, show neutral text and dispatch `DismissNotice` (it also clears on the next move). The notices are `IncompleteSubmission`, `TargetFull`, `DoesNotFitThere` and `NotSolvedYet` (added in v1.2).
@@ -146,8 +147,8 @@ Never call `Rules.Repair.validate` from a view. Correctness exists only after `S
 
 After resolution, keep sending `Advance` for each slide in `Timeline.slides Repairs1950 model.history`:
 
-- **Success:** `WeekdaySlide day task` for Monday to Friday, in the submitted order. On the `ShelveBooks` day the phase becomes `ReopeningShelf`; after the shelf, the slides resume, then `ReopeningSaturday`, `ReturningToPresent` and `PresentHub`.
-- **Failure:** one `ConsequenceSlide Repairs1950 violation` built from the first recorded violation, then `ReturningToPresent` and `PresentHub`. The shelf is not played.
+- **Success:** `WeekdaySlide day task` for Monday to Friday, in the submitted order. On the `ShelveBooks` day the phase becomes `ReopeningShelf`; after the shelf, the slides resume, then `ReopeningSaturday`, the tear home (v1.6), `ReturningToPresent` and `PresentHub`.
+- **Failure:** one `ConsequenceSlide Repairs1950 violation` built from the first recorded violation, then the tear home (v1.6), `ReturningToPresent` and `PresentHub`. The shelf is not played.
 
 ### Violations the repair board can produce (for B's feedback and C's text)
 
@@ -188,8 +189,8 @@ The whole 1950 chapter now runs through `Update`, from a new game to the present
 Introduction ×3 --Advance--> PresentHub --OpenNextDiary--> OpeningDiary Repairs1950 --Advance--> TimeTravel (2.5 s, or SkipTravel) -->
 Salvage --Advance (when solved)--> RepairBoard (fresh: empty board, NoAttemptUsed) --Submit-->
   success: Slideshow 0..  shelving-day slide --Advance--> ReopeningShelf --Advance (when ordered)-->
-           Slideshow (day after shelving) .. ReopeningSaturday --Advance--> ReturningToPresent --Advance--> PresentHub
-  failure: ConsequenceSlide --Advance--> ReturningToPresent --Advance--> PresentHub   (no shelf)
+           Slideshow (day after shelving) .. ReopeningSaturday --Advance--> TearToPresent (v1.6) --> ReturningToPresent --Advance--> PresentHub
+  failure: ConsequenceSlide --Advance--> TearToPresent (v1.6) --> ReturningToPresent --Advance--> PresentHub   (no shelf)
 ```
 
 - The week follows the submitted order. It pauses once, on the `WeekdaySlide day ShelveBooks` slide. After the shelf it resumes on the next day: Friday if shelving was Thursday, straight to Saturday if shelving was Friday. The shelving day is never replayed.
@@ -381,13 +382,13 @@ Both main puzzles are now playable through `Update`, with the same two-attempt f
 - **Complete:** `Rules.Shadow.complete placement` gives `Just staging` only when all six slots hold the right kind of cut-out and each cut-out is used exactly once. Anything else is `IncompleteSubmission` and spends nothing.
 - **Validate:** `Rules.Shadow.validate scriptVariant staging` returns one `SceneConflictsWithScript scene` per scene whose character or prop differs from the script, in scene order. The variant comes from `(Timeline.deriveWorld history).scriptVariant`: the original script after a successful 1950, the neighbours' retelling after a failed one.
 - The scenes are numbered slots, so there are 3! × 3! = **36** complete stagings, not 216. Each variant accepts exactly one, and no staging passes under both. A wrong staging always conflicts in at least two scenes.
-- **Success** plays `PerformanceSlide Scene1..3` with the performed cast. **Failure** plays `ConsequenceSlide Shadows1973 (SceneConflictsWithScript firstScene)`. Then `ReturningToPresent` and `PresentHub`, with the 1998 journal next.
+- **Success** plays `PerformanceSlide Scene1..3` with the performed cast. **Failure** plays `ConsequenceSlide Shadows1973 (SceneConflictsWithScript firstScene)`. Then the tear home (v1.6), `ReturningToPresent` and `PresentHub`, with the 1998 journal next.
 
 ### 1998 forgotten book
 
 - **Complete:** a chosen candidate (`ChooseCandidate c`). Submitting with none chosen is `IncompleteSubmission`.
 - **Validate:** `Rules.Mystery.validate candidate` returns one `DetailDoesNotMatch detail` per remembered detail the book lacks: B lacks `LucyInscription`, C lacks `LanternSentence`, D lacks `FoxLanternIllustration`, and A has all three. The answer doesn't depend on history; only the inscription clue's source does (`FamilyArchive` or `FollowUpEmail`).
-- **Success** plays `ServiceFoundedSlide`. **Failure** plays `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)`. Then `ReturningToPresent` goes straight to `Ending`, because all three chapters are resolved.
+- **Success** plays `ServiceFoundedSlide`. **Failure** plays `ConsequenceSlide Search1998 (DetailDoesNotMatch detail)`. Then the tear home (v1.6) and `ReturningToPresent`, which goes straight to `Ending`, because all three chapters are resolved.
 
 ### For B
 
@@ -407,7 +408,7 @@ Both main puzzles are now playable through `Update`, with the same two-attempt f
 ### State and messages
 
 ```elm
-type Transition = OpeningDiary Era | TimeTravel Era Float | Slideshow Era Int | ReturningToPresent   -- TimeTravel is new
+type Transition = OpeningDiary Era | TimeTravel Era Float | Slideshow Era Int | TearToPresent Era Float | ReturningToPresent   -- TimeTravel is new (TearToPresent: v1.6)
 type Msg = ... | SkipTravel                                                                          -- new
 ```
 
@@ -422,11 +423,12 @@ type Msg = ... | SkipTravel                                                     
 
 | Helper | Meaning |
 |---|---|
+| `returnDuration`, `hasReturned` | 1800 ms: the tear home (v1.6, below). |
 | `duration`, `bookOpen`, `arrival` | 2500, 500 and 1800 ms: the book opens by 500, the destination is reached at 1800, the chapter starts at 2500. |
 | `yearAt era elapsed` | The year on the open book: `Nothing` (the present) until the pages turn, then each year back in turn, then `Just era` from arrival. To 1950: Present, 1998, 1973, 1950. To 1973: Present, 1998, 1973. To 1998: Present, 1998. |
 | `yearsBack era` | That whole list. |
 | `hasArrived elapsed` | From 1800 ms: the room behind the book is the destination's starting room. |
-| `isTravelling phase`, `wantsFrames model` | For views and `Main`. |
+| `isTravelling phase`, `wantsFrames model` | True during either trip (`TimeTravel` or `TearToPresent`). For views and `Main`. |
 
 ### The view (`Views.TimeTravel`, `public/styles.css`)
 
@@ -438,6 +440,44 @@ Made by A for this feature, in B's files, at the team's request; B is free to re
 - **Reduced motion** (`prefers-reduced-motion: reduce`): no turning, spinning or growing. The shop darkens, the open diary shows the destination year, and it fades to the room.
 
 `tests/TravelTests.elm` covers the timing, the clamp, Skip matching finishing, repeated clicks, ignored input, held keys, reopening and the year order.
+
+## The tear home (added in v1.6)
+
+After a chapter's last slide, "Return to the present" no longer cuts straight to the present. It plays a 1.8-second tear in the page, deliberately unlike the trip into the past: no book, no clock, no years.
+
+### State and flow
+
+```elm
+type Transition = ... | TearToPresent Era Float | ...   -- new: the finished era, elapsed ms
+```
+
+```
+last slide of era --Advance--> TearToPresent era 0 --(frames to 1800 ms, or SkipTravel)--> ReturningToPresent --Advance--> PresentHub, or Ending after 1998
+```
+
+- Only `Advance` on a chapter's **last** slide starts it; earlier slides still move on to the next slide. Every era and both outcomes use it.
+- It uses the same clamped frame step as the trip into a diary (`Rules.Travel.step`), and finishes at `Rules.Travel.returnDuration`. `SkipTravel` (the same Skip message) finishes it at once. Both go through `Update.backInThePresent`, which leads to the existing `ReturningToPresent` narration, so they give the same state.
+- During the tear everything else is ignored, as during the trip in: `Advance` (a double click on "Return to the present" starts one tear), walking, `Inspect`, puzzle moves, diary actions. A second `SkipTravel`, and frames afterwards, do nothing. History, attempts and results are never touched. The hub, unlocking and endings that follow are unchanged.
+
+### The view (`Views.Tear`, `public/styles.css`)
+
+Made by A for this feature, in B's files; B is free to restyle it.
+
+- **Two rooms at once,** each in its own `.stage` layer with its own attributes, so neither picks up the other's look:
+  - **the finished era's room** exactly as its last slide left it (`stageAttributes` of that slide: roof, rubble, shelves, window, lights down, and its props), without the caption;
+  - **the present** exactly as the "Back to the present" screen draws it (`present` plus `premises` from the derived world, its props, and Edwin), without the narration.
+
+  So the present behind the tear reflects the real outcomes. After a failed 1950, for example, it shows the stain and the bucket, and parcels appear only if 1998 succeeded.
+- **Timing,** all drawn from `elapsed`:
+  - 0–150 ms: the room holds still.
+  - 150–550 ms: a paper tint and texture settle over it.
+  - 450–700 ms: a thin, ragged golden tear opens near the centre (a `clip-path` polygon on the present layer).
+  - 700–1500 ms: the tear widens past both edges, its paper edges glowing gold.
+  - 1450–1800 ms: the glow fades, then the narration.
+- A **Skip** button is visible throughout, and the overlay takes every click.
+- **Reduced motion:** a plain crossfade from the finished room to the present, with no tear, tint or glow.
+
+`tests/ReturnTests.elm` covers the start from the last slide for every era and outcome, the timing and clamp, Skip matching a finished tear, repeated clicks, ignored input, unchanged history, and the hub, unlocking and endings that follow.
 
 ## Release build
 

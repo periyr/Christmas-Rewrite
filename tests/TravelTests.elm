@@ -227,7 +227,7 @@ reopening : Test
 reopening =
     let
         ending =
-            send [ ChooseCandidate CandidateA, Submit, Advance, Advance ] (arrivedIn Search1998)
+            send [ ChooseCandidate CandidateA, Submit, Advance, SkipTravel, Advance ] (arrivedIn Search1998)
     in
     describe "reopening a diary"
         [ test "the setup reaches an ending" <|
@@ -245,7 +245,7 @@ reopening =
             \_ ->
                 let
                     replayed =
-                        send ([ ReopenDiary Search1998, Advance ] ++ frames 30 50 ++ [ SkipTravel, ChooseCandidate CandidateA, Submit, Advance, Advance ]) ending
+                        send ([ ReopenDiary Search1998, Advance ] ++ frames 30 50 ++ [ SkipTravel, ChooseCandidate CandidateA, Submit, Advance, SkipTravel, Advance ]) ending
                 in
                 ( replayed.phase, send [ ReopenDiary Search1998, Advance ] replayed |> travelling )
                     |> Expect.equal ( Ending, Just ( Search1998, 0 ) )

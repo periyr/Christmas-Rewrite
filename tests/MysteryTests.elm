@@ -201,12 +201,12 @@ suite =
                             )
             , test "all three succeeded: the slideshow ends at the saved shop" <|
                 \_ ->
-                    send [ ChooseCandidate CandidateA, Submit, Advance, Advance ] (mysteryAfter Succeeded Succeeded)
+                    send [ ChooseCandidate CandidateA, Submit, Advance, SkipTravel, Advance ] (mysteryAfter Succeeded Succeeded)
                         |> (\m -> ( m.phase, Timeline.fate m.history ))
                         |> Expect.equal ( Ending, Just ShopSaved )
             , test "a failed 1998 after two successes closes the shop for that reason" <|
                 \_ ->
-                    send [ ChooseCandidate CandidateB, Submit, Retry, Submit, Advance, Advance ] (mysteryAfter Succeeded Succeeded)
+                    send [ ChooseCandidate CandidateB, Submit, Retry, Submit, Advance, SkipTravel, Advance ] (mysteryAfter Succeeded Succeeded)
                         |> (\m -> ( m.phase, Timeline.fate m.history ))
                         |> Expect.equal ( Ending, Just (ShopClosed [ Search1998 ]) )
             ]

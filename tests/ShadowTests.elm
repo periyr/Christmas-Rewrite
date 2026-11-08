@@ -411,7 +411,7 @@ flow =
                         )
         , test "after 1973 resolves, the story returns to the present with the 1998 journal next" <|
             \_ ->
-                send (perform retelling ++ [ Submit, Retry, Submit, Advance, Advance, Advance ]) (shadowAfter Fixtures.repairsSucceeded)
+                send (perform retelling ++ [ Submit, Retry, Submit, Advance, SkipTravel, Advance, Advance ]) (shadowAfter Fixtures.repairsSucceeded)
                     |> (\m -> ( m.phase, (Timeline.deriveWorld m.history).nextDiary ))
                     |> Expect.equal ( PresentHub, Just Search1998 )
         ]

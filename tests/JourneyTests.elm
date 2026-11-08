@@ -109,6 +109,9 @@ playOn fuel model =
             ReopeningShelf _ ->
                 playOn (fuel - 1) (send (shelveSmallToTall ++ [ Advance ]) model)
 
+            Transition (TearToPresent _ _) ->
+                playOn (fuel - 1) (send [ SkipTravel ] model)
+
             _ ->
                 playOn (fuel - 1) (send [ Advance ] model)
 

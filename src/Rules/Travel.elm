@@ -1,11 +1,13 @@
 module Rules.Travel exposing
-    ( duration, bookOpen, arrival
-    , step, isComplete, hasArrived
+    ( duration, bookOpen, arrival, returnDuration
+    , step, isComplete, hasArrived, hasReturned
     , yearsBack, yearAt
     , isTravelling, wantsFrames
     )
 
-{-| The trip back in time when a diary is entered (contract v1.5).
+{-| The trips between the present and the past: into a diary when it is
+entered (contract v1.5), and back through a tear in the page after a chapter's
+last slide (contract v1.6).
 
 All timing lives here and in Update, driven by animation frames: the view only
 draws `TimeTravel era elapsed`. Three stages, in milliseconds:
@@ -37,6 +39,14 @@ arrival =
     1800
 
 
+{-| The way back to the present after a chapter: the tear opens and widens
+until the present fills the screen, then the "Back to the present" narration.
+-}
+returnDuration : Float
+returnDuration =
+    1800
+
+
 {-| The elapsed time after one animation frame. Frame deltas are clamped like
 walking (Rules.Room.maxFrameDelta), so coming back to a hidden tab never jumps.
 -}
@@ -48,6 +58,11 @@ step delta elapsed =
 isComplete : Float -> Bool
 isComplete elapsed =
     elapsed >= duration
+
+
+hasReturned : Float -> Bool
+hasReturned elapsed =
+    elapsed >= returnDuration
 
 
 {-| From here on the destination is reached: its year stays, and the room
@@ -114,11 +129,14 @@ isTravelling phase =
         Transition (TimeTravel _ _) ->
             True
 
+        Transition (TearToPresent _ _) ->
+            True
+
         _ ->
             False
 
 
-{-| Whether Main needs animation frames: while walking, and while travelling. -}
+{-| Whether Main needs animation frames: while walking, and during either trip. -}
 wantsFrames : Model -> Bool
 wantsFrames model =
     Rules.Room.isMoving model || isTravelling model.phase

@@ -102,6 +102,7 @@ fridayShelvingWeek =
 type Seen
     = SawSlide Slide
     | SawShelf
+    | SawTear Era
     | SawReturning
     | SawPresent
     | Stuck Phase
@@ -123,6 +124,10 @@ playToPresent fuel model =
 
             ReopeningShelf _ ->
                 SawShelf :: playToPresent (fuel - 1) (send (shelveSmallToTall ++ [ Advance ]) model)
+
+            Transition (TearToPresent era _) ->
+                -- The tear home plays out on its own frames.
+                SawTear era :: playToPresent (fuel - 1) (send (List.repeat 40 (AnimationFrame 50)) model)
 
             Transition ReturningToPresent ->
                 SawReturning :: playToPresent (fuel - 1) (Update.update Advance model)
@@ -256,6 +261,7 @@ afterSuccess =
                         , SawShelf
                         , SawSlide (WeekdaySlide Friday ReglazeWindow)
                         , SawSlide ReopeningSaturday
+                        , SawTear Repairs1950
                         , SawReturning
                         , SawPresent
                         ]
@@ -272,6 +278,7 @@ afterSuccess =
                         , SawSlide (WeekdaySlide Friday ShelveBooks)
                         , SawShelf
                         , SawSlide ReopeningSaturday
+                        , SawTear Repairs1950
                         , SawReturning
                         , SawPresent
                         ]
@@ -311,6 +318,7 @@ afterFailure =
                     |> playToPresent 20
                     |> Expect.equal
                         [ SawSlide (ConsequenceSlide Repairs1950 (RoofAfterRain Wednesday))
+                        , SawTear Repairs1950
                         , SawReturning
                         , SawPresent
                         ]
@@ -392,6 +400,9 @@ playToPresentModel fuel model =
 
             ReopeningShelf _ ->
                 playToPresentModel (fuel - 1) (send (shelveSmallToTall ++ [ Advance ]) model)
+
+            Transition (TearToPresent _ _) ->
+                playToPresentModel (fuel - 1) (Update.update SkipTravel model)
 
             Transition _ ->
                 playToPresentModel (fuel - 1) (Update.update Advance model)
